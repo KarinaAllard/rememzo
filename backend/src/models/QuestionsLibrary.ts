@@ -14,6 +14,8 @@ const QuestionSchema: Schema<IQuestion> = new Schema({
     templateText: { type: String, required: true },
     optionsCount: { type: Number, required: true },
     translations: { type: Map, of: String},
-});
+},
+{ collection: "questionslibrary" }
+);
 
-export default mongoose.model<IQuestion>("questionslibrary", QuestionSchema);
+export default mongoose.model<IQuestion>("QuestionsLibrary", QuestionSchema);

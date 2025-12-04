@@ -44,6 +44,8 @@ const DailySceneSchema: Schema<IDailyScene> = new Schema({
     },
     questionId: { type: Schema.Types.ObjectId, ref: "questionslibrary", required: true },
     timestamp: { type: Date, default: Date.now }
-});
+},
+{ collection: "dailyscenes" }
+);
 
-export default mongoose.model<IDailyScene>("dailyscenes", DailySceneSchema);
+export default mongoose.model<IDailyScene>("DailyScene", DailySceneSchema);

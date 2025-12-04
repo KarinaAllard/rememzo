@@ -16,6 +16,8 @@ const StatsSchema: Schema<IStats> = new Schema({
     winrate: { type: Number, default: 0 },
     bestStreak: { type: Number, default: 0 },
     lastPlayed: { type: Date, default: null }
-});
+},
+{ collection: "stats" }
+);
 
-export default mongoose.model<IStats>("stats", StatsSchema);
+export default mongoose.model<IStats>("Stat", StatsSchema);

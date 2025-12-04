@@ -22,6 +22,8 @@ const AttemptSchema: Schema<IAttempt> = new Schema({
         correct: { type: Boolean, required: true }
         },
     timestamp: { type: Date, default: Date.now }
-});
+},
+{ collection: "attempts" }
+);
 
-export default mongoose.model<IAttempt>("attempts", AttemptSchema);
+export default mongoose.model<IAttempt>("Attempt", AttemptSchema);

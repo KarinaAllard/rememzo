@@ -24,6 +24,8 @@ const SceneTemplateSchema: Schema<ISceneTemplate> = new Schema({
             allowedTypes: { type: [String], required: true }
         }
     ]
-});
+},
+{ collection: "scenetemplates" }
+);
 
-export default mongoose.model<ISceneTemplate>("scenetemplates", SceneTemplateSchema);
+export default mongoose.model<ISceneTemplate>("SceneTemplate", SceneTemplateSchema);
