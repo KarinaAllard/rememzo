@@ -1,4 +1,5 @@
-import { ISceneTemplate } from "../models/SceneTemplates";
+import { ISceneTemplateLean } from "./generateDailyScene";
+
 
 export interface ISlotWithChosenType {
     index: number;
@@ -24,7 +25,7 @@ export function assignRandomTypes(slots: ISlotWithChosenType[], chanceToFill = 0
     });
 }
 
-export function generateScene(template: ISceneTemplate): ISlotWithChosenType[] {
+export function generateScene(template: ISceneTemplateLean): ISlotWithChosenType[] {
     const slotWithTypes = assignRandomTypes(template.slots);
 
     return slotWithTypes.map(slot => ({

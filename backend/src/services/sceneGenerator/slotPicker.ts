@@ -1,6 +1,6 @@
-import { ISceneTemplate } from "../../models/SceneTemplates";
+import { ISceneTemplateLean } from "../../utils/generateDailyScene";
 
-export function pickRandomSlots(template: ISceneTemplate) {
+export function pickRandomSlots(template: ISceneTemplateLean) {
 	const allSlots = [...template.slots];
 
 	const numberOfItems = Math.max(
