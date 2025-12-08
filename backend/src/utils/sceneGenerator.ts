@@ -24,13 +24,15 @@ export function assignRandomTypes(slots: ISlotWithChosenType[], chanceToFill = 0
     });
 }
 
-export function generateScene(template: ISceneTemplate) {
+export function generateScene(template: ISceneTemplate): ISlotWithChosenType[] {
     const slotWithTypes = assignRandomTypes(template.slots);
 
     return slotWithTypes.map(slot => ({
         index: slot.index,
         x: slot.x,
         y: slot.y,
-        chosenType: slot.chosenType
+        allowedTypes: slot.allowedTypes,
+        chosenType: slot.chosenType,
+        filled: !!slot.chosenType
     }));
 }

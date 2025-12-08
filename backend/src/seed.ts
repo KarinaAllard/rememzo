@@ -22,38 +22,62 @@ async function seed() {
 
     // --- SEED ITEMS ---
     const itemsToInsert = [
-      {
-        name: "Book",
-        type: "book",
-        variations: ["red", "blue"],
-        states: ["default"],
-        artRef: ["book_red.png", "book_blue.png"],
-        translations: { en: "Book", sv: "Bok" }
-      },
-      {
-        name: "Cup",
-        type: "cup",
-        variations: ["white", "green"],
-        states: ["default"],
-        artRef: ["cup_white.png", "cup_green.png"],
-        translations: { en: "Cup", sv: "Kopp" }
-      },
-      {
-        name: "TV",
-        type: "electronics",
-        variations: ["beige"],
-        states: ["noSignal", "static", "off"],
-        artRef: ["tv_nosignal.png", "tv_static.png", "tv_off.png"],
-        translations: { en: "TV", sv: "TV" }
-      },
-      {
-        name: "Fruit Bowl",
-        type: "container",
-        variations: ["wood", "ceramic"],
-        states: ["full", "empty"],
-        artRef: ["bowl_wood.png", "bowl_ceramic.png"],
-        translations: { en: "Fruit Bowl", sv: "Fruktskål" }
-      }
+          {
+            name: "Empty",
+            type: "empty",
+            variations: ["empty"],
+            states: ["empty"],
+            artRef: ["transparent.png"],
+            translations: { en: "Empty", sv: "Tom" }
+        },
+        {
+            name: "Book",
+            type: "book",
+            variations: ["red", "blue"],
+            states: ["default"],
+            artRef: ["book_red.png", "book_blue.png"],
+            translations: { en: "Book", sv: "Bok" }
+        },
+        {
+            name: "Vase",
+            type: "vase",
+            variations: ["red", "blue"],
+            states: ["default"],
+            artRef: ["vase_red.png", "vase_blue.png"],
+            translations: { en: "Vase", sv: "Vas" }
+        },
+        {
+            name: "Cup",
+            type: "cup",
+            variations: ["white", "green"],
+            states: ["default"],
+            artRef: ["cup_white.png", "cup_green.png"],
+            translations: { en: "Cup", sv: "Kopp" }
+        },
+        {
+            name: "Fruit Bowl",
+            type: "container",
+            variations: ["wood", "ceramic"],
+            states: ["full", "empty"],
+            artRef: ["bowl_wood.png", "bowl_ceramic.png"],
+            translations: { en: "Fruit Bowl", sv: "Fruktskål" }
+        },
+        {
+            name: "TV",
+            type: "electronics",
+            variations: ["beige"],
+            states: ["noSignal", "static", "off"],
+            artRef: ["tv_nosignal.png", "tv_static.png", "tv_off.png"],
+            translations: { en: "TV", sv: "TV" }
+        },
+        {
+            name: "Plant",
+            type: "plant",
+            variations: ["small", "large"],
+            states: ["default"],
+            artRef: ["plant_small.png", "plant_large.png"],
+            translations: { en: "Plant", sv: "Växt" }
+        }
     ];
 
     const items = await ItemsLibrary.insertMany(itemsToInsert);
