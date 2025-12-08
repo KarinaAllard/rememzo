@@ -85,34 +85,60 @@ async function seed() {
 
     // --- SEED SCENE TEMPLATES ---
     const templatesToInsert = [
-        {
-            name: "Living Room 1",
-            backgroundRef: "livingroom_1.png",
-            maxItems: 8,
-            slots: [
-            { index: 0, x: 40, y: 120, allowedTypes: ["book", "vase"] },
-            { index: 1, x: 120, y: 120, allowedTypes: ["cup", "container"] },
-            { index: 2, x: 200, y: 80, allowedTypes: ["electronics"] },
-            { index: 3, x: 60, y: 200, allowedTypes: ["book", "container"] },
-            { index: 4, x: 150, y: 200, allowedTypes: ["plant"] },
-            { index: 5, x: 220, y: 150, allowedTypes: ["book", "electronics"] },
-            { index: 6, x: 80, y: 250, allowedTypes: ["cup"] },
-            { index: 7, x: 180, y: 220, allowedTypes: ["vase", "plant"] }
-            ]
-        },
-        {
-            name: "Desk Scene",
-            backgroundRef: "desk_1.png",
-            maxItems: 6,
-            slots: [
-            { index: 0, x: 50, y: 90, allowedTypes: ["book", "container"] },
-            { index: 1, x: 140, y: 90, allowedTypes: ["electronics", "book"] },
-            { index: 2, x: 90, y: 150, allowedTypes: ["cup", "plant"] },
-            { index: 3, x: 160, y: 150, allowedTypes: ["book", "vase"] },
-            { index: 4, x: 120, y: 200, allowedTypes: ["plant"] },
-            { index: 5, x: 200, y: 180, allowedTypes: ["electronics", "container"] }
-            ]
-        }
+      {
+        name: "Living Room 1",
+        backgroundRef: "livingroom_1.png",
+        maxItems: 8,
+        slots: [
+          { index: 0, x: 40, y: 120, allowedTypes: ["book", "vase"] },
+          { index: 1, x: 120, y: 120, allowedTypes: ["cup", "container"] },
+          { index: 2, x: 200, y: 80, allowedTypes: ["electronics"] },
+          { index: 3, x: 60, y: 200, allowedTypes: ["book", "container"] },
+          { index: 4, x: 150, y: 200, allowedTypes: ["plant"] },
+          { index: 5, x: 220, y: 150, allowedTypes: ["book", "electronics"] },
+          { index: 6, x: 80, y: 250, allowedTypes: ["cup"] },
+          { index: 7, x: 180, y: 220, allowedTypes: ["vase", "plant"] }
+        ]
+      },
+      {
+        name: "Desk Scene",
+        backgroundRef: "desk_1.png",
+        maxItems: 6,
+        slots: [
+          { index: 0, x: 50, y: 90, allowedTypes: ["book", "container"] },
+          { index: 1, x: 140, y: 90, allowedTypes: ["electronics", "book"] },
+          { index: 2, x: 90, y: 150, allowedTypes: ["cup", "plant"] },
+          { index: 3, x: 160, y: 150, allowedTypes: ["book", "vase"] },
+          { index: 4, x: 120, y: 200, allowedTypes: ["plant"] },
+          { index: 5, x: 200, y: 180, allowedTypes: ["electronics", "container"] }
+        ]
+      },
+      {
+        name: "Kitchen Scene",
+        backgroundRef: "kitchen_1.png",
+        maxItems: 5,
+        slots: [
+          { index: 0, x: 30, y: 100, allowedTypes: ["cup", "container"] },
+          { index: 1, x: 100, y: 100, allowedTypes: ["cup"] },
+          { index: 2, x: 60, y: 150, allowedTypes: ["plant"] },
+          { index: 3, x: 180, y: 140, allowedTypes: ["fruitBowl", "container"] },
+          { index: 4, x: 150, y: 180, allowedTypes: ["vase"] }
+        ]
+      },
+      {
+        name: "Bedroom Scene",
+        backgroundRef: "bedroom_1.png",
+        maxItems: 7,
+        slots: [
+          { index: 0, x: 50, y: 80, allowedTypes: ["book", "vase"] },
+          { index: 1, x: 120, y: 80, allowedTypes: ["plant"] },
+          { index: 2, x: 180, y: 120, allowedTypes: ["electronics"] },
+          { index: 3, x: 60, y: 160, allowedTypes: ["cup"] },
+          { index: 4, x: 150, y: 180, allowedTypes: ["book", "container"] },
+          { index: 5, x: 200, y: 150, allowedTypes: ["plant", "vase"] },
+          { index: 6, x: 80, y: 200, allowedTypes: ["fruitBowl", "cup"] }
+        ]
+      }
     ];
 
     const templates = await SceneTemplate.insertMany(templatesToInsert);
