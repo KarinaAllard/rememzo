@@ -26,7 +26,7 @@ const DailySceneSchema: Schema<IDailyScene> = new Schema({
     items: [
         {
             itemId: { type: Schema.Types.ObjectId, ref: "itemslibrary", required: true },
-            variation: { type: String, requred: true },
+            variation: { type: String, required: true },
             state: { type: String, required: true },
             slotIndex: { type: Number, required: true },
             x: { type: Number, required: true },
