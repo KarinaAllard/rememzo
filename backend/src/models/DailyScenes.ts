@@ -19,6 +19,7 @@ export interface IDailyScene extends Document {
     }
     questionId: mongoose.Types.ObjectId;
     timestamp: Date;
+    date: string;
 }
 
 const DailySceneSchema: Schema<IDailyScene> = new Schema({
@@ -43,7 +44,8 @@ const DailySceneSchema: Schema<IDailyScene> = new Schema({
         ]
     },
     questionId: { type: Schema.Types.ObjectId, ref: "questionslibrary", required: true },
-    timestamp: { type: Date, default: Date.now }
+    timestamp: { type: Date, default: Date.now },
+    date: { type: String, required: true}
 },
 { collection: "dailyscenes" }
 );

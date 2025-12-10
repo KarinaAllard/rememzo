@@ -2,6 +2,7 @@ import express, { type Request, type Response } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import connectDB from "./db";
+import dailyPuzzle from "./routes/dailyPuzzle";
 
 dotenv.config();
 
@@ -14,6 +15,8 @@ connectDB();
 app.get("/", (req: Request, res: Response) => {
 	res.send("Rememzo backend running!");
 });
+
+app.use("/api/play", dailyPuzzle);
 
 const PORT = parseInt(process.env.PORT || "5001", 10);
 app.listen(PORT, () => {
