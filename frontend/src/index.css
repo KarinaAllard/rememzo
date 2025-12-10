@@ -4,10 +4,11 @@
 
 :root {
 
-  --text: #9e9eba;
+  --text: #9999c1;
   --text-hover: #b2b2ed;
   --background: #121212;
   --cta: #5D5DBF;
+  --bolder: 700;
 
   font-family: "Amiko" ,system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -17,7 +18,7 @@
   background-color: var(--background);
 }
 
-button {
+button, input[type="submit"] {
   background-color: var(--cta);
   color: whitesmoke;
   padding: 0.5rem 1rem;
