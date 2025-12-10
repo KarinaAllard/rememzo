@@ -1,11 +1,19 @@
 @import "tailwindcss";
 
+
+
 :root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+
+  --text: #9e9eba;
+  --text-hover: #b2b2ed;
+  --background: #121212;
+
+  font-family: "Amiko" ,system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  color: var(--text);
+  background-color: var(--background);
 }
+
 
