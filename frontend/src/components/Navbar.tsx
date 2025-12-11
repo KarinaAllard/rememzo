@@ -5,7 +5,7 @@ import mobileLogo from "../assets/mobile-logo-v5.png"
 export const Navbar = () => {
 
     return (
-        <header className="p-4 flex justify-between px-10 items-center w-full max-w-[2000px]">
+        <header className="p-4 flex justify-between md:px-10 items-center w-full max-w-[2000px]">
             <Link to="/">
                 <img src={logo} alt="Rememzo" className="hidden md:block w-[300px]" />
                 <img src={mobileLogo} alt="Rememzo" className="block w-[115px] ml-1 md:hidden" />
