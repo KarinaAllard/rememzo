@@ -8,6 +8,8 @@
   --text-hover: #b2b2ed;
   --background: #121212;
   --cta: #5D5DBF;
+  --cta-hover: #4949a9;
+  --dark-purple: #2b2b81;
   --bolder: 700;
 
   font-family: "Amiko" ,system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -18,15 +20,3 @@
   background-color: var(--background);
 }
 
-button, input[type="submit"] {
-  background-color: var(--cta);
-  color: whitesmoke;
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-}
-
-button:hover{
-  background-color: var(--cta);
-  opacity: 0.94;
-  color: white;
-}

@@ -1,3 +1,5 @@
+import { Button } from "../components/Button"
+
 export const Login = () => {
     return (
         <div className="">
@@ -11,7 +13,7 @@ export const Login = () => {
                     <br/>
                 <input type="password" name="password" id="password" className="border border-(--text-hover)" />
                 </label>
-                <input type="submit" value="Log in" />
+                <Button>Log in</Button>
             </form>
         </div>
     )
