@@ -4,13 +4,14 @@
 
 :root {
 
-  --text: #9999c1;
+  --text: #bfbfd9;
   --text-hover: #b2b2ed;
+  --link: #a5a5f8;
+  --link-hover: #9898e9;
   --background: #121212;
   --cta: #5D5DBF;
   --cta-hover: #4949a9;
   --dark-purple: #2b2b81;
-  --bolder: 700;
 
   font-family: "Amiko" ,system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
@@ -20,3 +21,6 @@
   background-color: var(--background);
 }
 
+a {
+  font-weight: 700;
+}
