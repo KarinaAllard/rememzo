@@ -3,6 +3,7 @@ type ButtonProps = {
     onClick?: () => void;
     type?: "button" | "submit";
     className?: string;
+    disabled?: boolean;
 }
 
 export const Button = (props: ButtonProps) => {
