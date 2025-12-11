@@ -12,8 +12,8 @@ export const Navbar = () => {
             </Link>
             <nav>
                 <ul className="flex gap-6 pt-3">
-                <li><NavLink to="/play" className="hover:text-(--text-hover)">Play</NavLink></li>
-                <li><NavLink to="/login" className="hover:text-(--text-hover)">Login</NavLink></li>
+                <li><NavLink to="/play" className="text-(--link) hover:text-(--link-hover)">Play</NavLink></li>
+                <li><NavLink to="/login" className="text-(--link) hover:text-(--link-hover)">Login</NavLink></li>
                 </ul>
             </nav>
         </header>
