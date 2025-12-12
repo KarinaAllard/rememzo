@@ -12,7 +12,7 @@ export const Button = (props: ButtonProps) => {
             type={props.type || "button"}
             onClick={props.onClick}
             className={`
-                    relative px-4 py-2 bg-(--cta) text-neutral-100 cursor-pointer rounded-sm
+                    relative px-4 py-2 bg-(--cta) text-neutral-100 cursor-pointer font-bold
                     before:content-[''] before:absolute before:left-0 before:top-0
                     before:h-0.5 before:w-full
                     before:bg-linear-to-r before:from-(--cta) before:via-(--text) before:to-(--cta)
