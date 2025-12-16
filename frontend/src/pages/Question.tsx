@@ -24,7 +24,7 @@ export const Question = () => {
                         key={option}
                         type="button"
                         onClick={() => setSelected(option)}
-                        className={selected === option ? "" : "bg-gray-400 text-(--dark-purple)"}
+                        variant={selected === option ? "primary" : "muted"}
                     >
                         {option}
                     </Button>
