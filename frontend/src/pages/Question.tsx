@@ -1,15 +1,22 @@
 import { useState } from "react"
 import { Button } from "../components/Button"
+import { useNavigate } from "react-router";
 
 export const Question = () => {
     const [selected, setSelected] = useState<string | null>(null);
-    const options = ["Option A", "Option B", "Option C", "Option D", "Option E", "Option F"];
+    const options = ["A", "B", "C", "D", "E", "F"];
+    const navigate = useNavigate()
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (selected) {
-            console.log("Submitted:", selected);
-        }
+        if (!selected) return;
+
+        navigate("/play/result", {
+            state: {
+                selectedAnswer: selected,
+                questionId: "mock-question-id",
+            },
+        })
     };
 
     return (
@@ -20,16 +27,27 @@ export const Question = () => {
                 <p className="text-xl text-center text-(--text-hover)">How many [blank] were in the scene?</p>
 
                 {options.map((option) => (
-                    <Button
-                        key={option}
-                        type="button"
-                        onClick={() => setSelected(option)}
-                        variant={selected === option ? "secondary" : "muted"}
-                    >
-                        {option}
-                    </Button>
+                    <label key={option} className="block w-full">
+                        <input
+                            type="radio"
+                            name="answer"
+                            value={option}
+                            checked={selected === option}
+                            onChange={() => setSelected(option)}
+                            className="sr-only"
+                        />
+                        <Button
+                            key={option}
+                            type="button"
+                            onClick={() => setSelected(option)}
+                            className="w-full"
+                            variant={selected === option ? "secondary" : "muted"}
+                        >
+                            Option {option}
+                        </Button>
+                    </label>
                 ))}
-                <Button type="submit" className="mt-w-full" disabled={!selected}>
+                <Button type="submit" className="mt-4 w-full" disabled={!selected}>
                     Submit
                 </Button>
             </form>
