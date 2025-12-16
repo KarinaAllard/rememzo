@@ -24,7 +24,7 @@ export const Question = () => {
                         key={option}
                         type="button"
                         onClick={() => setSelected(option)}
-                        variant={selected === option ? "primary" : "muted"}
+                        variant={selected === option ? "secondary" : "muted"}
                     >
                         {option}
                     </Button>

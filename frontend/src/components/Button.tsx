@@ -4,7 +4,7 @@ type ButtonProps = {
     type?: "button" | "submit";
     className?: string;
     disabled?: boolean;
-    variant?: "primary" | "muted";
+    variant?: "primary" | "secondary" | "muted";
 }
 
 const baseClasses = `
@@ -24,12 +24,20 @@ const variantClasses = {
         hover:before:from-(--cta-hover) hover:before:via-(--text-hover) hover:before:to-(--cta-hover) 
         hover:after:bg-linear-to-r hover:after:from-(--cta-hover) hover:after:via-(--dark-purple) hover:after:to-(--cta-hover)
     `,
+    secondary: `
+        bg-(--link) text-(--dark-purple) before:bg-linear-to-r before:from-(--link) before:via-neutral-200 before:to-(--link)
+        after:bg-linear-to-r after:from-(--link) after:via-(--cta) after:to-(--link) 
+        hover:bg-linear-to-b hover:from-(--link) hover:to-(--link-hover)
+        hover:before:from-(--link) hover:before:via-neutral-300 hover:before:to-(--link) 
+        hover:after:bg-linear-to-r hover:after:from-(--link-hover) hover:after:via-(--cta-hover) hover:after:to-(--link-hover)
+    `,
     muted: `
-        bg-gray-400 text-(--dark-purple) before:bg-linear-to-r before:from-gray-400 before:via-gray-200 before:to-gray-400 
+        bg-gray-400 text-gray-800 before:bg-linear-to-r before:from-gray-400 before:via-gray-200 before:to-gray-400 
         after:bg-linear-to-r after:from-gray-400 after:via-gray-600 after:to-gray-400 
         hover:text-white hover:bg-linear-to-b hover:from-gray-400 hover:to-gray-500
         hover:before:from-gray-400 hover:before:via-gray-300 hover:before:to-gray-400 
-        hover:after:bg-linear-to-r hover:after:from-gray-500 hover:after:via-gray-600 hover:after:to-gray-500`,
+        hover:after:bg-linear-to-r hover:after:from-gray-500 hover:after:via-gray-600 hover:after:to-gray-500
+    `,
 };
 
 export const Button = (props: ButtonProps) => {
