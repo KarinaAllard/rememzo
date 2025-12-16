@@ -2,22 +2,11 @@ import { useEffect, useState } from "react"
 import { Button } from "../components/Button"
 import { useNavigate } from "react-router";
 import axios from "axios";
-
-type Option = {
-    text: string
-    isCorrect?: boolean
-    _id: string
-}
-
-type DailyQuestion = {
-    questionText: string
-    options: Option[]
-    questionId: string
-}
+import type { IDailyQuestion } from "../types/IQuestion";
 
 export const Question = () => {
     const [selected, setSelected] = useState<string | null>(null);
-    const [question, setQuestion] = useState<DailyQuestion | null>(null)
+    const [question, setQuestion] = useState<IDailyQuestion | null>(null)
     const navigate = useNavigate()
 
     useEffect(() => {
@@ -46,12 +35,15 @@ export const Question = () => {
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        if (!selected) return;
+        if (!selected || !question) return;
+
+        const selectedOption = question.options.find(opt => opt.text === selected)
 
         navigate("/play/result", {
             state: {
                 selectedAnswer: selected,
-                questionId: "mock-question-id",
+                isCorrect: selectedOption?.isCorrect || false,
+                questionId: question.questionId,
             },
         })
     };
