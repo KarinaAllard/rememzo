@@ -10,7 +10,9 @@ export const Login = () => {
             <form className="flex flex-col mt-4">
                 <Input label="Email" type="email" name="email" />
                 <Input label="Password" type="password" name="password" />
-                <Button type="submit">Log in</Button>
+                <Link to={"/my-account"} className="w-full">
+                    <Button type="submit" className="w-full">Log in</Button>
+                </Link>
             </form>
             <div className="mt-4">
                 <p>Not registered yet? </p>

@@ -14,7 +14,7 @@ export const Signup = () => {
                 <Button type="submit">Log in</Button>
             </form>
             <div className="mt-4">
-                <p>Already have an accoumt?</p>
+                <p>Already have an account?</p>
                 <p className="text-(--link) hover:text-(--link-hover) font-semibold">
                     <Link to="/login">Log in here</Link>
                 </p>
