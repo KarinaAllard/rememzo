@@ -27,7 +27,16 @@ export const Question = () => {
                 <p className="text-xl text-center text-(--text-hover)">How many [blank] were in the scene?</p>
 
                 {options.map((option) => (
-                    <label key={option} className="block w-full">
+                    <label 
+                        key={option} 
+                        className="block w-full"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter" || e.key === " ") {
+                                setSelected(option)
+                            }
+                        }}
+                    >
                         <input
                             type="radio"
                             name="answer"
