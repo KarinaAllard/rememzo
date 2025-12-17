@@ -4,9 +4,10 @@ import DailyScene from "../models/DailyScenes";
 import { generateDailyScene, IGeneratedScene } from "../utils/generateDailyScene";
 import { isValidPuzzleDate } from "../utils/validateDate";
 import QuestionsLibrary from "../models/QuestionsLibrary";
-import ItemsLibrary from "../models/ItemsLibrary";
+import ItemsLibrary, { IItem } from "../models/ItemsLibrary";
 import { generateCountOptions } from "../utils/questionGenerators/countItemType";
 import { generateWhichStateQuestion } from "../utils/questionGenerators/whichState";
+import { generateExistsInSceneQuestion } from "../utils/questionGenerators/existsInScene";
 
 const router = express.Router();
 
@@ -77,6 +78,41 @@ router.get("/daily", async (req: Request, res: Response) => {
             itemsById,
             randomQuestion.templateText,
             randomQuestion.optionsCount
+        ));
+
+        break;
+    }
+
+      case "existsInScene": {
+        const sceneItems = generatedScene.items.filter(i => i.state !== "empty");
+        const libraryItems = Array.from(itemsById.values());
+
+        const shouldExist = Math.random() < 0.5;
+
+        let selectedLibraryItem: IItem | undefined;
+
+        if (shouldExist && sceneItems.length) {
+          const itemInScene = sceneItems[Math.floor(Math.random() * sceneItems.length)];
+          selectedLibraryItem = libraryItems.find(libItem => libItem.name === itemInScene.name);
+        } else {
+          const sceneNames = new Set(sceneItems.map(i => i.name));
+          const itemsNotInScene = libraryItems.filter(i => !sceneNames.has(i.name));
+
+          if (!itemsNotInScene.length) {
+            selectedLibraryItem = libraryItems[Math.floor(Math.random() * libraryItems.length)];
+          } else {
+            selectedLibraryItem = itemsNotInScene[Math.floor(Math.random() * itemsNotInScene.length)];
+          }
+        }
+
+        if (!selectedLibraryItem) throw new Error("Failed to select item for existsInScene question");
+
+        const selectedName = selectedLibraryItem.name;
+        
+        ({ questionText, options } = generateExistsInSceneQuestion(
+          sceneItems,
+          selectedName,
+          randomQuestion.templateText
         ));
 
         break;
