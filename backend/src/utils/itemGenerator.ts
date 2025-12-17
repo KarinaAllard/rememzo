@@ -4,6 +4,7 @@ import ItemsLibrary, { IItem } from "../models/ItemsLibrary";
 export interface IGeneratedItem {
     itemId: string;
     name: string;
+    type: string;
     variation: string;
     state: string;
     slotIndex: number;
@@ -21,6 +22,7 @@ export async function generateItemsForSlots(slots: ISlotWithChosenType[]): Promi
             generatedItems.push({
                 itemId: "empty",
                 name: "empty",
+                type: "empty",
                 variation: "empty",
                 state: "empty",
                 slotIndex: slot.index,
@@ -35,6 +37,7 @@ export async function generateItemsForSlots(slots: ISlotWithChosenType[]): Promi
             generatedItems.push({
                 itemId: "empty",
                 name: "empty",
+                type: "empty",
                 variation: "empty",
                 state: "empty",
                 slotIndex: slot.index,
@@ -53,6 +56,7 @@ export async function generateItemsForSlots(slots: ISlotWithChosenType[]): Promi
         generatedItems.push({
             itemId: chosenItem._id.toString(),
             name: chosenItem.name,
+            type: chosenItem.type,
             variation,
             state,
             slotIndex: slot.index,
