@@ -16,6 +16,12 @@ router.get("/daily", async (req: Request, res: Response) => {
         return res.status(400).json({ error: "Invalid or missing date (expected YYYY-MM-DD)" });
     }
 
+    const allItems = await ItemsLibrary.find().lean();
+
+    const itemsById = new Map(
+      allItems.map(item => [item._id.toString(), item])
+    );
+
     let dailyScene = await DailyScene.findOne({ date }).lean();
     if (dailyScene) return res.json(dailyScene);
 
@@ -39,15 +45,45 @@ router.get("/daily", async (req: Request, res: Response) => {
         y: item.y
     }));
 
+    let questionText = randomQuestion.templateText;
+    let options: { text: string; isCorrect: boolean }[] = [];
+
+    switch (randomQuestion.type) {
+      case "countItemType": {
+        const targetType = randomQuestion.requiredItemTypes[0];
+
+        const count = itemsForDb.filter(item => {
+          if (item.state === "empty") return false;
+
+          const itemDoc = itemsById.get(item.itemId.toString());
+          if (!itemDoc) return false;
+
+          return itemDoc.type === targetType;
+        }).length;
+
+        const rawOptions = [count - 1, count, count + 1];
+
+        const numericOptions = Array.from(new Set(rawOptions))
+          .filter(n => n >= 0);
+
+        options = numericOptions.map(value => ({
+          text: value.toString(),
+          isCorrect: value === count
+        }));
+
+        break;
+      }
+
+      default:
+        throw new Error(`Unsupported question type: ${randomQuestion.type}`);
+    }
+
     dailyScene = await DailyScene.create({
       templateId: new mongoose.Types.ObjectId(generatedScene.templateId),
       items: itemsForDb,
       question: {
-        questionText: randomQuestion.templateText,
-        options: Array.from({ length: randomQuestion.optionsCount }, (_, i) => ({
-          text: `Option ${i + 1}`,
-          isCorrect: i === 0 // placeholder: first option correct
-        }))
+        questionText,
+        options
       },
       questionId: new mongoose.Types.ObjectId(randomQuestion._id),
       timestamp: new Date(),
