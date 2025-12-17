@@ -49,23 +49,21 @@ router.get("/daily", async (req: Request, res: Response) => {
     let questionText = randomQuestion.templateText;
     let options: { text: string; isCorrect: boolean }[] = [];
 
-    // TODO: Filter question based on scene facts
-    // (e.g. only ask about item types that appear in the scene)
-
     switch (randomQuestion.type) {
       case "countItemType": {
-        const targetType = randomQuestion.requiredItemTypes[0];
+        const sceneItems = generatedScene.items.filter(i => i.state !== "empty");
 
-        const count = itemsForDb.filter(item => {
-          if (item.state === "empty") return false;
+        const availableTypesInScene = Array.from(new Set(sceneItems.map(i => i.name)));
 
-          const itemDoc = itemsById.get(item.itemId.toString());
-          if (!itemDoc) return false;
+        const selectedType = availableTypesInScene.length
+        ? availableTypesInScene[Math.floor(Math.random() * availableTypesInScene.length)]
+        : randomQuestion.requiredItemTypes[0];
 
-          return itemDoc.type === targetType;
-        }).length;
+        const count = sceneItems.filter(i => i.name === selectedType).length;
 
         options = generateCountOptions(count, randomQuestion.optionsCount);
+
+        questionText = randomQuestion.templateText.replace("{type}", selectedType);
 
         break;
       }
