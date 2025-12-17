@@ -22,3 +22,11 @@ export function generateToken(user: IUser) {
 export function generateRefreshToken(user: IUser) {
     return jwt.sign({ userId: user._id }, JWT_SECRET, { expiresIn: REFRESH_EXPIRES_IN });
 }
+
+export function createAuthResponse(user: IUser) {
+    return {
+        token: generateToken(user),
+        refreshToken: generateRefreshToken(user),
+        userId: user._id
+    };
+}
