@@ -95,7 +95,8 @@ router.get("/daily", async (req: Request, res: Response) => {
 
       case "existsInScene": {
         const sceneItems = generatedScene.items.filter(i => i.state !== "empty");
-        const libraryItems = Array.from(itemsById.values());
+        const libraryItems = Array.from(itemsById.values())
+        .filter(i => i.type !== "empty");
 
         const shouldExist = Math.random() < 0.5;
 
