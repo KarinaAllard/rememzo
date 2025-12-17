@@ -11,7 +11,7 @@ router.post("/register", async (req: Request, res: Response) => {
 
         if (!email || !password) return res.status(400).json({ error: "Email and password required" });
 
-        const existingUser = await User.findOne({ email });
+        const existingUser = await findUserByEmail(email);
         if (existingUser) return res.status(409).json({ error: "Email already registered" });
 
         const passwordHash = await hashPassword(password);
