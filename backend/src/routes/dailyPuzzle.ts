@@ -73,6 +73,16 @@ router.get("/daily", async (req: Request, res: Response) => {
 
       case "whichState": {
         const sceneItems = generatedScene.items.filter(i => i.state !== "empty");
+
+        const candidates = sceneItems.filter(i =>
+          randomQuestion.requiredItemTypes.includes(i.type) &&
+          (itemsById.get(i.itemId)?.states.length || 0) > 1
+        );
+
+        if (!candidates.length) {
+          throw new Error("No valid items for whichState question");
+        }
+
         ({ questionText, options } = generateWhichStateQuestion(
             sceneItems,
             itemsById,
@@ -108,7 +118,7 @@ router.get("/daily", async (req: Request, res: Response) => {
         if (!selectedLibraryItem) throw new Error("Failed to select item for existsInScene question");
 
         const selectedName = selectedLibraryItem.name;
-        
+
         ({ questionText, options } = generateExistsInSceneQuestion(
           sceneItems,
           selectedName,
