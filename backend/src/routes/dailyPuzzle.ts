@@ -5,6 +5,7 @@ import { generateDailyScene, IGeneratedScene } from "../utils/generateDailyScene
 import { isValidPuzzleDate } from "../utils/validateDate";
 import QuestionsLibrary from "../models/QuestionsLibrary";
 import ItemsLibrary from "../models/ItemsLibrary";
+import { generateCountOptions } from "../utils/countItemType";
 
 const router = express.Router();
 
@@ -48,6 +49,9 @@ router.get("/daily", async (req: Request, res: Response) => {
     let questionText = randomQuestion.templateText;
     let options: { text: string; isCorrect: boolean }[] = [];
 
+    // TODO: Filter question based on scene facts
+    // (e.g. only ask about item types that appear in the scene)
+
     switch (randomQuestion.type) {
       case "countItemType": {
         const targetType = randomQuestion.requiredItemTypes[0];
@@ -61,15 +65,7 @@ router.get("/daily", async (req: Request, res: Response) => {
           return itemDoc.type === targetType;
         }).length;
 
-        const rawOptions = [count - 1, count, count + 1];
-
-        const numericOptions = Array.from(new Set(rawOptions))
-          .filter(n => n >= 0);
-
-        options = numericOptions.map(value => ({
-          text: value.toString(),
-          isCorrect: value === count
-        }));
+        options = generateCountOptions(count, randomQuestion.optionsCount);
 
         break;
       }
