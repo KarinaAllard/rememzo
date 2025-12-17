@@ -5,7 +5,8 @@ import { generateDailyScene, IGeneratedScene } from "../utils/generateDailyScene
 import { isValidPuzzleDate } from "../utils/validateDate";
 import QuestionsLibrary from "../models/QuestionsLibrary";
 import ItemsLibrary from "../models/ItemsLibrary";
-import { generateCountOptions } from "../utils/countItemType";
+import { generateCountOptions } from "../utils/questionGenerators/countItemType";
+import { generateWhichStateQuestion } from "../utils/questionGenerators/whichState";
 
 const router = express.Router();
 
@@ -49,7 +50,8 @@ router.get("/daily", async (req: Request, res: Response) => {
     let questionText = randomQuestion.templateText;
     let options: { text: string; isCorrect: boolean }[] = [];
 
-    switch (randomQuestion.type) {
+    try {
+      switch (randomQuestion.type) {
       case "countItemType": {
         const sceneItems = generatedScene.items.filter(i => i.state !== "empty");
 
@@ -68,9 +70,27 @@ router.get("/daily", async (req: Request, res: Response) => {
         break;
       }
 
+      case "whichState": {
+        const sceneItems = generatedScene.items.filter(i => i.state !== "empty");
+        ({ questionText, options } = generateWhichStateQuestion(
+            sceneItems,
+            itemsById,
+            randomQuestion.templateText,
+            randomQuestion.optionsCount
+        ));
+
+        break;
+    }
+
       default:
         throw new Error(`Unsupported question type: ${randomQuestion.type}`);
     }
+  } catch (error) {
+    console.warn("Question generation failed, picking a new type", error);
+
+    const alternativeQuestions = allQuestions.filter(q => q.type !== randomQuestion.type);
+    const newQuestion = alternativeQuestions[Math.floor(Math.random() * alternativeQuestions.length)];
+  }
 
     dailyScene = await DailyScene.create({
       templateId: new mongoose.Types.ObjectId(generatedScene.templateId),
