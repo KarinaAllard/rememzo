@@ -5,9 +5,7 @@ import { generateDailyScene, IGeneratedScene } from "../utils/generateDailyScene
 import { isValidPuzzleDate } from "../utils/validateDate";
 import QuestionsLibrary from "../models/QuestionsLibrary";
 import ItemsLibrary, { IItem } from "../models/ItemsLibrary";
-import { generateCountOptions } from "../utils/questionGenerators/countItemType";
-import { generateWhichStateQuestion } from "../utils/questionGenerators/whichState";
-import { generateExistsInSceneQuestion } from "../utils/questionGenerators/existsInScene";
+import { generateQuestion, IGeneratedQuestion } from "../services/questionGenerator";
 
 const router = express.Router();
 
@@ -19,20 +17,23 @@ router.get("/daily", async (req: Request, res: Response) => {
         return res.status(400).json({ error: "Invalid or missing date (expected YYYY-MM-DD)" });
     }
 
-    const allItems = await ItemsLibrary.find().lean();
-
-    const itemsById = new Map(
-      allItems.map(item => [item._id.toString(), item])
-    );
-
     let dailyScene = await DailyScene.findOne({ date }).lean();
     if (dailyScene) return res.json(dailyScene);
 
+    const allItems = await ItemsLibrary.find().lean();
+
+    const itemsById = new Map(allItems.map(item => [item._id.toString(), item]));
+    
     const generatedScene: IGeneratedScene = await generateDailyScene();
 
-    const allQuestions = await QuestionsLibrary.find();
+    const allQuestions = await QuestionsLibrary.find().lean();
     if (!allQuestions.length) throw new Error("No questions available");
-    const randomQuestion = allQuestions[Math.floor(Math.random() * allQuestions.length)];
+
+    const generatedQuestion: IGeneratedQuestion = await generateQuestion(
+      generatedScene,
+      itemsById,
+      allQuestions
+    );
 
     const emptyItem = await ItemsLibrary.findOne({ type: "empty" });
     if (!emptyItem) throw new Error("Empty item not found");
@@ -48,105 +49,14 @@ router.get("/daily", async (req: Request, res: Response) => {
         y: item.y
     }));
 
-    let questionText = randomQuestion.templateText;
-    let options: { text: string; isCorrect: boolean }[] = [];
-
-    try {
-      switch (randomQuestion.type) {
-      case "countItemType": {
-        const sceneItems = generatedScene.items.filter(i => i.state !== "empty");
-
-        const availableTypesInScene = Array.from(new Set(sceneItems.map(i => i.name)));
-
-        const selectedType = availableTypesInScene.length
-        ? availableTypesInScene[Math.floor(Math.random() * availableTypesInScene.length)]
-        : randomQuestion.requiredItemTypes[0];
-
-        const count = sceneItems.filter(i => i.name === selectedType).length;
-
-        options = generateCountOptions(count, randomQuestion.optionsCount);
-
-        questionText = randomQuestion.templateText.replace("{type}", selectedType);
-
-        break;
-      }
-
-      case "whichState": {
-        const sceneItems = generatedScene.items.filter(i => i.state !== "empty");
-
-        const candidates = sceneItems.filter(i =>
-          randomQuestion.requiredItemTypes.includes(i.type) &&
-          (itemsById.get(i.itemId)?.states.length || 0) > 1
-        );
-
-        if (!candidates.length) {
-          throw new Error("No valid items for whichState question");
-        }
-
-        ({ questionText, options } = generateWhichStateQuestion(
-            sceneItems,
-            itemsById,
-            randomQuestion.templateText,
-            randomQuestion.optionsCount
-        ));
-
-        break;
-    }
-
-      case "existsInScene": {
-        const sceneItems = generatedScene.items.filter(i => i.state !== "empty");
-        const libraryItems = Array.from(itemsById.values())
-        .filter(i => i.type !== "empty");
-
-        const shouldExist = Math.random() < 0.5;
-
-        let selectedLibraryItem: IItem | undefined;
-
-        if (shouldExist && sceneItems.length) {
-          const itemInScene = sceneItems[Math.floor(Math.random() * sceneItems.length)];
-          selectedLibraryItem = libraryItems.find(libItem => libItem.name === itemInScene.name);
-        } else {
-          const sceneNames = new Set(sceneItems.map(i => i.name));
-          const itemsNotInScene = libraryItems.filter(i => !sceneNames.has(i.name));
-
-          if (!itemsNotInScene.length) {
-            selectedLibraryItem = libraryItems[Math.floor(Math.random() * libraryItems.length)];
-          } else {
-            selectedLibraryItem = itemsNotInScene[Math.floor(Math.random() * itemsNotInScene.length)];
-          }
-        }
-
-        if (!selectedLibraryItem) throw new Error("Failed to select item for existsInScene question");
-
-        const selectedName = selectedLibraryItem.name;
-
-        ({ questionText, options } = generateExistsInSceneQuestion(
-          sceneItems,
-          selectedName,
-          randomQuestion.templateText
-        ));
-
-        break;
-    }
-
-      default:
-        throw new Error(`Unsupported question type: ${randomQuestion.type}`);
-    }
-  } catch (error) {
-    console.warn("Question generation failed, picking a new type", error);
-
-    const alternativeQuestions = allQuestions.filter(q => q.type !== randomQuestion.type);
-    const newQuestion = alternativeQuestions[Math.floor(Math.random() * alternativeQuestions.length)];
-  }
-
     dailyScene = await DailyScene.create({
       templateId: new mongoose.Types.ObjectId(generatedScene.templateId),
       items: itemsForDb,
       question: {
-        questionText,
-        options
+        questionText: generatedQuestion.questionText,
+        options: generatedQuestion.options
       },
-      questionId: new mongoose.Types.ObjectId(randomQuestion._id),
+      questionId: new mongoose.Types.ObjectId(generatedQuestion.questionId),
       timestamp: new Date(),
       date
     });
