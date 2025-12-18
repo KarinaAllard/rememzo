@@ -14,16 +14,28 @@ export const Signup = () => {
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
+    const validateEmail = (email: string) => /\S+@\S+\.\S+/.test(email);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
-        setLoading(true);
+
+        if (!validateEmail(email.trim())) {
+            setError("Please enter a valid email address.");
+            return;
+        }
+
+        if (password.length< 6) {
+            setError("Password must be at least 6 characters long.");
+            return;
+        }
 
         if (password !== confirmPassword) {
             setError("Passwords do not match!");
             return;
         }
 
+        setLoading(true);
         try {
             const result = await register(email, password);
             localStorage.setItem("token", result.token);
@@ -46,8 +58,7 @@ export const Signup = () => {
                     type="email" 
                     name="email" 
                     value={email} 
-                    onChange={e => 
-                    setEmail(e.target.value)} 
+                    onChange={e => setEmail(e.target.value)} 
                     className="w-full"
                 />
                 <Input 
