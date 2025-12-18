@@ -12,7 +12,7 @@ type InputProps = {
 
 export const Input = (props: InputProps) => {
     return (
-        <div className="flex flex-col mb-4 w-full">
+        <div className="flex flex-col mb-1 w-full">
             <label htmlFor={props.id || props.name} className="text-sm font-medium text-(--text)">
                 {props.label}
             </label>

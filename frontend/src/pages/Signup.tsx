@@ -10,29 +10,37 @@ export const Signup = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
-    const [error, setError] = useState<string | null>(null);
+    const [submitError, setSubmitError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
 
     const validateEmail = (email: string) => /\S+@\S+\.\S+/.test(email);
 
+    const emailError =
+        email && !validateEmail(email)
+            ? "Please enter a valid email address."
+            : null;
+
+    const passwordError =
+        password && password.length < 6
+            ? "Password must be at least 6 characters long."
+            : null;
+
+    const confirmPasswordError =
+        confirmPassword && password !== confirmPassword
+            ? "Passwords do not match."
+            : null;
+
+    const hasLiveErrors =
+        !!emailError || !!passwordError || !!confirmPasswordError;
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError(null);
+        setSubmitError(null);
 
-        if (!validateEmail(email.trim())) {
-            setError("Please enter a valid email address.");
-            return;
-        }
-
-        if (password.length< 6) {
-            setError("Password must be at least 6 characters long.");
-            return;
-        }
-
-        if (password !== confirmPassword) {
-            setError("Passwords do not match!");
+        if (hasLiveErrors) {
+            setSubmitError("Please fix the errors above.");
             return;
         }
 
@@ -43,7 +51,7 @@ export const Signup = () => {
             navigate("/my-account");
         } catch (error) {
             console.error("Signup failed:", error);
-            setError("Registration failed. Try again.");
+            setSubmitError("Registration failed. Try again.");
         } finally {
             setLoading(false);
         }
@@ -54,7 +62,7 @@ export const Signup = () => {
             <h1 className="text-4xl text-(--text-hover) mb-6">Sign Up</h1>
             <p className="text-sm">To keep track of your stats and streak, register here.</p>
             <form onSubmit={handleSubmit} className="flex flex-col mt-4 w-full">
-                {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+                <p className="text-red-500 text-sm mt-1 min-h-4">{submitError}</p>
                 <Input 
                     label="Email" 
                     type="email" 
@@ -63,6 +71,9 @@ export const Signup = () => {
                     onChange={e => setEmail(e.target.value)} 
                     className="w-full"
                 />
+                <p className="text-xs text-yellow-400 min-h-4 mb-2">
+                    {emailError}
+                </p>
                 <Input 
                     label="Password" 
                     type={showPassword ? "text" : "password"} 
@@ -73,6 +84,9 @@ export const Signup = () => {
                     onIconClick={() => setShowPassword(!showPassword)}
                     className="w-full"
                 />
+                <p className="text-xs text-yellow-400 min-h-4 mb-2">
+                    {passwordError}
+                </p>
                 <Input 
                     label="Confirm Password" 
                     type={showPassword ? "text" : "password"}  
@@ -83,6 +97,9 @@ export const Signup = () => {
                     onIconClick={() => setShowPassword(!showPassword)}
                     className="w-full"
                 />
+                <p className="text-xs text-yellow-400 min-h-4 mb-2">
+                    {confirmPasswordError}
+                </p>
                 <PasswordMeter password={password} />
                 <div className="mt-8 w-full">
                     <Button type="submit" loading={loading} className="w-full">Sign Up</Button>
