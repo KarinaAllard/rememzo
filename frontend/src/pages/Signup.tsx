@@ -4,6 +4,7 @@ import { Input } from "../components/Input"
 import { useState } from "react"
 import { register } from "../services/authService"
 import { LuEye, LuEyeClosed } from "../icons";
+import { PasswordMeter } from "../components/PasswordMeter"
 
 export const Signup = () => {
     const [email, setEmail] = useState("");
@@ -53,6 +54,7 @@ export const Signup = () => {
             <h1 className="text-4xl text-(--text-hover) mb-6">Sign Up</h1>
             <p className="text-sm">To keep track of your stats and streak, register here.</p>
             <form onSubmit={handleSubmit} className="flex flex-col mt-4 w-full">
+                {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
                 <Input 
                     label="Email" 
                     type="email" 
@@ -81,8 +83,10 @@ export const Signup = () => {
                     onIconClick={() => setShowPassword(!showPassword)}
                     className="w-full"
                 />
-                {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-                <Button type="submit" loading={loading}>Sign Up</Button>
+                <PasswordMeter password={password} />
+                <div className="mt-8 w-full">
+                    <Button type="submit" loading={loading} className="w-full">Sign Up</Button>
+                </div>
             </form>
             <div className="mt-4">
                 <p>Already have an account?</p>
