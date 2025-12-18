@@ -5,6 +5,7 @@ import { useState } from "react"
 import { register } from "../services/authService"
 import { LuEye, LuEyeClosed } from "../icons";
 import { PasswordMeter } from "../components/PasswordMeter"
+import { useAuthRedirect } from "../hooks/useAuthRedirect"
 
 export const Signup = () => {
     const [email, setEmail] = useState("");
@@ -14,6 +15,8 @@ export const Signup = () => {
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+
+    useAuthRedirect(true);
 
     const validateEmail = (email: string) => /\S+@\S+\.\S+/.test(email);
 

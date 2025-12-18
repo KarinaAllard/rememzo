@@ -4,6 +4,7 @@ import { Input } from "../components/Input";
 import { useState } from "react";
 import { login } from "../services/authService";
 import { LuEye, LuEyeClosed } from "../icons";
+import { useAuthRedirect } from "../hooks/useAuthRedirect";
 
 export const Login = () => {
     const [email, setEmail] = useState("");
@@ -13,6 +14,8 @@ export const Login = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
     const navigate = useNavigate();
+
+    useAuthRedirect(true);
 
     const validateEmail = (email: string) => /\S+@\S+\.\S+/.test(email);
 
@@ -40,7 +43,7 @@ export const Login = () => {
             } else {
                 sessionStorage.setItem("token", result.token);
             }
-            
+
             navigate("/my-account");
         } catch (error) {
             console.error("Login failed:", error);
