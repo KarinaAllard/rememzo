@@ -84,9 +84,12 @@ export const Signup = () => {
                     onIconClick={() => setShowPassword(!showPassword)}
                     className="w-full"
                 />
-                <p className="text-xs text-yellow-400 min-h-4 mb-2">
-                    {passwordError}
-                </p>
+                <div className="min-h-4 mb-2 relative">
+                    <PasswordMeter password={password} />
+                    <p className="text-xs text-yellow-400 absolute top-2">
+                        {passwordError}
+                    </p>
+                </div>
                 <Input 
                     label="Confirm Password" 
                     type={showPassword ? "text" : "password"}  
@@ -100,8 +103,7 @@ export const Signup = () => {
                 <p className="text-xs text-yellow-400 min-h-4 mb-2">
                     {confirmPasswordError}
                 </p>
-                <PasswordMeter password={password} />
-                <div className="mt-8 w-full">
+                <div className="mt-4 w-full">
                     <Button type="submit" loading={loading} className="w-full">Sign Up</Button>
                 </div>
             </form>

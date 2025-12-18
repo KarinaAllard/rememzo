@@ -43,14 +43,14 @@ export const PasswordMeter = ({ password }: PasswordMeterProps) => {
     }
 
     return (
-        <div className="flex flex-col gap-1 mt-2 w-full">
+        <div className="flex flex-col gap-1 w-full">
             <div className="h-1 w-full bg-gray-800 rounded">
                 <div
                     className={`${color} h-1 rounded`}
                     style={{ width: `${width}%` }}
                 />
-                <span className="text-xs font-medium text-(--text)">{label}</span>
             </div>
+            <span className="text-xs font-medium text-(--text) text-right w-full">{label}</span>
         </div>
     )
 }
