@@ -5,6 +5,7 @@ type ButtonProps = {
     className?: string;
     disabled?: boolean;
     variant?: "primary" | "secondary" | "muted";
+    loading?: boolean;
 }
 
 const baseClasses = `
@@ -41,17 +42,22 @@ const variantClasses = {
 };
 
 export const Button = (props: ButtonProps) => {
-    const variant = props.variant ?? "primary";
+    const { loading, disabled } = props;
+    const variant = props.disabled ? "muted" : props.variant ?? "primary";
     return (
         <button
             type={props.type || "button"}
             onClick={props.onClick}
+            disabled={disabled || loading}
             className={`
                     ${baseClasses}
                     ${variantClasses[variant]}
                     ${props.className || ""}
                 `}
         >
+            {loading && (
+                <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-2 inline-block"></span>
+            )}
             {props.children}
         </button>
     );

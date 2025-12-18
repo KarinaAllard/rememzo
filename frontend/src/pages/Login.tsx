@@ -8,10 +8,13 @@ export const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        setError(null);
+        setLoading(true);
         
         try {
             const result = await login(email, password);
@@ -20,6 +23,8 @@ export const Login = () => {
         } catch (error) {
             console.error("Login failed:", error);
             setError("Invalid email or password")
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -31,7 +36,7 @@ export const Login = () => {
                 <Input label="Email" type="email" name="email" value={email} onChange={e => setEmail(e.target.value)} />
                 <Input label="Password" type="password" name="password" value={password} onChange={e => setPassword(e.target.value)} />
                 {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-                <Button type="submit" className="w-full">Log in</Button>
+                <Button type="submit" className="w-full" loading={loading}>Log in</Button>
             </form>
             <div className="mt-4">
                 <p>Not registered yet? </p>

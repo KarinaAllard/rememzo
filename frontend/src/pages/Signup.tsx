@@ -9,11 +9,13 @@ export const Signup = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setError(null);
+        setLoading(true);
 
         if (password !== confirmPassword) {
             setError("Passwords do not match!");
@@ -27,6 +29,8 @@ export const Signup = () => {
         } catch (error) {
             console.error("Signup failed:", error);
             setError("Registration failed. Try again.");
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -39,7 +43,7 @@ export const Signup = () => {
                 <Input label="Password" type="password" name="password" value={password} onChange={e => setPassword(e.target.value)} />
                 <Input label="Confirm Password" type="password" name="confirmPassword" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)}/>
                 {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-                <Button type="submit">Sign Up</Button>
+                <Button type="submit" loading={loading}>Sign Up</Button>
             </form>
             <div className="mt-4">
                 <p>Already have an account?</p>
