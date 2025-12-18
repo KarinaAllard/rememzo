@@ -11,6 +11,7 @@ export const Login = () => {
     const [submitError, setSubmitError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [rememberMe, setRememberMe] = useState(false);
     const navigate = useNavigate();
 
     const validateEmail = (email: string) => /\S+@\S+\.\S+/.test(email);
@@ -33,8 +34,13 @@ export const Login = () => {
 
         setLoading(true);
         try {
-            const result = await login(email, password);
-            localStorage.setItem("token", result.token);
+            const result = await login(email, password);            
+            if (rememberMe) {
+                localStorage.setItem("token", result.token);
+            } else {
+                sessionStorage.setItem("token", result.token);
+            }
+            
             navigate("/my-account");
         } catch (error) {
             console.error("Login failed:", error);
@@ -71,6 +77,19 @@ export const Login = () => {
                     onIconClick={() => setShowPassword(!showPassword)}
                     className="w-full"
                 />
+                <div className="flex items-center mb-4">
+                    <input 
+                        type="checkbox" 
+                        name="rememberMe" 
+                        id="rememberMe" 
+                        checked={rememberMe}
+                        onChange={e => setRememberMe(e.target.checked)}
+                        className="mr-2 accent-(--cta)"
+                    />
+                    <label htmlFor="rememberMe" className="text-sm text-(--text)">
+                        Remember me
+                    </label>
+                </div>
                 <div className="mt-10 w-full">
                     <Button type="submit" className="w-full" loading={loading}>Log in</Button>
                 </div>
