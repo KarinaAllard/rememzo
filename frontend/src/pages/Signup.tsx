@@ -53,9 +53,16 @@ export const Signup = () => {
             localStorage.setItem("token", result.token);
             localStorage.setItem("refreshToken", result.refreshToken);
             navigate("/my-account");
-        } catch (error) {
+        } catch (error: any) {
             console.error("Signup failed:", error);
-            setSubmitError("Registration failed. Try again.");
+
+            if (error?.response?.status === 409) {
+                setSubmitError("Email already registered.");
+            } else if (error?.response?.data?.error) {
+                setSubmitError(error.response.data.error);
+            } else {
+                setSubmitError("Registration failed. Try again.");
+            }
         } finally {
             setLoading(false);
         }
