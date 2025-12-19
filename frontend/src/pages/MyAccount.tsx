@@ -6,7 +6,9 @@ export const MyAccount = () => {
 
     const handleLogout = () => {
         localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
         sessionStorage.removeItem("token");
+        sessionStorage.removeItem("refreshToken");
         navigate("/login", { replace: true });
     };
 

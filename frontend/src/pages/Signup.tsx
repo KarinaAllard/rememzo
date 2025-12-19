@@ -51,6 +51,7 @@ export const Signup = () => {
         try {
             const result = await register(email, password);
             localStorage.setItem("token", result.token);
+            localStorage.setItem("refreshToken", result.refreshToken);
             navigate("/my-account");
         } catch (error) {
             console.error("Signup failed:", error);

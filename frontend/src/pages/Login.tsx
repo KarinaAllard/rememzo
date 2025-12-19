@@ -40,8 +40,10 @@ export const Login = () => {
             const result = await login(email, password);            
             if (rememberMe) {
                 localStorage.setItem("token", result.token);
+                localStorage.setItem("refreshToken", result.refreshToken);
             } else {
                 sessionStorage.setItem("token", result.token);
+                sessionStorage.setItem("refreshToken", result.refreshToken);
             }
 
             navigate("/my-account");
