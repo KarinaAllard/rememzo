@@ -8,6 +8,7 @@ import { Play } from "./pages/Play";
 import { Question } from "./pages/Question";
 import { Result } from "./pages/Result";
 import { Signup } from "./pages/Signup";
+import { ProtectedRoute } from "./routes/ProtectedRoute";
 
 export const router = createBrowserRouter([
     {
@@ -41,7 +42,11 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/my-account",
-                element: <MyAccount />
+                element: (
+                    <ProtectedRoute>
+                        <MyAccount />
+                    </ProtectedRoute>
+                )
             },
     ]
     }
