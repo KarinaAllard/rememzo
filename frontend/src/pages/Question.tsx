@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react"
 import { Button } from "../components/Button"
 import { useNavigate } from "react-router";
-import axios from "axios";
 import type { IDailyQuestion } from "../types/IQuestion";
+import { fetchDailyQuestion } from "../services/questionService";
 
 export const Question = () => {
     const [selected, setSelected] = useState<string | null>(null);
@@ -13,8 +13,7 @@ export const Question = () => {
         const fetchQuestion = async () => {
             try {
                 const today = new Date().toISOString().split("T")[0]
-                const res = await axios.get(`/api/play/daily?date=${today}`)
-                const data = res.data
+                const data = await fetchDailyQuestion(today);
 
                 if (!data?.question) {
                     console.error("No question in daily scene:", data);
