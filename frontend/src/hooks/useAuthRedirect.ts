@@ -1,17 +1,17 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router";
+import { useAuth } from "./useAuth";
 
 export const useAuthRedirect = (redirectIfLoggedIn = false) => {
     const navigate = useNavigate();
+    const { isAuthenticated } = useAuth();
 
     useEffect(() => {
-        const token =
-        localStorage.getItem("token") || sessionStorage.getItem("token");
 
-        if (redirectIfLoggedIn && token) {
-            navigate("/my-account");
-        } else if (!redirectIfLoggedIn && !token) {
-            navigate("/login");
+        if (redirectIfLoggedIn && isAuthenticated) {
+            navigate("/my-account", { replace: true });
+        } else if (!redirectIfLoggedIn && !isAuthenticated) {
+            navigate("/login", { replace: true });
         }
-    }, [navigate, redirectIfLoggedIn]);
+    }, [navigate, redirectIfLoggedIn, isAuthenticated]);
 };
