@@ -6,26 +6,29 @@ type CountdownProps = {
 };
 
 export const Countdown = (props: CountdownProps) => {
-
-    const [current, setCurrent] = useState(props.seconds);
+    const [remainingMs, setRemainingMs] = useState(props.seconds * 1000);
 
     useEffect(() => {
-        if (current === 0) {
-            props.onComplete();
-            return;
-        }
+        const interval = setInterval(() => {
+            setRemainingMs((prev) => {
+                if (prev <= 50) {
+                    clearInterval(interval);
+                    props.onComplete();
+                    return 0;
+                }
+                return prev -50;
+            })
+        }, 50);
 
-        const timer = setTimeout(() => {
-            setCurrent(current - 1);
-        }, 1000);
+        return () => clearInterval(interval);
+    }, [props.onComplete]);
 
-        return () => clearTimeout(timer);
-    }, [current, props.onComplete]);
+    const display = Math.max(remainingMs / 1000, 0).toFixed(2);
 
     return (
 
-        <div>
-            {current}
+        <div className="text-6xl font-bold text-center">
+            {display}
         </div>
     )
 }
