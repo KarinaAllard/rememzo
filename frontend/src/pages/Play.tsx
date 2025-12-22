@@ -4,13 +4,14 @@ import { useGame } from "../game/GameContext";
 import { useGameFlow } from "../hooks/useGameFlow";
 
 export const Play = () => {
-    const { phase, setPhase } = useGame();
+    const { phase, setPhase, countdownRemainingMs, setCountdownRemainingMs } = useGame();
     useGameFlow();
 
     const handleStart = () => setPhase("countdown");
 
     const handleCountdownComplete = () => {
         setPhase("question")
+        setCountdownRemainingMs(null);
     };
 
     return (
@@ -27,7 +28,14 @@ export const Play = () => {
                 </Button>
             )}
 
-            {phase === "countdown" && <Countdown seconds={3} onComplete={handleCountdownComplete}/>}
+            {phase === "countdown" && ( 
+                <Countdown 
+                    seconds={30} 
+                    remainingMs={countdownRemainingMs ?? undefined}
+                    setRemainingMs={setCountdownRemainingMs}
+                    onComplete={handleCountdownComplete}
+                />
+            )}
         </div>
     )
 }

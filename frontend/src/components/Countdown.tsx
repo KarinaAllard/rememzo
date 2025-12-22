@@ -4,17 +4,22 @@ import { motion } from "framer-motion";
 type CountdownProps = {
     seconds: number;
     onComplete: () => void;
+    remainingMs?: number;
+    setRemainingMs?: (ms: number) => void;
 };
 
 export const Countdown = (props: CountdownProps) => {
-    const [remainingMs, setRemainingMs] = useState(props.seconds * 1000);
+    const [remainingMs, setRemainingMs] = useState(
+        props.remainingMs ?? props.seconds * 1000
+    );
 
     useEffect(() => {
         const interval = setInterval(() => {
             setRemainingMs((prev) => {
                 const next = Math.max(prev - 50, 0);
+                props.setRemainingMs?.(next);
                 return next;
-            })
+            });
         }, 50);
 
         return () => clearInterval(interval);
