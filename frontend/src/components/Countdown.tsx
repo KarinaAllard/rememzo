@@ -12,17 +12,19 @@ export const Countdown = (props: CountdownProps) => {
     useEffect(() => {
         const interval = setInterval(() => {
             setRemainingMs((prev) => {
-                if (prev <= 50) {
-                    clearInterval(interval);
-                    props.onComplete();
-                    return 0;
-                }
-                return prev -50;
+                const next = Math.max(prev - 50, 0);
+                return next;
             })
         }, 50);
 
         return () => clearInterval(interval);
-    }, [props.onComplete]);
+    }, []);
+
+    useEffect(() => {
+        if (remainingMs === 0) {
+            props.onComplete();
+        }
+    }, [remainingMs, props.onComplete]);
 
     const display = Math.max(remainingMs / 1000, 0).toFixed(2);
     const total = props.seconds * 1000;

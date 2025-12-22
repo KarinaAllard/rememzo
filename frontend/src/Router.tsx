@@ -23,7 +23,10 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/play",
-                element: <Play />
+                element: 
+                <GameGuard allowed={["idle", "paused", "countdown", "question"]}>
+                    <Play />
+                </GameGuard>
             },
             {
                 path: "/play/question",
