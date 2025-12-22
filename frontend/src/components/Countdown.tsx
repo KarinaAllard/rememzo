@@ -9,15 +9,22 @@ type CountdownProps = {
 };
 
 export const Countdown = (props: CountdownProps) => {
-    const [remainingMs, setRemainingMs] = useState(
-        props.remainingMs ?? props.seconds * 1000
+    const storageKey = "dailyPuzzleCountdown";
+    const savedMs = sessionStorage.getItem(storageKey);
+    const [remainingMs, setRemainingMs] = useState<number>(
+        savedMs ? parseInt(savedMs) : props.seconds * 1000
     );
+
+    // TODO: Implement backend-based daily attempt validation later, keep this during development for testing
 
     useEffect(() => {
         const interval = setInterval(() => {
             setRemainingMs((prev) => {
                 const next = Math.max(prev - 50, 0);
-                props.setRemainingMs?.(next);
+                sessionStorage.setItem(storageKey, next.toString());
+                if (next === 0) {
+                    sessionStorage.removeItem(storageKey);
+                }
                 return next;
             });
         }, 50);

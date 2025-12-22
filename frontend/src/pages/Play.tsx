@@ -7,7 +7,9 @@ export const Play = () => {
     const { phase, setPhase, countdownRemainingMs, setCountdownRemainingMs } = useGame();
     useGameFlow();
 
-    const handleStart = () => setPhase("countdown");
+    const handleStart = () => { 
+        if (!countdownRemainingMs) setPhase("countdown")
+    };
 
     const handleCountdownComplete = () => {
         setPhase("question")
@@ -30,7 +32,7 @@ export const Play = () => {
 
             {phase === "countdown" && ( 
                 <Countdown 
-                    seconds={30} 
+                    seconds={3} 
                     remainingMs={countdownRemainingMs ?? undefined}
                     setRemainingMs={setCountdownRemainingMs}
                     onComplete={handleCountdownComplete}
