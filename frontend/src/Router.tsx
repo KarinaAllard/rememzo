@@ -9,6 +9,7 @@ import { Question } from "./pages/Question";
 import { Result } from "./pages/Result";
 import { Signup } from "./pages/Signup";
 import { ProtectedRoute } from "./routes/ProtectedRoute";
+import { GameGuard } from "./game/GameGuard";
 
 export const router = createBrowserRouter([
     {
@@ -26,7 +27,10 @@ export const router = createBrowserRouter([
             },
             {
                 path: "/play/question",
-                element: <Question />
+                element: 
+                <GameGuard allowed={["question"]}>
+                    <Question />
+                </GameGuard>   
             },
             {
                 path: "/play/result",
