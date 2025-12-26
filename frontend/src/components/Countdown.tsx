@@ -4,25 +4,39 @@ import { motion } from "framer-motion";
 type CountdownProps = {
     seconds: number;
     onComplete: () => void;
+    remainingMs?: number;
+    setRemainingMs?: (ms: number) => void;
 };
 
 export const Countdown = (props: CountdownProps) => {
-    const [remainingMs, setRemainingMs] = useState(props.seconds * 1000);
+    const storageKey = "dailyPuzzleCountdown";
+    const savedMs = sessionStorage.getItem(storageKey);
+    const [remainingMs, setRemainingMs] = useState<number>(
+        savedMs ? parseInt(savedMs) : props.seconds * 1000
+    );
+
+    // TODO: Implement backend-based daily attempt validation later, keep this during development for testing
 
     useEffect(() => {
         const interval = setInterval(() => {
             setRemainingMs((prev) => {
-                if (prev <= 50) {
-                    clearInterval(interval);
-                    props.onComplete();
-                    return 0;
+                const next = Math.max(prev - 50, 0);
+                sessionStorage.setItem(storageKey, next.toString());
+                if (next === 0) {
+                    sessionStorage.removeItem(storageKey);
                 }
-                return prev -50;
-            })
+                return next;
+            });
         }, 50);
 
         return () => clearInterval(interval);
-    }, [props.onComplete]);
+    }, []);
+
+    useEffect(() => {
+        if (remainingMs === 0) {
+            props.onComplete();
+        }
+    }, [remainingMs, props.onComplete]);
 
     const display = Math.max(remainingMs / 1000, 0).toFixed(2);
     const total = props.seconds * 1000;
