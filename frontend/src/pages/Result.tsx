@@ -1,34 +1,32 @@
-import { Link, useLocation, useNavigate } from "react-router"
+import { Link, useNavigate } from "react-router"
 import { Button } from "../components/Button"
 import { useToday } from "../hooks/useToday"
 import { isDailyAttemptCompleted } from "../hooks/useDailyAttempt"
 import { useEffect } from "react"
 
 export const Result = () => {
-    const location = useLocation()
     const navigate = useNavigate()
     const today = useToday()
 
-    const { selectedAnswer, isCorrect } = location.state || {};
+    const raw = sessionStorage.getItem("dailyResult");
+    const result = raw ? JSON.parse(raw) : null;
 
     const completed = isDailyAttemptCompleted(today);
 
     useEffect(() => {
-        if (!selectedAnswer && !completed) {
+        if (!result && !completed) {
             navigate("/", { replace: true });
         }
-    }, [selectedAnswer, completed, navigate]);
-
-    if (!selectedAnswer && !completed) return null
+    }, [result, completed, navigate]);
 
     return (
         <div className="w-full flex flex-col items-center">
             <h1 className="text-4xl text-(--text-hover) mb-6">Result</h1>
-            {selectedAnswer ? (
+            {result ? (
                 <p>
-                    You selected: {selectedAnswer} -{" "}
-                    <span className={isCorrect ? "text-green-500" : "text-red-500"}>
-                        {isCorrect ? "Correct!" : "Wrong!"}
+                    You selected: {result.selectedAnswer} -{" "}
+                    <span className={result.isCorrect ? "text-green-500" : "text-red-500"}>
+                        {result.isCorrect ? "Correct!" : "Wrong!"}
                     </span>
                 </p>
             ) : (
