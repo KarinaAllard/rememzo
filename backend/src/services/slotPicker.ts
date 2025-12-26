@@ -1,4 +1,4 @@
-import { ISceneTemplateLean } from "../../utils/generateDailyScene";
+import { ISceneTemplateLean } from "../utils/generateDailyScene";
 
 export function pickRandomSlots(template: ISceneTemplateLean) {
 	const allSlots = [...template.slots];

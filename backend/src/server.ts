@@ -4,6 +4,7 @@ import cors from "cors";
 import connectDB from "./db";
 import dailyPuzzle from "./routes/dailyPuzzle";
 import authRoutes from "./routes/auth/auth";
+import gameRoutes from "./routes/gameAttempt";
 
 dotenv.config();
 
@@ -32,6 +33,8 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/play", dailyPuzzle);
 
 app.use("/api/auth", authRoutes);
+
+app.use("/api/game", gameRoutes);
 
 const PORT = parseInt(process.env.PORT || "5001", 10);
 app.listen(PORT, () => {
