@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../components/Button"
 import { Countdown } from "../components/Countdown";
 import { useGame } from "../game/GameContext";
 import { useGameFlow } from "../hooks/useGameFlow";
-import { completeDailyAttempt, startDailyAttempt } from "../hooks/useDailyAttempt";
+import { completeDailyAttempt, isDailyAttemptCompleted, startDailyAttempt } from "../hooks/useDailyAttempt";
 import { useToday } from "../hooks/useToday";
+import { useNavigate } from "react-router";
 
 export const Play = () => {
     const { phase, setPhase, countdownRemainingMs, setCountdownRemainingMs } = useGame();
@@ -13,6 +14,13 @@ export const Play = () => {
     const [attemptId, setAttemptId] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const today = useToday();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (isDailyAttemptCompleted(today)) {
+            navigate("/play/result", { replace: true });
+        }
+    }, [today, navigate]);
 
     const handleStart = async () => { 
         setLoading(true);
