@@ -9,7 +9,7 @@ export class GameAttemptService {
         puzzleDate,
         totalTimeMs,
     }: {
-        userId?: mongoose.Types.ObjectId;
+        userId?: string | mongoose.Types.ObjectId;
         guestId?: string;
         sceneId: mongoose.Types.ObjectId;
         puzzleDate: string;
@@ -17,16 +17,28 @@ export class GameAttemptService {
     }): Promise<IGameAttempt> {
         if (!userId && !guestId) throw new Error("Must provide userId or guestId");
 
-        let attempt = await GameAttempts.findOne({
-            $or: [{ userId }, { guestId }],
-            sceneId,
-            puzzleDate,
-            completed: false
-        });
+        let attempt: IGameAttempt | null = null;
+
+        if (userId){
+            const objectId = typeof userId === "string" ? new mongoose.Types.ObjectId(userId) : userId;
+            attempt = await GameAttempts.findOne({
+                userId: objectId,
+                sceneId,
+                puzzleDate,
+                completed: false
+            })
+        } else if (guestId) {
+            attempt = await GameAttempts.findOne({
+                guestId,
+                sceneId,
+                puzzleDate,
+                completed: false
+            });
+        }
 
         if (!attempt) {
             attempt = await GameAttempts.create({
-                userId,
+                userId: userId ? (typeof userId === "string" ? new mongoose.Types.ObjectId(userId) : userId) : undefined,
                 guestId,
                 sceneId,
                 puzzleDate,
