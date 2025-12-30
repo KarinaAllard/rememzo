@@ -85,7 +85,7 @@ export const Question = () => {
                             type="button"
                             onClick={() => setSelected(option.text)}
                             className="w-full"
-                            variant={selected === option.text ? "secondary" : "muted"}
+                            variant={selected === option.text ? "selected" : "option"}
                         >
                             {option.text}
                         </Button>

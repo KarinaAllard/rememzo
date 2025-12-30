@@ -1,12 +1,12 @@
 type ButtonProps = {
-    children: React.ReactNode;
-    onClick?: () => void;
-    type?: "button" | "submit";
-    className?: string;
-    disabled?: boolean;
-    variant?: "primary" | "secondary" | "muted";
-    loading?: boolean;
-}
+	children: React.ReactNode;
+	onClick?: () => void;
+	type?: "button" | "submit";
+	className?: string;
+	disabled?: boolean;
+	variant?: "primary" | "secondary" | "muted" | "option" | "selected";
+	loading?: boolean;
+};
 
 const baseClasses = `
     relative px-4 py-2 cursor-pointer font-bold rounded-sm
@@ -17,48 +17,58 @@ const baseClasses = `
 `;
 
 const variantClasses = {
-    primary: `
-        bg-(--cta) text-neutral-100
+	primary: `
+        bg-(--cta) text-white
         before:bg-linear-to-r before:from-(--cta) before:via-(--text) before:to-(--cta) 
-        after:bg-linear-to-r after:from-(--cta) after:via-(--dark-purple) after:to-(--cta)
+        after:bg-linear-to-r after:from-(--cta) after:via-(--dark-cta) after:to-(--cta)
         hover:text-white hover:bg-linear-to-b hover:from-(--cta) hover:to-(--cta-hover)
-        hover:before:from-(--cta-hover) hover:before:via-(--text-hover) hover:before:to-(--cta-hover) 
-        hover:after:bg-linear-to-r hover:after:from-(--cta-hover) hover:after:via-(--dark-purple) hover:after:to-(--cta-hover)
+        hover:before:from-(--cta) hover:before:via-(--text-hover) hover:before:to-(--cta) 
+        hover:after:bg-linear-to-r hover:after:from-(--cta-hover) hover:after:via-(--dark-cta) hover:after:to-(--cta-hover)
     `,
-    secondary: `
-        bg-(--link) text-(--dark-purple) before:bg-linear-to-r before:from-(--link) before:via-neutral-200 before:to-(--link)
-        after:bg-linear-to-r after:from-(--link) after:via-(--cta) after:to-(--link) 
-        hover:bg-linear-to-b hover:from-(--link) hover:to-(--link-hover)
-        hover:before:from-(--link) hover:before:via-neutral-300 hover:before:to-(--link) 
-        hover:after:bg-linear-to-r hover:after:from-(--link-hover) hover:after:via-(--cta-hover) hover:after:to-(--link-hover)
+	secondary: `
+        bg-gray-700 text-(--secondary-text) before:bg-linear-to-r before:from-gray-700 before:via-neutral-200 before:to-gray-700
+        after:bg-linear-to-r after:from-gray-700 after:via-gray-800 after:to-gray-700 
+        hover:bg-linear-to-b hover:from-gray-600 hover:to-gray-700
+        hover:before:from-gray-600 hover:before:via-neutral-300 hover:before:to-gray-600 
+        hover:after:bg-linear-to-r hover:after:from-gray-700 hover:after:via-gray-800 hover:after:to-gray-700
     `,
-    muted: `
-        bg-gray-400 text-gray-800 before:bg-linear-to-r before:from-gray-400 before:via-gray-200 before:to-gray-400 
+	muted: `
+        bg-gray-400 text-gray-900 before:bg-linear-to-r before:from-gray-400 before:via-gray-200 before:to-gray-400 
         after:bg-linear-to-r after:from-gray-400 after:via-gray-600 after:to-gray-400 
-        hover:text-white hover:bg-linear-to-b hover:from-gray-400 hover:to-gray-500
-        hover:before:from-gray-400 hover:before:via-gray-300 hover:before:to-gray-400 
-        hover:after:bg-linear-to-r hover:after:from-gray-500 hover:after:via-gray-600 hover:after:to-gray-500
+        hover:text-gray-900 hover:bg-linear-to-b hover:from-gray-300 hover:to-gray-400
+        hover:before:from-gray-300 hover:before:via-gray-200 hover:before:to-gray-300 
+        hover:after:bg-linear-to-r hover:after:from-gray-400 hover:after:via-gray-600 hover:after:to-gray-400
+    `,
+	option: `
+        bg-(--background) text-(--text) text-2xl
+        hover:text-white hover:bg-neutral-900
+        border-1 border-(--background)
+    `,
+	selected: `
+        bg-neutral-900 text-(--text) text-2xl
+        hover:text-white hover:bg-neutral-800
+        border-1 border-white
     `,
 };
 
 export const Button = (props: ButtonProps) => {
-    const { loading, disabled } = props;
-    const variant = props.disabled ? "muted" : props.variant ?? "primary";
-    return (
-        <button
-            type={props.type || "button"}
-            onClick={props.onClick}
-            disabled={disabled || loading}
-            className={`
+	const { loading, disabled } = props;
+	const variant = props.disabled ? "muted" : props.variant ?? "primary";
+	return (
+		<button
+			type={props.type || "button"}
+			onClick={props.onClick}
+			disabled={disabled || loading}
+			className={`
                     ${baseClasses}
                     ${variantClasses[variant]}
                     ${props.className || ""}
                 `}
-        >
-            {loading && (
-                <span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-2 inline-block"></span>
-            )}
-            {props.children}
-        </button>
-    );
+		>
+			{loading && (
+				<span className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin mr-2 inline-block"></span>
+			)}
+			{props.children}
+		</button>
+	);
 };
