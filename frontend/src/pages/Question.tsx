@@ -1,26 +1,20 @@
 import { useEffect, useState } from "react"
 import { Button } from "../components/Button"
-import { useNavigate } from "react-router";
 import type { IDailyQuestion } from "../types/IQuestion";
 import { fetchDailyQuestion } from "../services/questionService";
-import { isDailyAttemptCompleted, markDailyAttemptCompleted } from "../hooks/useDailyAttempt";
+import { markDailyAttemptCompleted } from "../hooks/useDailyAttempt";
 import { useToday } from "../hooks/useToday";
-import { useGame } from "../game/GameContext";
+import { useGameController } from "../hooks/useGameController";
 
 export const Question = () => {
     const [selected, setSelected] = useState<string | null>(null);
     const [question, setQuestion] = useState<IDailyQuestion | null>(null)
-    const navigate = useNavigate()
     const today = useToday();
-    const { setPhase } = useGame();
+    const { goToPhase } = useGameController();
 
     useEffect(() => {
         const fetchQuestion = async () => {
             try {
-                if (isDailyAttemptCompleted(today)) {
-                    navigate("/play/result", { replace: true });
-                    return;
-                }
                 const data = await fetchDailyQuestion(today);
 
                 if (!data?.question) {
@@ -38,7 +32,7 @@ export const Question = () => {
             }
         }
         fetchQuestion()
-    }, [today, navigate])
+    }, [today])
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -46,7 +40,7 @@ export const Question = () => {
 
         markDailyAttemptCompleted(today);
 
-        const selectedOption = question.options.find(opt => opt.text === selected)
+        const selectedOption = question.options.find(opt => opt.text === selected);
 
         sessionStorage.setItem(
             "dailyResult",
@@ -57,7 +51,7 @@ export const Question = () => {
             })
         );
 
-        navigate("/play/result", { replace: true });
+        goToPhase("result");
     };
 
     return (

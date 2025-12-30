@@ -38,7 +38,9 @@ export const router = createBrowserRouter([
             {
                 path: "/play/result",
                 element: 
+                <GameGuard allowed={["result", "completed"]}>
                     <Result />
+                </GameGuard>
             },
             {
                 path: "/login",
@@ -56,6 +58,6 @@ export const router = createBrowserRouter([
                     </ProtectedRoute>
                 )
             },
-    ]
+        ]
     }
 ])

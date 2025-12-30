@@ -1,23 +1,15 @@
-import { Link, useNavigate } from "react-router"
+import { Link } from "react-router"
 import { Button } from "../components/Button"
 import { useToday } from "../hooks/useToday"
 import { isDailyAttemptCompleted } from "../hooks/useDailyAttempt"
-import { useEffect } from "react"
 
 export const Result = () => {
-    const navigate = useNavigate()
     const today = useToday()
 
     const raw = sessionStorage.getItem("dailyResult");
     const result = raw ? JSON.parse(raw) : null;
 
-    const completed = isDailyAttemptCompleted(today);
-
-    useEffect(() => {
-        if (!result && !completed) {
-            navigate("/", { replace: true });
-        }
-    }, [result, completed, navigate]);
+    const completed = !result && isDailyAttemptCompleted(today);
 
     return (
         <div className="w-full flex flex-col items-center">
@@ -29,9 +21,13 @@ export const Result = () => {
                         {result.isCorrect ? "Correct!" : "Wrong!"}
                     </span>
                 </p>
-            ) : (
+            ) : completed ? (
                 <p>
                     You have already completed today's puzzle!
+                </p>
+            ) : (
+                <p>
+                    No result available.
                 </p>
             )}
             

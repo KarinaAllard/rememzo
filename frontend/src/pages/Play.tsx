@@ -1,26 +1,18 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Button } from "../components/Button"
 import { Countdown } from "../components/Countdown";
 import { useGame } from "../game/GameContext";
-import { useGameFlow } from "../hooks/useGameFlow";
-import { completeDailyAttempt, isDailyAttemptCompleted, startDailyAttempt } from "../hooks/useDailyAttempt";
+import { completeDailyAttempt, startDailyAttempt } from "../hooks/useDailyAttempt";
 import { useToday } from "../hooks/useToday";
-import { useNavigate } from "react-router";
+import { useGameController } from "../hooks/useGameController";
 
 export const Play = () => {
-    const { phase, setPhase, countdownRemainingMs, setCountdownRemainingMs } = useGame();
-    useGameFlow();
+    const { phase, countdownRemainingMs, setCountdownRemainingMs } = useGame();
+    const { goToPhase } = useGameController();
 
     const [attemptId, setAttemptId] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const today = useToday();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        if (isDailyAttemptCompleted(today)) {
-            navigate("/play/result", { replace: true });
-        }
-    }, [today, navigate]);
 
     const handleStart = async () => { 
         setLoading(true);
@@ -28,7 +20,7 @@ export const Play = () => {
             const { attemptId, remainingMs } = await startDailyAttempt();
             setAttemptId(attemptId);
             setCountdownRemainingMs(remainingMs);
-            setPhase("countdown");
+            goToPhase("countdown");
         } catch (error: any) {
             alert(error.response?.data?.error || "Could not start game");
         } finally {
@@ -41,7 +33,7 @@ export const Play = () => {
         try {
             await completeDailyAttempt(attemptId);
             setCountdownRemainingMs(null);
-            setPhase("question");
+            goToPhase("question");
         } catch (error: any) {
             alert(error.response?.data?.error || "Could not complete attempt");
         }

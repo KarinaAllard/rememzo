@@ -1,7 +1,10 @@
 import { Outlet } from "react-router"
 import { Navbar } from "./Navbar"
+import { useGameFlow } from "../hooks/useGameFlow"
 
 export const Layout = () => {
+    useGameFlow();
+    
     return (
         <div className="flex flex-col min-h-screen min-w-full items-center">
             <Navbar />
