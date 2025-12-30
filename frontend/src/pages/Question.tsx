@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react"
 import { Button } from "../components/Button"
-import { useNavigate } from "react-router";
 import type { IDailyQuestion } from "../types/IQuestion";
 import { fetchDailyQuestion } from "../services/questionService";
+import { markDailyAttemptCompleted } from "../hooks/useDailyAttempt";
+import { useToday } from "../hooks/useToday";
+import { useGameController } from "../hooks/useGameController";
 
 export const Question = () => {
     const [selected, setSelected] = useState<string | null>(null);
     const [question, setQuestion] = useState<IDailyQuestion | null>(null)
-    const navigate = useNavigate()
+    const today = useToday();
+    const { goToPhase } = useGameController();
 
     useEffect(() => {
         const fetchQuestion = async () => {
             try {
-                const today = new Date().toISOString().split("T")[0]
                 const data = await fetchDailyQuestion(today);
 
                 if (!data?.question) {
@@ -30,27 +32,32 @@ export const Question = () => {
             }
         }
         fetchQuestion()
-    }, [])
+    }, [today])
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (!selected || !question) return;
 
-        const selectedOption = question.options.find(opt => opt.text === selected)
+        markDailyAttemptCompleted(today);
 
-        navigate("/play/result", {
-            state: {
+        const selectedOption = question.options.find(opt => opt.text === selected);
+
+        sessionStorage.setItem(
+            "dailyResult",
+            JSON.stringify({
                 selectedAnswer: selected,
                 isCorrect: selectedOption?.isCorrect || false,
                 questionId: question.questionId,
-            },
-        })
+            })
+        );
+
+        goToPhase("result");
     };
 
     return (
         <div className="w-full flex flex-col">
             <h1 className="text-4xl text-(--text-hover) mb-6">Question</h1>
-            <p className="text-sm">2025-12-11</p>
+            <p className="text-sm">{today}</p>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md mx-auto mt-10">
                 <p className="text-xl text-center text-(--text-hover)">{question?.questionText}</p>
 
