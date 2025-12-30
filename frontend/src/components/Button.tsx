@@ -41,12 +41,12 @@ const variantClasses = {
     `,
 	option: `
         bg-(--background) text-(--text) text-2xl
-        hover:text-white hover:bg-neutral-900
+        hover:text-white hover:bg-neutral-900 font-normal
         border-1 border-(--background)
     `,
 	selected: `
         bg-neutral-900 text-(--text) text-2xl
-        hover:text-white hover:bg-neutral-800
+        hover:text-white hover:bg-neutral-800 font-bold
         border-1 border-white
     `,
 };
