@@ -30,6 +30,7 @@
 
   font-family: 'Inconsolata', system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-weight: 400;
+  font-size: 125%;
 
   color: var(--text);
   background-color: var(--background);
