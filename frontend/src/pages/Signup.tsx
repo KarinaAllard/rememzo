@@ -73,7 +73,7 @@ export const Signup = () => {
             <h1 className="text-4xl text-(--text-hover) mb-6">Sign Up</h1>
             <p className="text-sm">To keep track of your stats and streak, register here.</p>
             <form onSubmit={handleSubmit} className="flex flex-col mt-4 w-full">
-                <p className="text-red-500 text-sm mt-1 min-h-4">{submitError}</p>
+                <p className="text-(--cta) text-sm mt-1 min-h-4">{submitError}</p>
                 <Input 
                     label="Email" 
                     type="email" 
