@@ -18,7 +18,7 @@ export const Result = () => {
                 <div className="flex flex-col items-center">
                     <p>
                         You selected: {result.selectedAnswer} -{" "}
-                        <span className={result.isCorrect ? "text-green-500" : "text-red-500"}>
+                        <span className={result.isCorrect ? "text-(--success) font-bold" : "text-(--cta) font-bold"}>
                             {result.isCorrect ? "Correct!" : "Wrong!"}
                         </span>
                     </p>
