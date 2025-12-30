@@ -15,12 +15,17 @@ export const Result = () => {
         <div className="w-full flex flex-col items-center">
             <h1 className="text-4xl text-(--text-hover) mb-6">Result</h1>
             {result ? (
-                <p>
-                    You selected: {result.selectedAnswer} -{" "}
-                    <span className={result.isCorrect ? "text-green-500" : "text-red-500"}>
-                        {result.isCorrect ? "Correct!" : "Wrong!"}
-                    </span>
-                </p>
+                <div className="flex flex-col items-center">
+                    <p>
+                        You selected: {result.selectedAnswer} -{" "}
+                        <span className={result.isCorrect ? "text-green-500" : "text-red-500"}>
+                            {result.isCorrect ? "Correct!" : "Wrong!"}
+                        </span>
+                    </p>
+                    <p>
+                        Come back tomorrow to play again!
+                    </p>
+                </div>
             ) : completed ? (
                 <p>
                     You have already completed today's puzzle!
