@@ -23,19 +23,19 @@ export const PasswordMeter = ({ password }: PasswordMeterProps) => {
         case 0:
         case 1:
             label = "Weak";
-            color = "bg-red-500";
+            color = "bg-neutral-700";
             break;
         case 2:
             label = "Medium";
-            color = "bg-yellow-400";
+            color = "bg-neutral-500";
             break;
         case 3:
             label = "Strong";
-            color = "bg-blue-500";
+            color = "bg-neutral-300";
             break;
         case 4:
             label = "Very Strong";
-            color = "bg-green-500";
+            color = "bg-(--success)";
             break;
         default:
             label = "";
@@ -44,7 +44,7 @@ export const PasswordMeter = ({ password }: PasswordMeterProps) => {
 
     return (
         <div className="flex flex-col gap-1 w-full">
-            <div className="h-1 w-full bg-gray-800 rounded">
+            <div className="h-1 w-full bg-neutral-800 rounded">
                 <div
                     className={`${color} h-1 rounded`}
                     style={{ width: `${width}%` }}

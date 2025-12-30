@@ -1,6 +1,6 @@
 import { Link, NavLink } from "react-router"
-import logo from "../assets/logo-v5.png"
-import mobileLogo from "../assets/mobile-logo-v5.png"
+import logo from "../assets/logo-v6.png"
+import mobileLogo from "../assets/mobile-logo-v6.png"
 
 export const Navbar = () => {
 

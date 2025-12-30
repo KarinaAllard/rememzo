@@ -42,11 +42,11 @@ export const Countdown = (props: CountdownProps) => {
     const total = props.seconds * 1000;
     const fraction = remainingMs / total;
 
-    const color = fraction <= 1/3
-    ? "#f87171"
-    : fraction < 2/3
-    ? "#facc15"
-    : "#22c55e";
+    const color = fraction <= 1/5
+    ? "#c9215f"
+    : fraction < 3/5
+    ? "#d4d4d4"
+    : "#36dea0";
 
     return (
 
