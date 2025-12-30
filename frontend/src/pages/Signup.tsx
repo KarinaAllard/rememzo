@@ -82,7 +82,7 @@ export const Signup = () => {
                     onChange={e => setEmail(e.target.value)} 
                     className="w-full"
                 />
-                <p className="text-xs text-yellow-400 min-h-4 mb-2">
+                <p className="text-xs text-(--shine) min-h-4 mb-2 italic opacity-90">
                     {emailError}
                 </p>
                 <Input 
@@ -97,7 +97,7 @@ export const Signup = () => {
                 />
                 <div className="min-h-4 mb-2 relative">
                     <PasswordMeter password={password} />
-                    <p className="text-xs text-yellow-400 absolute top-2">
+                    <p className="text-xs text-(--shine) absolute top-2 italic opacity-90">
                         {passwordError}
                     </p>
                 </div>
@@ -111,7 +111,7 @@ export const Signup = () => {
                     onIconClick={() => setShowPassword(!showPassword)}
                     className="w-full"
                 />
-                <p className="text-xs text-yellow-400 min-h-4 mb-2">
+                <p className="text-xs text-(--shine) min-h-4 mb-2 italic opacity-90">
                     {confirmPasswordError}
                 </p>
                 <div className="mt-4 w-full">
