@@ -22,11 +22,13 @@
   --text-hover: #d4d4d4;
   --link: #d06694;
   --link-hover: #e47ba8;
+  --shine: #f9a8cb;
   --secondary-text: #f2f2f4; 
   --background: #121212;
   --cta: #c9215f;
   --cta-hover: #d73973;
-  --dark-cta: #9c1949;
+  --dark-cta: #86123d;
+  --success: #36dea0;
 
   font-family: 'Inconsolata', system-ui, Avenir, Helvetica, Arial, sans-serif;
   font-weight: 400;
