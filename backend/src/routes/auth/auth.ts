@@ -1,6 +1,9 @@
 import express, { Request, Response } from "express";
 import { hashPassword, verifyPassword, generateToken, generateRefreshToken, createAuthResponse } from "../../services/authService";
-import { createUser, findUserByEmail } from "../../services/userService";
+import { createUser, findUserByEmail, findUserById } from "../../services/userService";
+import jwt from "jsonwebtoken"
+
+const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
 
 const router = express.Router();
 
@@ -38,6 +41,31 @@ router.post("/login", async (req: Request, res: Response ) => {
     } catch (error: any) {
         res.status(500).json({ error: error.message });
     }
+});
+
+router.post("/refresh", async (req: Request, res: Response) => {
+
+  const { token: refreshToken } = req.body || {};
+
+  if (!refreshToken) {
+    return res.status(400).json({ error: "Refresh token required" });
+  }
+
+  let payload: { userId: string };
+  try {
+    payload = jwt.verify(refreshToken, JWT_SECRET) as { userId: string };
+  } catch (error: any) {
+    return res.status(401).json({ error: "Invalid refresh token" });
+  }
+
+  const user = await findUserById(payload.userId);
+
+  if (!user) return res.status(404).json({ error: "User not found" });
+
+  const newToken = generateToken(user);
+  const newRefreshToken = generateRefreshToken(user);
+
+  res.json({ token: newToken, refreshToken: newRefreshToken });
 });
 
 export default router;
