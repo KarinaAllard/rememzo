@@ -2,6 +2,7 @@ import { useNavigate } from "react-router";
 import { Button } from "../components/Button";
 import { useEffect, useState } from "react";
 import { fetchMe } from "../services/meService";
+import { FlagEN, FlagSV } from "../icons/flags";
 
 export const MyAccount = () => {
     const navigate = useNavigate();
@@ -44,8 +45,12 @@ export const MyAccount = () => {
                     <p>Email: 
                         <span className="text-(--shine) font-semibold"> {user.email}</span>
                     </p>
-                    <p>Language preference: 
-                        <span className="uppercase text-(--shine) font-semibold"> {user.preferences.language}</span>
+                    <p className="flex gap-2">
+                        Language preference: 
+                        {user.preferences.language === "sv" ? <FlagSV /> : <FlagEN />}
+                        <span className="uppercase text-(--shine) font-semibold">
+                            {user.preferences.language}
+                        </span>
                     </p>
                     <p>Current Streak: 
                         <span className="text-(--shine) font-semibold"> {user.streak}</span>
