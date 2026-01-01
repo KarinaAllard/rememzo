@@ -5,7 +5,7 @@ import { fetchMe } from "../services/meService";
 
 export const MyAccount = () => {
     const navigate = useNavigate();
-    const [user, setUser] = useState<{ email: string; preferences: { language: string } } | null>(null);
+    const [user, setUser] = useState<{ email: string; preferences: { language: string }; streak: number } | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -35,14 +35,21 @@ export const MyAccount = () => {
     if (error) return <p className="text-(--dark-cta)">{error}</p>
 
     return (
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col gap-2">
             <h1 className="text-4xl text-(--text-hover) mb-6">My Account</h1>
-            <p className="text-sm mb-4">Welcome! Here you'll eventually see your stats.</p>
+            <p className="text-sm mb-4 text-(--secondary-text)">Welcome! Here you can see your stats and preferences.</p>
 
             {user ? (
-                <div>
-                    <p>Email: {user.email}</p>
-                    <p>Language preference: {user.preferences.language}</p>
+                <div className="flex flex-col gap-4 p-4 border border-neutral-800 mb-4">
+                    <p>Email: 
+                        <span className="text-(--shine) font-semibold"> {user.email}</span>
+                    </p>
+                    <p>Language preference: 
+                        <span className="uppercase text-(--shine) font-semibold"> {user.preferences.language}</span>
+                    </p>
+                    <p>Current Streak: 
+                        <span className="text-(--shine) font-semibold"> {user.streak}</span>
+                    </p>
                 </div>
             ) : (
                 <p>No user data available</p>
