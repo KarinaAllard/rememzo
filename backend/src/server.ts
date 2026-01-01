@@ -5,6 +5,7 @@ import connectDB from "./db";
 import dailyPuzzle from "./routes/dailyPuzzle";
 import authRoutes from "./routes/auth/auth";
 import gameRoutes from "./routes/gameAttempt";
+import meRoute from "./routes/me";
 
 dotenv.config();
 
@@ -35,6 +36,8 @@ app.use("/api/play", dailyPuzzle);
 app.use("/api/auth", authRoutes);
 
 app.use("/api/game", gameRoutes);
+
+app.use("/api/", meRoute);
 
 const PORT = parseInt(process.env.PORT || "5001", 10);
 app.listen(PORT, () => {
