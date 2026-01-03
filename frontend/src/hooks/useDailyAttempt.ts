@@ -2,12 +2,18 @@ import { getOrCreateGuestId } from "../game/guest";
 import { fetchDailyQuestion } from "../services/questionService";
 import { startAttempt, completeAttempt } from "../services/gameService";
 import { useToday } from "./useToday";
+import { getAttemptIdentity } from "../game/identity";
 
 export const startDailyAttempt = async () => {
-    const guestId = getOrCreateGuestId();
     const today = useToday();
+    const identity = getAttemptIdentity();
     const sceneData = await fetchDailyQuestion(today);
-    const attemptData = await startAttempt(guestId, sceneData._id, sceneData.date);
+
+    const attemptData = await startAttempt({
+        ...identity,
+        sceneId: sceneData._id, 
+        puzzleDate: sceneData.date,
+    });
 
     return {
         attemptId: attemptData._id || attemptData.attemptId,
@@ -20,11 +26,17 @@ export const completeDailyAttempt = async (attemptId: string) => {
 };
 
 export const isDailyAttemptCompleted = (puzzleDate: string) => {
-    const guestId = getOrCreateGuestId();
-    const attemptsRaw = sessionStorage.getItem("completedAttempts") || "{}";
-    const attempts = JSON.parse(attemptsRaw);
+    const identity = getAttemptIdentity();
 
-    return Boolean(attempts[guestId]?.[puzzleDate]);
+    if ("guestId" in identity) {
+        const attemptsRaw = sessionStorage.getItem("completedAttempts") || "{}";
+        const attempts = JSON.parse(attemptsRaw);
+
+        return Boolean(attempts[identity.guestId]?.[puzzleDate]);
+    }
+
+    return false;
+
 };
 
 export const markDailyAttemptCompleted = (puzzleDate: string) => {
