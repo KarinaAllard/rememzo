@@ -98,4 +98,28 @@ router.get("/last/:userId", authenticateJWT, async (req: AuthRequest, res: Respo
     }
 });
 
+router.get("/user/:userId/range", authenticateJWT, async (req: AuthRequest, res: Response) => {
+    try {
+        const { userId } = req.params;
+        const { from, to } = req.query;
+
+        if (req.user?.userId !== userId) {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+
+        const query: any = { userId: new mongoose.Types.ObjectId(userId) };
+        if (from || to) {
+            query.timestamp = {};
+            if (from) query.timestamp.$gte = new Date(from as string);
+            if (to) query.timestamp.$lte = new Date(to as string);
+        }
+
+        const attempts = await Attempts.find(query).sort({ timestamp: -1 });
+        res.json(attempts);
+    } catch (error: any) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 export default router;
