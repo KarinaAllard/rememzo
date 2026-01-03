@@ -78,4 +78,24 @@ router.get("/user/:userId", authenticateJWT, async (req: AuthRequest, res: Respo
     }
 });
 
+router.get("/last/:userId", authenticateJWT, async (req: AuthRequest, res: Response) => {
+    try {
+        const { userId } = req.params;
+
+        if (req.user?.userId !== userId) {
+            return res.status(403).json({ error: "Forbidden" });
+        }
+
+        const lastAttempt = await Attempts.findOne({ userId: new mongoose.Types.ObjectId(userId) })
+            .sort({ timestamp: -1 });
+
+        if (!lastAttempt) return res.status(404).json({ error: "No attempt found" });
+
+        res.json(lastAttempt);
+    } catch (error: any) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+});
+
 export default router;
