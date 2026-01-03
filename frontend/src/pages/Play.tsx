@@ -7,18 +7,17 @@ import { useToday } from "../hooks/useToday";
 import { useGameController } from "../hooks/useGameController";
 
 export const Play = () => {
-    const { phase, countdownRemainingMs, setCountdownRemainingMs } = useGame();
+    const { phase, countdownRemainingMs, setCountdownRemainingMs, attemptId, setAttemptId } = useGame();
     const { goToPhase } = useGameController();
 
-    const [attemptId, setAttemptId] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const today = useToday();
 
     const handleStart = async () => { 
         setLoading(true);
         try {
-            const { attemptId, remainingMs } = await startDailyAttempt();
-            setAttemptId(attemptId);
+            const { attemptId: newAttemptId, remainingMs } = await startDailyAttempt();
+            setAttemptId(newAttemptId);
             setCountdownRemainingMs(remainingMs);
             goToPhase("countdown");
         } catch (error: any) {

@@ -1,10 +1,14 @@
-import { getOrCreateGuestId } from "../game/guest";
 import { fetchDailyQuestion } from "../services/questionService";
 import { startAttempt, completeAttempt } from "../services/gameService";
 import { useToday } from "./useToday";
-import { getAttemptIdentity } from "../game/identity";
+import { getAttemptIdentity, type AttemptIdentity } from "../game/identity";
 
-export const startDailyAttempt = async () => {
+interface DailyAttemptData {
+    attemptId: string;
+    remainingMs: number;
+}
+
+export const startDailyAttempt = async (): Promise<DailyAttemptData> => {
     const today = useToday();
     const identity = getAttemptIdentity();
     const sceneData = await fetchDailyQuestion(today);
@@ -21,12 +25,33 @@ export const startDailyAttempt = async () => {
     };
 };
 
-export const completeDailyAttempt = async (attemptId: string) => {
-    return completeAttempt(attemptId);
+export const markDailyAttemptCompleted = async (
+    puzzleDate: string,
+    attemptId?: string
+): Promise<void> => {
+    const identity: AttemptIdentity = getAttemptIdentity();
+
+    if ("guestId" in identity) {
+        const attemptsRaw = sessionStorage.getItem("completedAttempts") || "{}";
+        const attempts = JSON.parse(attemptsRaw);
+
+        attempts[identity.guestId] = attempts[identity.guestId] || {};
+        attempts[identity.guestId][puzzleDate] = true;
+        
+        sessionStorage.setItem("completedAttempts", JSON.stringify(attempts));
+    }
+
+    if ("userId" in identity && attemptId) {
+        try {
+            await completeAttempt(attemptId);
+        } catch (error: any) {
+            console.error("Failed to mark user attempt completed", error);
+        }
+    }
 };
 
 export const isDailyAttemptCompleted = (puzzleDate: string) => {
-    const identity = getAttemptIdentity();
+    const identity: AttemptIdentity = getAttemptIdentity();
 
     if ("guestId" in identity) {
         const attemptsRaw = sessionStorage.getItem("completedAttempts") || "{}";
@@ -36,16 +61,12 @@ export const isDailyAttemptCompleted = (puzzleDate: string) => {
     }
 
     return false;
-
 };
 
-export const markDailyAttemptCompleted = (puzzleDate: string) => {
-    const guestId = getOrCreateGuestId();
-    const attemptsRaw = sessionStorage.getItem("completedAttempts") || "{}";
-    const attempts = JSON.parse(attemptsRaw);
-
-    attempts[guestId] = attempts[guestId] || {};
-    attempts[guestId][puzzleDate] = true;
-
-    sessionStorage.setItem("completedAttempts", JSON.stringify(attempts));
-}
+export const completeDailyAttempt = async (attemptId: string) => {
+    try {
+        return await completeAttempt(attemptId);
+    } catch (error: any) {
+        console.error("Failed to complete attempt", error);
+    }
+};

@@ -5,12 +5,15 @@ import { fetchDailyQuestion } from "../services/questionService";
 import { markDailyAttemptCompleted } from "../hooks/useDailyAttempt";
 import { useToday } from "../hooks/useToday";
 import { useGameController } from "../hooks/useGameController";
+import { useGame } from "../game/GameContext";
 
 export const Question = () => {
     const [selected, setSelected] = useState<string | null>(null);
     const [question, setQuestion] = useState<IDailyQuestion | null>(null)
     const today = useToday();
     const { goToPhase } = useGameController();
+
+    const { attemptId } = useGame();
 
     useEffect(() => {
         const fetchQuestion = async () => {
@@ -38,7 +41,7 @@ export const Question = () => {
         e.preventDefault();
         if (!selected || !question) return;
 
-        markDailyAttemptCompleted(today);
+        markDailyAttemptCompleted(today, attemptId ?? undefined);
 
         const selectedOption = question.options.find(opt => opt.text === selected);
 
