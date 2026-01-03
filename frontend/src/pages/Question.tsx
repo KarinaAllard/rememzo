@@ -7,6 +7,7 @@ import { useToday } from "../hooks/useToday";
 import { useGameController } from "../hooks/useGameController";
 import { useGame } from "../game/GameContext";
 import { submitAttemptAnswer } from "../services/attemptService";
+import { getAttemptIdentity } from "../game/identity";
 
 export const Question = () => {
     const [selected, setSelected] = useState<string | null>(null);
@@ -16,6 +17,7 @@ export const Question = () => {
     const today = useToday();
     const { goToPhase } = useGameController();
     const { attemptId } = useGame();
+    const identity = getAttemptIdentity();
 
     useEffect(() => {
         const fetchQuestion = async () => {
@@ -48,24 +50,26 @@ export const Question = () => {
             const selectedOption = question.options.find(opt => opt.text === selected);
             const correct = selectedOption?.isCorrect ?? false;
 
-            if (attemptId) {
+            if ("userId" in identity && attemptId) {
                 await submitAttemptAnswer(attemptId, {
                     questionId: question.questionId,
                     selectedOption: selected,
                     correct,
                 });
+            } else if ("guestId" in identity) {
+                sessionStorage.setItem(
+                    "dailyResult",
+                    JSON.stringify({
+                        selectedAnswer: selected,
+                        isCorrect: selectedOption?.isCorrect || false,
+                        questionId: question.questionId,
+                    })
+                );
+
             }
             
             markDailyAttemptCompleted(today, attemptId ?? undefined);
 
-            sessionStorage.setItem(
-                "dailyResult",
-                JSON.stringify({
-                    selectedAnswer: selected,
-                    isCorrect: selectedOption?.isCorrect || false,
-                    questionId: question.questionId,
-                })
-            );
 
             goToPhase("result");
         } catch (error: any) {
