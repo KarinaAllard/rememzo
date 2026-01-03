@@ -25,15 +25,17 @@ export class GameAttemptService {
                 userId: objectId,
                 sceneId,
                 puzzleDate,
-                completed: false
             })
         } else if (guestId) {
             attempt = await GameAttempts.findOne({
                 guestId,
                 sceneId,
                 puzzleDate,
-                completed: false
             });
+        }
+
+        if (attempt?.completed) {
+            throw new Error("You have already completed today's attempt");
         }
 
         if (!attempt) {
