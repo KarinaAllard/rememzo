@@ -31,3 +31,16 @@ router.post("/:attemptId/answer",  async (req: Request, res: Response) => {
     }
 });
 
+router.get("/:attemptId", async (req: Request, res: Response) => {
+    try {
+        const { attemptId } = req.params;
+
+        const result = await Attempts.findOne({ "gameAttemptId": attemptId }).lean();
+        if (!result) return res.status(404).json({ error: "Result not found" });
+
+        res.json(result);
+    } catch (error: any) {
+        console.error(error);
+        res.status(500).json({ error: error.message });
+    }
+});
