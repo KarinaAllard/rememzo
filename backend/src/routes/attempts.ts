@@ -3,6 +3,8 @@ import GameAttempts from "../models/GameAttempts";
 import Attempts from "../models/Attempts";
 import { authenticateJWT, AuthRequest } from "../middleware/authenticateJWT";
 import mongoose from "mongoose";
+import User from "../models/User";
+import Stats from "../models/Stats";
 
 const router = express.Router();
 
@@ -22,8 +24,10 @@ router.post("/:attemptId/answer", authenticateJWT,  async (req: AuthRequest, res
             return res.status(401).json({ error: "User must be logged in to save result" });
         }
 
+        const userId = new mongoose.Types.ObjectId(req.user.userId);
+
         const attemptRecord = await Attempts.create({
-            userId: new mongoose.Types.ObjectId(req.user.userId),
+            userId,
             sceneId: gameAttempt.sceneId,
             won: correct,
             answer: { questionId, selectedOption, correct },
@@ -31,6 +35,38 @@ router.post("/:attemptId/answer", authenticateJWT,  async (req: AuthRequest, res
 
         gameAttempt.completed = true;
         await gameAttempt.save();
+
+        const user = await User.findById(userId);
+        if (!user) return res.status(404).json ({ error: "User not found" });
+
+        let stats = await Stats.findOne({ userId });
+        if (!stats) {
+            stats = await Stats.create({
+                userId,
+                totalGamesPlayed: 0,
+                totalWins: 0,
+                winrate: 0,
+                bestStreak: 0,
+                lastPlayed: new Date(),
+            });
+        }
+
+        stats.totalGamesPlayed += 1;
+        stats.lastPlayed = new Date();
+
+        if (attemptRecord.won) {
+            user.streak += 1;
+            stats.totalWins +=1;
+
+            if (user.streak > stats.bestStreak) stats.bestStreak = user.streak;
+        } else {
+            user.streak = 0;
+        }
+
+        stats.winrate = stats.totalWins / stats.totalGamesPlayed;
+
+        await user.save();
+        await stats.save();
 
         res.json(attemptRecord);
     } catch (error: any) {
