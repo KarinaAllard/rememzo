@@ -22,6 +22,15 @@ baseService.interceptors.response.use(
     async (error) => {
         const originalRequest = error.config;
 
+        if (originalRequest.url?.includes("/auth/refresh")) {
+            localStorage.removeItem("token");
+            localStorage.removeItem("refreshToken");
+            sessionStorage.removeItem("token");
+            sessionStorage.removeItem("refreshToken");
+            window.location.href = "/login";
+            return Promise.reject(error);
+        }
+
         if (error.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
 
@@ -37,12 +46,13 @@ baseService.interceptors.response.use(
 
                 originalRequest.headers.Authorization = `Bearer ${newToken}`;
                 return baseService(originalRequest);
-            } catch {
+            } catch (refreshError) {
                 localStorage.removeItem("token");
                 localStorage.removeItem("refreshToken");
                 sessionStorage.removeItem("token");
                 sessionStorage.removeItem("refreshToken");
                 window.location.href = "/login";
+                return Promise.reject(refreshError);
             }
         }
 
