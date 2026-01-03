@@ -21,11 +21,17 @@ export const Play = () => {
             setCountdownRemainingMs(remainingMs);
             goToPhase("countdown");
         } catch (error: any) {
-            alert(error.response?.data?.error || "Could not start game");
+            if (error.response?.data?.error === "You have already completed today's attempt") {
+                goToPhase("completed");
+            } else {
+                console.error(error);
+            }
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
     };
+
+    // TODO - remove alert
 
     const handleCountdownComplete = async () => {
         if (!attemptId) return;
