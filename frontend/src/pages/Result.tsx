@@ -2,12 +2,60 @@ import { Link } from "react-router"
 import { Button } from "../components/Button"
 import { useToday } from "../hooks/useToday"
 import { isDailyAttemptCompleted } from "../hooks/useDailyAttempt"
+import { useGame } from "../game/GameContext"
+import { getAttemptIdentity } from "../game/identity"
+import { useEffect, useState } from "react"
+import { fetchAttemptResult, fetchLastAttempt } from "../services/attemptService"
+
+type ResultData = {
+    selectedOption: string
+    correct: boolean
+}
 
 export const Result = () => {
     const today = useToday()
+    const { attemptId } = useGame();
+    const identity = getAttemptIdentity();
+    
+    const [result, setResult] = useState<ResultData | null>(null);
+    const [loading, setLoading] = useState(true);
 
-    const raw = sessionStorage.getItem("dailyResult");
-    const result = raw ? JSON.parse(raw) : null;
+    useEffect(() => {
+        const loadResult = async () => {
+            try {
+                let response: any = null;
+
+                if ("userId" in identity) {
+                    if (attemptId) {
+                        response = await fetchAttemptResult(attemptId);
+                    } else {
+                        response = await fetchLastAttempt(identity.userId);
+                    }
+
+                    if (response?.answer) {
+                        setResult({
+                            selectedOption: response.answer.selectedOption,
+                            correct: response.answer.correct,
+                        });
+                    }
+
+                } else {
+                    const raw = sessionStorage.getItem("dailyResult");
+                    setResult(raw ? JSON.parse(raw) : null);
+                }
+            } catch (error: any) {
+                console.error("Failed to load result:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        loadResult();
+    }, [attemptId, identity]);
+
+    if (loading) {
+        return <p>Loading result...</p>
+    };
 
     const completed = !result && isDailyAttemptCompleted(today);
 
@@ -17,9 +65,9 @@ export const Result = () => {
             {result ? (
                 <div className="flex flex-col items-center">
                     <p>
-                        You selected: {result.selectedAnswer} -{" "}
-                        <span className={result.isCorrect ? "text-(--success) font-bold" : "text-(--cta) font-bold"}>
-                            {result.isCorrect ? "Correct!" : "Wrong!"}
+                        You selected: {result.selectedOption} -{" "}
+                        <span className={result.correct ? "text-(--success) font-bold" : "text-(--cta) font-bold"}>
+                            {result.correct ? "Correct!" : "Wrong!"}
                         </span>
                     </p>
                     <p>

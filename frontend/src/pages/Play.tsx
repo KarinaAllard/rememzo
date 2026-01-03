@@ -64,6 +64,7 @@ export const Play = () => {
                 </Button>
             )}
 
+            {/* TODO: Remember to change countdown time */}
             {phase === "countdown" && ( 
                 <Countdown 
                     seconds={5} 
