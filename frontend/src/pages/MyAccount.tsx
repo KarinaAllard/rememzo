@@ -6,7 +6,7 @@ import { useUser } from "../context/UserContext";
 
 export const MyAccount = () => {
     const navigate = useNavigate();
-    const { user } = useUser();
+    const { user, refreshUser } = useUser();
     const { showToast } = useToast();
 
     const handleLogout = () => {
@@ -15,6 +15,7 @@ export const MyAccount = () => {
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("refreshToken");
 
+        refreshUser();
         showToast("You've been logged out", "info");
         navigate("/login", { replace: true });
     };
