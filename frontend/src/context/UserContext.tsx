@@ -1,13 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { fetchMe } from "../services/meService";
-
-type Stats = {
-  totalGamesPlayed: number;
-  totalWins: number;
-  winrate: number;
-  bestStreak: number;
-  lastPlayed: string | null;
-};
+import { fetchMe, type Stats } from "../services/meService";
 
 type User = {
     email: string;
