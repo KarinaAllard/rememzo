@@ -17,7 +17,7 @@ export const Result = () => {
     const today = useToday()
     const { attemptId, phase } = useGame();
     const identity = getAttemptIdentity();
-    const showtToast = phase === "result" || phase === "completed";
+    const showToast = phase === "result" || phase === "completed";
     
     const [result, setResult] = useState<ResultData | null>(null);
     const [loading, setLoading] = useState(true);
@@ -64,7 +64,7 @@ export const Result = () => {
     return (
         <div className="w-full flex flex-col items-center">
             <h1 className="text-4xl text-(--text-hover) mb-6">Result</h1>
-            {showtToast && (
+            {showToast && (
                 <Toast duration={2500} variant="success">
                     Daily puzzle completed!
                 </Toast>
