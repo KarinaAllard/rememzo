@@ -8,6 +8,7 @@ import { useGameController } from "../hooks/useGameController";
 import { useGame } from "../game/GameContext";
 import { submitAttemptAnswer } from "../services/attemptService";
 import { getAttemptIdentity } from "../game/identity";
+import { useUser } from "../context/UserContext";
 
 export const Question = () => {
     const [selected, setSelected] = useState<string | null>(null);
@@ -17,6 +18,7 @@ export const Question = () => {
     const today = useToday();
     const { goToPhase } = useGameController();
     const { attemptId } = useGame();
+    const { refreshUser } = useUser();
     const identity = getAttemptIdentity();
 
     useEffect(() => {
@@ -56,6 +58,8 @@ export const Question = () => {
                     selectedOption: selected,
                     correct,
                 });
+
+                refreshUser();
             } else if ("guestId" in identity) {
                 sessionStorage.setItem(
                     "dailyResult",

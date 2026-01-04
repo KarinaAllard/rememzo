@@ -7,6 +7,7 @@ import { getAttemptIdentity } from "../game/identity"
 import { useEffect, useState } from "react"
 import { fetchAttemptResult, fetchLastAttempt } from "../services/attemptService"
 import { Toast } from "../components/Toast"
+import { useUser } from "../context/UserContext"
 
 type ResultData = {
     selectedOption: string
@@ -16,6 +17,7 @@ type ResultData = {
 export const Result = () => {
     const today = useToday()
     const { attemptId, phase } = useGame();
+    const { user } = useUser();
     const identity = getAttemptIdentity();
     const showToast = phase === "result" || phase === "completed";
     
@@ -77,6 +79,11 @@ export const Result = () => {
                             {result.correct ? "Correct!" : "Wrong!"}
                         </span>
                     </p>
+                     {user && (
+                        <p>
+                            Current streak: <span>{user.streak}</span>
+                        </p>
+                    )}
                     <p>
                         Come back tomorrow to play again!
                     </p>
