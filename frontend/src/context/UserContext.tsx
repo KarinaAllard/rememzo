@@ -1,11 +1,17 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
-import { fetchMe, type Stats } from "../services/meService";
+import { fetchMe } from "../services/meService";
 
 type User = {
     email: string;
     preferences: { language: string };
     streak: number;
-    stats?: Stats;
+    stats?: {
+        totalGamesPlayed: number;
+        totalWins: number;
+        winrate: number;
+        bestStreak: number;
+        lastPlayed: string | null;
+    }
 };
 
 type UserContextType = {
