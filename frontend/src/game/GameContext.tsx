@@ -9,6 +9,8 @@ type GameContextValue = {
     setPhase: (phase: GamePhase) => void;
     countdownRemainingMs: number | null;
     setCountdownRemainingMs: (ms: number | null) => void;
+    attemptId: string | null;
+    setAttemptId: (id: string | null) => void;
 };
 
 const GameContext = createContext<GameContextValue | null>(null);
@@ -16,6 +18,7 @@ const GameContext = createContext<GameContextValue | null>(null);
 export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     const [phase, setPhase] = useState<GamePhase>("idle");
     const [countdownRemainingMs, setCountdownRemainingMs] = useState<number | null>(null);
+    const [attemptId, setAttemptId] = useState<string | null>(null);
 
     const today = useToday();
 
@@ -26,7 +29,7 @@ export const GameProvider = ({ children }: { children: React.ReactNode }) => {
     }, []);
 
     return (
-        <GameContext.Provider value={{ phase, setPhase, countdownRemainingMs, setCountdownRemainingMs }}>
+        <GameContext.Provider value={{ phase, setPhase, countdownRemainingMs, setCountdownRemainingMs, attemptId, setAttemptId }}>
             {children}
         </GameContext.Provider>
     );

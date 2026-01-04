@@ -1,42 +1,52 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../components/Button"
 import { Countdown } from "../components/Countdown";
 import { useGame } from "../game/GameContext";
-import { completeDailyAttempt, startDailyAttempt } from "../hooks/useDailyAttempt";
+import { startDailyAttempt } from "../hooks/useDailyAttempt";
 import { useToday } from "../hooks/useToday";
 import { useGameController } from "../hooks/useGameController";
 
 export const Play = () => {
-    const { phase, countdownRemainingMs, setCountdownRemainingMs } = useGame();
+    const { phase, countdownRemainingMs, setCountdownRemainingMs, attemptId, setAttemptId } = useGame();
     const { goToPhase } = useGameController();
 
-    const [attemptId, setAttemptId] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
     const today = useToday();
 
+    useEffect(() => {
+        const storedAttemptId = sessionStorage.getItem("dailyAttemptId");
+        if (storedAttemptId && !attemptId) {
+            setAttemptId(storedAttemptId);
+        }
+    }, [attemptId, setAttemptId]);
+
+    useEffect(() => {
+        if (attemptId) sessionStorage.setItem("dailyAttemptId", attemptId);
+    }, [attemptId]);
+
     const handleStart = async () => { 
+        if (attemptId) return;
+
         setLoading(true);
         try {
-            const { attemptId, remainingMs } = await startDailyAttempt();
-            setAttemptId(attemptId);
+            const { attemptId: newAttemptId, remainingMs } = await startDailyAttempt();
+            setAttemptId(newAttemptId);
             setCountdownRemainingMs(remainingMs);
             goToPhase("countdown");
         } catch (error: any) {
-            alert(error.response?.data?.error || "Could not start game");
+            if (error.response?.data?.error === "You have already completed today's attempt") {
+                goToPhase("completed");
+            } else {
+                console.error(error);
+            }
         } finally {
-            setLoading(false)
+            setLoading(false);
         }
     };
 
     const handleCountdownComplete = async () => {
-        if (!attemptId) return;
-        try {
-            await completeDailyAttempt(attemptId);
             setCountdownRemainingMs(null);
             goToPhase("question");
-        } catch (error: any) {
-            alert(error.response?.data?.error || "Could not complete attempt");
-        }
     };
 
     return (
@@ -50,13 +60,14 @@ export const Play = () => {
                     onClick={handleStart}
                     disabled={loading}
                 >
-                    Start Game
+                    {loading ? "Starting..." : "Start Game"}
                 </Button>
             )}
 
+            {/* TODO: Remember to change countdown time */}
             {phase === "countdown" && ( 
                 <Countdown 
-                    seconds={20} 
+                    seconds={5} 
                     remainingMs={countdownRemainingMs ?? undefined}
                     setRemainingMs={setCountdownRemainingMs}
                     onComplete={handleCountdownComplete}

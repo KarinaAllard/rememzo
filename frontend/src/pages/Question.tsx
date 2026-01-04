@@ -5,12 +5,21 @@ import { fetchDailyQuestion } from "../services/questionService";
 import { markDailyAttemptCompleted } from "../hooks/useDailyAttempt";
 import { useToday } from "../hooks/useToday";
 import { useGameController } from "../hooks/useGameController";
+import { useGame } from "../game/GameContext";
+import { submitAttemptAnswer } from "../services/attemptService";
+import { getAttemptIdentity } from "../game/identity";
+import { useUser } from "../context/UserContext";
 
 export const Question = () => {
     const [selected, setSelected] = useState<string | null>(null);
     const [question, setQuestion] = useState<IDailyQuestion | null>(null)
+    const [loading, setLoading] = useState(false);
+
     const today = useToday();
     const { goToPhase } = useGameController();
+    const { attemptId } = useGame();
+    const { refreshUser } = useUser();
+    const identity = getAttemptIdentity();
 
     useEffect(() => {
         const fetchQuestion = async () => {
@@ -25,7 +34,7 @@ export const Question = () => {
                 setQuestion({
                     questionText: data.question.questionText,
                     options: data.question.options,
-                    questionId: data.question.questionId,
+                    questionId: data.questionId,
                 })
             } catch (error) {
                 console.error("Failed to fetch question:", error)
@@ -34,24 +43,44 @@ export const Question = () => {
         fetchQuestion()
     }, [today])
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!selected || !question) return;
 
-        markDailyAttemptCompleted(today);
+        setLoading(true);
+        try {
+            const selectedOption = question.options.find(opt => opt.text === selected);
+            const correct = selectedOption?.isCorrect ?? false;
 
-        const selectedOption = question.options.find(opt => opt.text === selected);
+            if ("userId" in identity && attemptId) {
+                await submitAttemptAnswer(attemptId, {
+                    questionId: question.questionId,
+                    selectedOption: selected,
+                    correct,
+                });
 
-        sessionStorage.setItem(
-            "dailyResult",
-            JSON.stringify({
-                selectedAnswer: selected,
-                isCorrect: selectedOption?.isCorrect || false,
-                questionId: question.questionId,
-            })
-        );
+                refreshUser();
+            } else if ("guestId" in identity) {
+                sessionStorage.setItem(
+                    "dailyResult",
+                    JSON.stringify({
+                        selectedAnswer: selected,
+                        isCorrect: selectedOption?.isCorrect || false,
+                        questionId: question.questionId,
+                    })
+                );
 
-        goToPhase("result");
+            }
+            
+            markDailyAttemptCompleted(today, attemptId ?? undefined);
+
+
+            goToPhase("result");
+        } catch (error: any) {
+            console.error("Failed to submit answer:", error);
+        } finally {
+            setLoading(false);
+        };
     };
 
     return (
@@ -91,8 +120,8 @@ export const Question = () => {
                         </Button>
                     </label>
                 ))}
-                <Button type="submit" className="mt-4 w-full" disabled={!selected}>
-                    Submit
+                <Button type="submit" className="mt-4 w-full" disabled={!selected || loading}>
+                    {loading ? "Submitting..." : "Submit"}
                 </Button>
             </form>
         </div>
