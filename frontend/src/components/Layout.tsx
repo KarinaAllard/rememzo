@@ -1,6 +1,7 @@
 import { Outlet } from "react-router"
 import { Navbar } from "./Navbar"
 import { useGameFlow } from "../hooks/useGameFlow"
+import { Footer } from "./Footer";
 
 export const Layout = () => {
     useGameFlow();
@@ -11,6 +12,7 @@ export const Layout = () => {
             <main className="flex grow mx-auto p-4 max-w-md w-full mt-12">
                 <Outlet />
             </main>
+            <Footer />
         </div>
     )
 }
