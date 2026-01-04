@@ -1,42 +1,23 @@
 import { useNavigate } from "react-router";
 import { Button } from "../components/Button";
-import { useEffect, useState } from "react";
-import { fetchMe } from "../services/meService";
 import { FlagEN, FlagSV } from "../icons/flags";
 import { useToast } from "../context/ToastContext";
+import { useUser } from "../context/UserContext";
 
 export const MyAccount = () => {
     const navigate = useNavigate();
-    const [user, setUser] = useState<{ email: string; preferences: { language: string }; streak: number } | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { user } = useUser();
     const { showToast } = useToast();
-
-    useEffect(() => {
-        const loadUser = async () => {
-            try {
-                const data = await fetchMe();
-                setUser(data);
-            } catch (error: any) {
-                setError(error.message || "Failed to fetch user");
-            } finally {
-                setLoading(false);
-            }
-        };
-        loadUser();
-    }, []);
 
     const handleLogout = () => {
         localStorage.removeItem("token");
         localStorage.removeItem("refreshToken");
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("refreshToken");
+
         showToast("You've been logged out", "info");
         navigate("/login", { replace: true });
     };
-
-    if (loading) return <p>Loading account info...</p>
-    if (error) return <p className="text-(--dark-cta)">{error}</p>
 
     return (
         <div className="w-full flex flex-col gap-2">
