@@ -29,7 +29,7 @@ export const MyAccount = () => {
         localStorage.removeItem("refreshToken");
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("refreshToken");
-        navigate("/login", { replace: true });
+        navigate("/login", { replace: true, state: { toast: "logout-success" } });
     };
 
     if (loading) return <p>Loading account info...</p>

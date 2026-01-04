@@ -11,7 +11,7 @@ type ToastProps = {
 const variantClasses = {
     success: "bg-(--success) text-neutral-900",
     error: "bg-(--dark-cta) text-white",
-    info: "bg-neutral-400 text-neutral-900",
+    info: "bg-neutral-300 text-neutral-900",
 };
 
 export const Toast = ({ children, duration = 2500, onClose, variant = "success" }: ToastProps) => {
