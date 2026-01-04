@@ -1,10 +1,19 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { fetchMe } from "../services/meService";
 
+type Stats = {
+  totalGamesPlayed: number;
+  totalWins: number;
+  winrate: number;
+  bestStreak: number;
+  lastPlayed: string | null;
+};
+
 type User = {
     email: string;
     preferences: { language: string };
     streak: number;
+    stats?: Stats;
 };
 
 type UserContextType = {
@@ -26,7 +35,12 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
             }
 
             const data = await fetchMe();
-            setUser(data);
+            setUser({
+                email: data.email,
+                preferences: data.preferences,
+                streak: data.streak,
+                stats: data.stats
+            });
         } catch (error) {
             console.error("Failed to fetch user", error);
             setUser(null);
