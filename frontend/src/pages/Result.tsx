@@ -6,6 +6,7 @@ import { useGame } from "../game/GameContext"
 import { getAttemptIdentity } from "../game/identity"
 import { useEffect, useState } from "react"
 import { fetchAttemptResult, fetchLastAttempt } from "../services/attemptService"
+import { Toast } from "../components/Toast"
 
 type ResultData = {
     selectedOption: string
@@ -14,8 +15,9 @@ type ResultData = {
 
 export const Result = () => {
     const today = useToday()
-    const { attemptId } = useGame();
+    const { attemptId, phase } = useGame();
     const identity = getAttemptIdentity();
+    const showtToast = phase === "result" || phase === "completed";
     
     const [result, setResult] = useState<ResultData | null>(null);
     const [loading, setLoading] = useState(true);
@@ -62,6 +64,11 @@ export const Result = () => {
     return (
         <div className="w-full flex flex-col items-center">
             <h1 className="text-4xl text-(--text-hover) mb-6">Result</h1>
+            {showtToast && (
+                <Toast duration={2500} variant="success">
+                    Daily puzzle completed!
+                </Toast>
+            )}
             {result ? (
                 <div className="flex flex-col items-center">
                     <p>
