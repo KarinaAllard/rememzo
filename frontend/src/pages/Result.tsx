@@ -8,6 +8,8 @@ import { useEffect, useState } from "react"
 import { fetchAttemptResult, fetchLastAttempt } from "../services/attemptService"
 import { Toast } from "../components/Toast"
 import { useUser } from "../context/UserContext"
+import { useToast } from "../context/ToastContext"
+import { TbReload } from "../icons/icons"
 
 type ResultData = {
     selectedOption: string
@@ -19,21 +21,24 @@ export const Result = () => {
     const { attemptId, phase } = useGame();
     const { user } = useUser();
     const identity = getAttemptIdentity();
-    const showToast = phase === "result" || phase === "completed";
+    const identityUserId = "userId" in identity ? identity.userId : null;
+    const showResultToast = phase === "result" || phase === "completed";
+    const { showToast } = useToast();
     
     const [result, setResult] = useState<ResultData | null>(null);
     const [loading, setLoading] = useState(true);
+    const [sessionOutdated, setSessionOutdated] = useState(false);
 
     useEffect(() => {
         const loadResult = async () => {
             try {
                 let response: any = null;
 
-                if ("userId" in identity) {
+                if (identityUserId) {
                     if (attemptId) {
                         response = await fetchAttemptResult(attemptId);
                     } else {
-                        response = await fetchLastAttempt(identity.userId);
+                        response = await fetchLastAttempt(identityUserId);
                     }
 
                     if (response?.answer) {
@@ -46,6 +51,14 @@ export const Result = () => {
                 } else {
                     const raw = sessionStorage.getItem("dailyResult");
                     setResult(raw ? JSON.parse(raw) : null);
+
+                    if (!raw && phase === "completed") {
+                        showToast(
+                            "Your session seems outdated. Please refresh the page to see your result.",
+                            "error"
+                        );
+                        setSessionOutdated(true);
+                    }
                 }
             } catch (error: any) {
                 console.error("Failed to load result:", error);
@@ -55,18 +68,19 @@ export const Result = () => {
         };
 
         loadResult();
-    }, [attemptId, identity]);
+    }, [attemptId, identityUserId]);
 
     if (loading) {
         return <p>Loading result...</p>
     };
+    
 
     const completed = !result && isDailyAttemptCompleted(today);
 
     return (
         <div className="w-full flex flex-col items-center">
             <h1 className="text-4xl text-(--text-hover) mb-6">Result</h1>
-            {showToast && (
+            {showResultToast && (
                 <Toast duration={2500} variant="success">
                     Daily puzzle completed!
                 </Toast>
@@ -96,6 +110,21 @@ export const Result = () => {
                 <p>
                     No result available.
                 </p>
+            )}
+
+            {sessionOutdated && (
+                <div className="flex flex-col items-center w-full mt-4">
+                    <div className="p-2 mb-2 bg-(--dark-cta) text-(--shine) rounded-sm flex flex-col items-center">
+                        <h4 className="text-xl">Your session seems outdated.</h4>
+                        <p className="text-sm">Please reload the page to see your result.</p>
+                    </div>
+                    <Button 
+                        onClick={() => window.location.reload()} 
+                        variant="option"
+                    >
+                        <TbReload />
+                    </Button>
+                    </div>
             )}
             
             <Link to="/" className="block w-full mt-4">
