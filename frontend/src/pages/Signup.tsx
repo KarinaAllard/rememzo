@@ -6,6 +6,7 @@ import { register } from "../services/authService";
 import { LuEye, LuEyeClosed } from "../icons/icons";
 import { PasswordMeter } from "../components/PasswordMeter";
 import { useAuthRedirect } from "../hooks/useAuthRedirect";
+import { useToast } from "../context/ToastContext";
 
 export const Signup = () => {
 	const [email, setEmail] = useState("");
@@ -15,6 +16,7 @@ export const Signup = () => {
 	const [loading, setLoading] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
 	const navigate = useNavigate();
+	const { showToast } = useToast();
 
 	useAuthRedirect(true);
 
@@ -52,16 +54,21 @@ export const Signup = () => {
 			const result = await register(email, password);
 			localStorage.setItem("token", result.token);
 			localStorage.setItem("refreshToken", result.refreshToken);
-			navigate("/my-account");
+
+			showToast("Account created successfully!", "success");
+			navigate("/my-account", { replace: true });
 		} catch (error: any) {
 			console.error("Signup failed:", error);
 
 			if (error?.response?.status === 409) {
 				setSubmitError("Email already registered.");
+				showToast("Email already registered", "error");
 			} else if (error?.response?.data?.error) {
 				setSubmitError(error.response.data.error);
+				showToast(error.response.data.error, "error");
 			} else {
 				setSubmitError("Registration failed. Try again.");
+				showToast("Registration failed. Try again.", "error");
 			}
 		} finally {
 			setLoading(false);
@@ -109,8 +116,6 @@ export const Signup = () => {
 					name="confirmPassword"
 					value={confirmPassword}
 					onChange={(e) => setConfirmPassword(e.target.value)}
-					rightIcon={showPassword ? <LuEye /> : <LuEyeClosed />}
-					onIconClick={() => setShowPassword(!showPassword)}
 					className="w-full"
 				/>
 				<p className="text-xs text-(--shine) min-h-4 mb-2 italic opacity-90">

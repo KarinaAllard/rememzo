@@ -12,14 +12,17 @@ export const ToastProvider = ({ children }: { children: ReactNode }) => {
 
   const showToast = (message: string, variant?: "success" | "error" | "info") => {
     setToast({ message, variant });
-    setTimeout(() => setToast(null), 2500);
   };
 
   return (
     <ToastContext.Provider value={{ showToast }}>
       {children}
       {toast && (
-        <Toast variant={toast.variant as any} duration={2500} onClose={() => setToast(null)}>
+        <Toast
+          variant={toast.variant as any}
+          duration={2500}
+          onClose={() => setToast(null)}
+        >
           {toast.message}
         </Toast>
       )}
