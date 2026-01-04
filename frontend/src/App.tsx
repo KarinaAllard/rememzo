@@ -1,12 +1,15 @@
 import { RouterProvider } from "react-router"
 import { router } from "./Router"
+import { ToastProvider } from "./context/ToastContext"
 
 
 function App() {
 
   return (
     <>
-      <RouterProvider router={router}></RouterProvider>
+      <ToastProvider>
+        <RouterProvider router={router}></RouterProvider>
+      </ToastProvider>
     </>
   )
 }

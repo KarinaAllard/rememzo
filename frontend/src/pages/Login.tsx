@@ -1,11 +1,11 @@
-import { Link, useLocation, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { login } from "../services/authService";
 import { LuEye, LuEyeClosed } from "../icons/icons";
 import { useAuthRedirect } from "../hooks/useAuthRedirect";
-import { Toast } from "../components/Toast";
+import { useToast } from "../context/ToastContext";
 
 export const Login = () => {
 	const [email, setEmail] = useState("");
@@ -14,9 +14,8 @@ export const Login = () => {
 	const [loading, setLoading] = useState(false);
 	const [showPassword, setShowPassword] = useState(false);
 	const [rememberMe, setRememberMe] = useState(false);
-	const [showToast, setShowToast] = useState(false);
+	const { showToast } = useToast();
 	const navigate = useNavigate();
-	const location = useLocation();
 
 	useAuthRedirect(true);
 
@@ -28,16 +27,6 @@ export const Login = () => {
 			: null;
 
 	const hasLiveErrors = !!emailError;
-
-	useEffect(() => {
-		const state = location.state as { toast?: string } | null;
-
-		if (state?.toast === "logout-success") {
-			setShowToast(true);
-
-			navigate(location.pathname, { replace: true, state: null });
-		}
-	}, [location.state, navigate, location.pathname]);
 
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault();
@@ -59,10 +48,12 @@ export const Login = () => {
 				sessionStorage.setItem("refreshToken", result.refreshToken);
 			}
 
-			navigate("/my-account");
+			navigate("/my-account", { replace: true });
+			showToast("Successfully logged in!", "success");
 		} catch (error) {
 			console.error("Login failed:", error);
 			setSubmitError("Invalid email or password");
+			showToast("Login failed", "error");
 		} finally {
 			setLoading(false);
 		}
@@ -71,11 +62,7 @@ export const Login = () => {
 	return (
 		<div className="w-full flex flex-col">
 			<h1 className="text-4xl text-(--text-hover) mb-6">Log in</h1>
-			{showToast && (
-				<Toast duration={2500} variant="info">
-					You've been logged out
-				</Toast>
-			)}
+			
 			<p className="text-sm">
 				To view your streak and other stats, log in here.
 			</p>

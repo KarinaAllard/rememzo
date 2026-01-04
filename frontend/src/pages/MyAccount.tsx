@@ -3,12 +3,14 @@ import { Button } from "../components/Button";
 import { useEffect, useState } from "react";
 import { fetchMe } from "../services/meService";
 import { FlagEN, FlagSV } from "../icons/flags";
+import { useToast } from "../context/ToastContext";
 
 export const MyAccount = () => {
     const navigate = useNavigate();
     const [user, setUser] = useState<{ email: string; preferences: { language: string }; streak: number } | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+    const { showToast } = useToast();
 
     useEffect(() => {
         const loadUser = async () => {
@@ -29,7 +31,8 @@ export const MyAccount = () => {
         localStorage.removeItem("refreshToken");
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("refreshToken");
-        navigate("/login", { replace: true, state: { toast: "logout-success" } });
+        showToast("You've been logged out", "info");
+        navigate("/login", { replace: true });
     };
 
     if (loading) return <p>Loading account info...</p>
@@ -39,7 +42,7 @@ export const MyAccount = () => {
         <div className="w-full flex flex-col gap-2">
             <h1 className="text-4xl text-(--text-hover) mb-6">My Account</h1>
             <p className="text-sm mb-4 text-(--secondary-text)">Welcome! Here you can see your stats and preferences.</p>
-
+            
             {user ? (
                 <div className="flex flex-col gap-4 p-4 border border-neutral-800 mb-4">
                     <p>Email: 
