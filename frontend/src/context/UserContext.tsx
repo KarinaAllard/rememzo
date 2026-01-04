@@ -19,10 +19,17 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
     const refreshUser = async () => {
         try {
+            const token = localStorage.getItem("token") || sessionStorage.getItem("token");
+            if (!token) {
+                setUser(null);
+                return;
+            }
+
             const data = await fetchMe();
             setUser(data);
         } catch (error) {
             console.error("Failed to fetch user", error);
+            setUser(null);
         }
     };
 

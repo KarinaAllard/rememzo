@@ -6,6 +6,7 @@ import { login } from "../services/authService";
 import { LuEye, LuEyeClosed } from "../icons/icons";
 import { useAuthRedirect } from "../hooks/useAuthRedirect";
 import { useToast } from "../context/ToastContext";
+import { useUser } from "../context/UserContext";
 
 export const Login = () => {
 	const [email, setEmail] = useState("");
@@ -15,6 +16,7 @@ export const Login = () => {
 	const [showPassword, setShowPassword] = useState(false);
 	const [rememberMe, setRememberMe] = useState(false);
 	const { showToast } = useToast();
+	const { refreshUser } = useUser();
 	const navigate = useNavigate();
 
 	useAuthRedirect(true);
@@ -48,6 +50,7 @@ export const Login = () => {
 				sessionStorage.setItem("refreshToken", result.refreshToken);
 			}
 
+			await refreshUser();
 			navigate("/my-account", { replace: true });
 			showToast("Successfully logged in!", "success");
 		} catch (error) {
