@@ -48,7 +48,7 @@ export const Play = () => {
             try {
                 attempt = await startDailyAttempt();
             } catch (error: any) {
-                if (error.message === "You have already completed today's attempt") {
+                if (error.response?.data?.error === "You have already completed today's attempt") {
                     goToPhase("completed");
                     return;
                 }

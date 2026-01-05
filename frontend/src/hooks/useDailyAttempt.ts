@@ -14,14 +14,18 @@ export const startDailyAttempt = async (): Promise<DailyAttemptData> => {
     const sceneData = await fetchDailyQuestion(today);
 
     let attemptData: any = null;
-    try {
+   try {
         attemptData = await fetchAttemptForIdentity({ 
             userId: "userId" in identity ? identity.userId : undefined,
             guestId: "guestId" in identity ? identity.guestId : undefined,
             puzzleDate: today,
         });
     } catch (error: any) {
-        attemptData = null;
+        if (error.response?.status === 404) {
+            attemptData = null; 
+        } else {
+            throw error; 
+        }
     }
 
     if (!attemptData) {
