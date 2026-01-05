@@ -3,12 +3,16 @@ import DailyScene from "../models/DailyScenes";
 import ItemsLibrary from "../models/ItemsLibrary";
 import { IGeneratedScene, generateDailyScene } from "../utils/generateDailyScene";
 import { generateQuestion, IGeneratedQuestion } from "./questionGenerator";
+import SceneTemplates from "../models/SceneTemplates";
 
 export class DailySceneService {
     static async getOrGenerateScene(date: string): Promise<any> {
 
         let dailyScene = await DailyScene.findOne({ date }).lean();
-        if (dailyScene) return dailyScene;
+        if (dailyScene) {
+            const template = await SceneTemplates.findById(dailyScene.templateId).lean();    
+            return {...dailyScene, template};
+        }
 
         const generatedScene: IGeneratedScene = await generateDailyScene();
 
@@ -50,6 +54,11 @@ export class DailySceneService {
             date
         });
 
-        return dailyScene;
+        const template = await SceneTemplates.findById(generatedScene.templateId).lean();
+
+        return {
+            ...dailyScene.toObject(),
+            template
+        }
     }
 }

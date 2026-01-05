@@ -7,6 +7,7 @@ import authRoutes from "./routes/auth/auth";
 import gameRoutes from "./routes/gameAttempt";
 import meRoute from "./routes/me";
 import attemptRoutes from "./routes/attempts";
+import itemRoute from "./routes/items";
 
 dotenv.config();
 
@@ -41,6 +42,8 @@ app.use("/api/game", gameRoutes);
 app.use("/api/", meRoute);
 
 app.use("/api/attempt", attemptRoutes);
+
+app.use("/api/items", itemRoute);
 
 const PORT = parseInt(process.env.PORT || "5001", 10);
 app.listen(PORT, () => {
