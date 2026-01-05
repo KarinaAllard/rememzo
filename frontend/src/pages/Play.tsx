@@ -40,7 +40,7 @@ export const Play = () => {
     }, [today]);
 
     const handleStart = async () => { 
-        if (attemptId) return;
+        if (attemptId && phase !== "completed") return;
 
         setLoading(true);
         try {
