@@ -44,16 +44,22 @@ export const Play = () => {
 
         setLoading(true);
         try {
-            const { attemptId: newAttemptId, remainingMs } = await startDailyAttempt();
-            setAttemptId(newAttemptId);
-            setCountdownRemainingMs(remainingMs);
+            let attempt;
+            try {
+                attempt = await startDailyAttempt();
+            } catch (error: any) {
+                if (error.message === "You have already completed today's attempt") {
+                    goToPhase("completed");
+                    return;
+                }
+                throw error;
+            }
+
+            setAttemptId(attempt.attemptId);
+            setCountdownRemainingMs(attempt.remainingMs);
             goToPhase("countdown");
         } catch (error: any) {
-            if (error.response?.data?.error === "You have already completed today's attempt") {
-                goToPhase("completed");
-            } else {
-                console.error(error);
-            }
+            console.error(error);
         } finally {
             setLoading(false);
         }
@@ -83,7 +89,8 @@ export const Play = () => {
             {phase === "countdown" && dailyPuzzle && ( 
                 <>
                     <Countdown 
-                        seconds={5} 
+                        seconds={20} 
+                        attemptId={attemptId || undefined}
                         remainingMs={countdownRemainingMs ?? undefined}
                         setRemainingMs={setCountdownRemainingMs}
                         onComplete={handleCountdownComplete}
