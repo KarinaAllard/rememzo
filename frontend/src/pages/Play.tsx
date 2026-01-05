@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "../components/Button"
 import { Countdown } from "../components/Countdown";
 import { useGame } from "../game/GameContext";
@@ -8,12 +8,15 @@ import { useGameController } from "../hooks/useGameController";
 import { PlayScene } from "../components/PlayScene";
 import { type IDailyPuzzle } from "../types/IGame";
 import { fetchDailyPuzzle } from "../services/dailyPuzzleService";
+import type { IItem } from "../types/IItemLibrary";
+import { fetchItemsLibrary } from "../services/itemLibraryService";
 
 export const Play = () => {
     const { phase, countdownRemainingMs, setCountdownRemainingMs, attemptId, setAttemptId } = useGame();
     const { goToPhase } = useGameController();
     const [dailyPuzzle, setDailyPuzzle] = useState<IDailyPuzzle | null>(null);
     const [loading, setLoading] = useState(false);
+    const [itemsLibrary, setItemsLibrary] = useState<IItem[]>([]);
     const today = useToday();
 
     useEffect(() => {
@@ -38,6 +41,17 @@ export const Play = () => {
         };
         fetchPuzzle();
     }, [today]);
+
+    useEffect(() => {
+        fetchItemsLibrary()
+            .then(setItemsLibrary)
+            .catch(err => console.error("Failed to load item library", err));
+    }, []);
+
+    const itemsById = useMemo(() => {
+        return new Map(itemsLibrary.map(item => [item._id, item]));
+    }, [itemsLibrary]);
+
 
     const handleStart = async () => { 
         if (attemptId && phase !== "completed") return;
@@ -95,7 +109,11 @@ export const Play = () => {
                         setRemainingMs={setCountdownRemainingMs}
                         onComplete={handleCountdownComplete}
                     />
-                    <PlayScene items={dailyPuzzle.items} />
+                    <PlayScene 
+                        items={dailyPuzzle.items} 
+                        itemsById={itemsById}
+                        backgroundRef={dailyPuzzle.template?.backgroundRef}
+                    />
                 </>
             )}
         </div>
