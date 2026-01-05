@@ -5,11 +5,14 @@ import { useGame } from "../game/GameContext";
 import { startDailyAttempt } from "../hooks/useDailyAttempt";
 import { useToday } from "../hooks/useToday";
 import { useGameController } from "../hooks/useGameController";
+import { PlayScene } from "../components/PlayScene";
+import { type IDailyPuzzle } from "../types/IGame";
+import { fetchDailyPuzzle } from "../services/dailyPuzzleService";
 
 export const Play = () => {
     const { phase, countdownRemainingMs, setCountdownRemainingMs, attemptId, setAttemptId } = useGame();
     const { goToPhase } = useGameController();
-
+    const [dailyPuzzle, setDailyPuzzle] = useState<IDailyPuzzle | null>(null);
     const [loading, setLoading] = useState(false);
     const today = useToday();
 
@@ -23,6 +26,18 @@ export const Play = () => {
     useEffect(() => {
         if (attemptId) sessionStorage.setItem("dailyAttemptId", attemptId);
     }, [attemptId]);
+
+    useEffect(() => {
+        const fetchPuzzle = async () => {
+            try {
+                const data = await fetchDailyPuzzle(today);
+                setDailyPuzzle(data);
+            } catch (error) {
+                console.error("Failed to load daily puzzle", error);
+            }
+        };
+        fetchPuzzle();
+    }, [today]);
 
     const handleStart = async () => { 
         if (attemptId) return;
@@ -65,13 +80,16 @@ export const Play = () => {
             )}
 
             {/* TODO: Remember to change countdown time */}
-            {phase === "countdown" && ( 
-                <Countdown 
-                    seconds={5} 
-                    remainingMs={countdownRemainingMs ?? undefined}
-                    setRemainingMs={setCountdownRemainingMs}
-                    onComplete={handleCountdownComplete}
-                />
+            {phase === "countdown" && dailyPuzzle && ( 
+                <>
+                    <Countdown 
+                        seconds={5} 
+                        remainingMs={countdownRemainingMs ?? undefined}
+                        setRemainingMs={setCountdownRemainingMs}
+                        onComplete={handleCountdownComplete}
+                    />
+                    <PlayScene items={dailyPuzzle.items} />
+                </>
             )}
         </div>
     )
