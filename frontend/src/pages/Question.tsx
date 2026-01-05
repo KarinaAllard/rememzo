@@ -64,8 +64,8 @@ export const Question = () => {
                 sessionStorage.setItem(
                     "dailyResult",
                     JSON.stringify({
-                        selectedAnswer: selected,
-                        isCorrect: selectedOption?.isCorrect || false,
+                        selectedOption: selected,
+                        correct: selectedOption?.isCorrect || false,
                         questionId: question.questionId,
                     })
                 );
