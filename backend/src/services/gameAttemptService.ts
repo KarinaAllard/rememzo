@@ -17,19 +17,31 @@ export class GameAttemptService {
     }): Promise<IGameAttempt> {
         if (!userId && !guestId) throw new Error("Must provide userId or guestId");
 
+        const userObjectId = 
+        userId
+            ? typeof userId === "string"
+                ? new mongoose.Types.ObjectId(userId)
+                : userId
+                : undefined;
+
+        const sceneObjectId =
+            typeof sceneId === "string"
+                ? new mongoose.Types.ObjectId(sceneId)
+                : sceneId;
+
         let attempt: IGameAttempt | null = null;
 
-        if (userId){
+        if (userObjectId){
             const objectId = typeof userId === "string" ? new mongoose.Types.ObjectId(userId) : userId;
             attempt = await GameAttempts.findOne({
-                userId: objectId,
-                sceneId,
+                userId: userObjectId,
+                sceneId: sceneObjectId,
                 puzzleDate,
             })
         } else if (guestId) {
             attempt = await GameAttempts.findOne({
                 guestId,
-                sceneId,
+                sceneId: sceneObjectId,
                 puzzleDate,
             });
         }
@@ -40,9 +52,9 @@ export class GameAttemptService {
 
         if (!attempt) {
             attempt = await GameAttempts.create({
-                userId: userId ? (typeof userId === "string" ? new mongoose.Types.ObjectId(userId) : userId) : undefined,
+                userId: userObjectId,
                 guestId,
-                sceneId,
+                sceneId: sceneObjectId,
                 puzzleDate,
                 remainingMs: totalTimeMs
             });
