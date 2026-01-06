@@ -27,7 +27,7 @@ export function generateWhichStateQuestion(
 
     if (states.length === 2) {
         const correctState = selectedItem.state;
-        const template = templateText || "Was the {name} {state}?";
+        const template = itemsFromLibrary.questionTemplate || templateText || "Was the {name} {state}?";
         questionText = template
             .replace("{name}", selectedItem.name)
             .replace("{state}", correctState);
@@ -45,7 +45,7 @@ export function generateWhichStateQuestion(
         const shuffledStates = [...states].sort(() => 0.5 - Math.random());
         const chosenOptions = shuffledStates.slice(0, Math.max(optionsCount, shuffledStates.length));
 
-        const options = chosenOptions.map(s => ({
+        options = chosenOptions.map(s => ({
             text: s,
             isCorrect: s === selectedItem.state
         }));
