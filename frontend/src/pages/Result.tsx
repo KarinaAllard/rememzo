@@ -78,7 +78,7 @@ export const Result = () => {
     const completed = !result && isDailyAttemptCompleted(today);
 
     return (
-        <div className="w-full flex flex-col items-center">
+        <div className="w-full flex flex-col items-center max-w-md">
             <h1 className="text-4xl text-(--text-hover) mb-6">Result</h1>
             {showResultToast && (
                 <Toast duration={2500} variant="success">

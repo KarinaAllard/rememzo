@@ -18,3 +18,25 @@ export const startAttempt = async ({
 export const completeAttempt = async (attemptId: string) => {
     return handleRequest(baseService.patch(`/game/${attemptId}/complete`));
 };
+
+export const updateRemainingAttempt = async (attemptId: string, remainingMs: number) => {
+    return handleRequest(
+        baseService.patch(`/game/${attemptId}/update`, { remainingMs })
+    );
+};
+
+export const fetchAttemptForIdentity = async ({
+    userId,
+    guestId,
+    puzzleDate,
+}: {
+    userId?: string;
+    guestId?: string;
+    puzzleDate: string;
+}) => {
+    return handleRequest(
+        baseService.get("/game/attempt", {
+            params: { userId, guestId, puzzleDate },
+        })
+    );
+};

@@ -1,16 +1,22 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "../components/Button"
 import { Countdown } from "../components/Countdown";
 import { useGame } from "../game/GameContext";
 import { startDailyAttempt } from "../hooks/useDailyAttempt";
 import { useToday } from "../hooks/useToday";
 import { useGameController } from "../hooks/useGameController";
+import { PlayScene } from "../components/PlayScene";
+import { type IDailyPuzzle } from "../types/IGame";
+import { fetchDailyPuzzle } from "../services/dailyPuzzleService";
+import type { IItem } from "../types/IItemLibrary";
+import { fetchItemsLibrary } from "../services/itemLibraryService";
 
 export const Play = () => {
     const { phase, countdownRemainingMs, setCountdownRemainingMs, attemptId, setAttemptId } = useGame();
     const { goToPhase } = useGameController();
-
+    const [dailyPuzzle, setDailyPuzzle] = useState<IDailyPuzzle | null>(null);
     const [loading, setLoading] = useState(false);
+    const [itemsLibrary, setItemsLibrary] = useState<IItem[]>([]);
     const today = useToday();
 
     useEffect(() => {
@@ -24,21 +30,50 @@ export const Play = () => {
         if (attemptId) sessionStorage.setItem("dailyAttemptId", attemptId);
     }, [attemptId]);
 
+    useEffect(() => {
+        const fetchPuzzle = async () => {
+            try {
+                const data = await fetchDailyPuzzle(today);
+                setDailyPuzzle(data);
+            } catch (error) {
+                console.error("Failed to load daily puzzle", error);
+            }
+        };
+        fetchPuzzle();
+    }, [today]);
+
+    useEffect(() => {
+        fetchItemsLibrary()
+            .then(setItemsLibrary)
+            .catch(err => console.error("Failed to load item library", err));
+    }, []);
+
+    const itemsById = useMemo(() => {
+        return new Map(itemsLibrary.map(item => [item._id, item]));
+    }, [itemsLibrary]);
+
+
     const handleStart = async () => { 
-        if (attemptId) return;
+        if (attemptId && phase !== "completed") return;
 
         setLoading(true);
         try {
-            const { attemptId: newAttemptId, remainingMs } = await startDailyAttempt();
-            setAttemptId(newAttemptId);
-            setCountdownRemainingMs(remainingMs);
+            let attempt;
+            try {
+                attempt = await startDailyAttempt();
+            } catch (error: any) {
+                if (error.response?.data?.error === "You have already completed today's attempt") {
+                    goToPhase("completed");
+                    return;
+                }
+                throw error;
+            }
+
+            setAttemptId(attempt.attemptId);
+            setCountdownRemainingMs(attempt.remainingMs);
             goToPhase("countdown");
         } catch (error: any) {
-            if (error.response?.data?.error === "You have already completed today's attempt") {
-                goToPhase("completed");
-            } else {
-                console.error(error);
-            }
+            console.error(error);
         } finally {
             setLoading(false);
         }
@@ -65,13 +100,21 @@ export const Play = () => {
             )}
 
             {/* TODO: Remember to change countdown time */}
-            {phase === "countdown" && ( 
-                <Countdown 
-                    seconds={5} 
-                    remainingMs={countdownRemainingMs ?? undefined}
-                    setRemainingMs={setCountdownRemainingMs}
-                    onComplete={handleCountdownComplete}
-                />
+            {phase === "countdown" && dailyPuzzle && ( 
+                <>
+                    <Countdown 
+                        seconds={20} 
+                        attemptId={attemptId || undefined}
+                        remainingMs={countdownRemainingMs ?? undefined}
+                        setRemainingMs={setCountdownRemainingMs}
+                        onComplete={handleCountdownComplete}
+                    />
+                    <PlayScene 
+                        items={dailyPuzzle.items} 
+                        itemsById={itemsById}
+                        backgroundRef={dailyPuzzle.template?.backgroundRef}
+                    />
+                </>
             )}
         </div>
     )

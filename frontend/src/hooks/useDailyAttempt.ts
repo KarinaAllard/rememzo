@@ -1,5 +1,5 @@
 import { fetchDailyQuestion } from "../services/questionService";
-import { startAttempt, completeAttempt } from "../services/gameService";
+import { startAttempt, completeAttempt, fetchAttemptForIdentity, updateRemainingAttempt } from "../services/gameService";
 import { useToday } from "./useToday";
 import { getAttemptIdentity, type AttemptIdentity } from "../game/identity";
 
@@ -10,14 +10,32 @@ interface DailyAttemptData {
 
 export const startDailyAttempt = async (): Promise<DailyAttemptData> => {
     const today = useToday();
-    const identity = getAttemptIdentity();
+    const identity: AttemptIdentity = getAttemptIdentity();
     const sceneData = await fetchDailyQuestion(today);
 
-    const attemptData = await startAttempt({
-        ...identity,
-        sceneId: sceneData._id, 
-        puzzleDate: sceneData.date,
-    });
+    let attemptData: any = null;
+   try {
+        attemptData = await fetchAttemptForIdentity({ 
+            userId: "userId" in identity ? identity.userId : undefined,
+            guestId: "guestId" in identity ? identity.guestId : undefined,
+            puzzleDate: today,
+        });
+    } catch (error: any) {
+        if (error.response?.status === 404) {
+            attemptData = null; 
+        } else {
+            throw error; 
+        }
+    }
+
+    if (!attemptData) {
+        attemptData = await startAttempt({
+            userId: "userId" in identity ? identity.userId : undefined,
+            guestId: "guestId" in identity ? identity.guestId : undefined,
+            sceneId: sceneData._id,
+            puzzleDate: sceneData.date,
+        });
+    }
 
     return {
         attemptId: attemptData._id || attemptData.attemptId,
@@ -50,7 +68,7 @@ export const markDailyAttemptCompleted = async (
     }
 };
 
-export const isDailyAttemptCompleted = (puzzleDate: string) => {
+export const isDailyAttemptCompleted = (puzzleDate: string): boolean => {
     const identity: AttemptIdentity = getAttemptIdentity();
 
     if ("guestId" in identity) {
@@ -68,5 +86,14 @@ export const completeDailyAttempt = async (attemptId: string) => {
         return await completeAttempt(attemptId);
     } catch (error: any) {
         console.error("Failed to complete attempt", error);
+    }
+};
+
+
+export const updateDailyAttemptRemaining = async (attemptId: string, remainingMs: number) => {
+    try {
+        return await updateRemainingAttempt(attemptId, remainingMs);
+    } catch (error: any) {
+        console.error("Failed to update remainingMs", error);
     }
 };

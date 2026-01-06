@@ -1,18 +1,29 @@
-import { Outlet } from "react-router"
-import { Navbar } from "./Navbar"
-import { useGameFlow } from "../hooks/useGameFlow"
+import { Outlet } from "react-router";
+import { Navbar } from "./Navbar";
+import { useGameFlow } from "../hooks/useGameFlow";
 import { Footer } from "./Footer";
+import { useGame } from "../game/GameContext";
 
 export const Layout = () => {
     useGameFlow();
-    
+    const { phase } = useGame();
+    const isPlayPhase = phase === "countdown";
+
     return (
-        <div className="flex flex-col min-h-screen min-w-full items-center">
+        <div className="flex flex-col min-h-screen w-full items-center overflow-x-hidden p-4">
             <Navbar />
-            <main className="flex grow mx-auto p-4 max-w-md w-full mt-12">
-                <Outlet />
-            </main>
+                <main
+                className={`flex grow mt-12 justify-center w-full max-w-full`}
+                >
+                <div
+                    className={`w-full ${
+                    isPlayPhase ? "max-w-[90vw] md:max-w-5xl" : "max-w-md"
+                    } flex flex-col items-center`}
+                >
+                    <Outlet />
+                </div>
+                </main>
             <Footer />
         </div>
-    )
-}
+    );
+};

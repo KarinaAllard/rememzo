@@ -1,8 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { updateDailyAttemptRemaining } from "../hooks/useDailyAttempt";
 
 type CountdownProps = {
     seconds: number;
+    attemptId?: string;
     onComplete: () => void;
     remainingMs?: number;
     setRemainingMs?: (ms: number) => void;
@@ -10,18 +12,33 @@ type CountdownProps = {
 
 export const Countdown = (props: CountdownProps) => {
     const storageKey = "dailyPuzzleCountdown";
-    const savedMs = sessionStorage.getItem(storageKey);
-    const [remainingMs, setRemainingMs] = useState<number>(
-        savedMs ? parseInt(savedMs) : props.seconds * 1000
-    );
+
+    const initialMs = props.remainingMs ?? (() => {
+        const savedMs = sessionStorage.getItem(storageKey);
+        return savedMs ? parseInt(savedMs) : props.seconds * 1000;
+    })();
+
+    const [remainingMs, setRemainingMsState] = useState<number>(initialMs);
+
+    const lastUpdateRef = useRef<number>(Date.now());
 
     // TODO: Implement backend-based daily attempt validation later, keep this during development for testing
 
     useEffect(() => {
+        if (props.setRemainingMs) props.setRemainingMs(remainingMs);
+    }, [remainingMs, props]);
+
+    useEffect(() => {
         const interval = setInterval(() => {
-            setRemainingMs((prev) => {
+            setRemainingMsState((prev) => {
                 const next = Math.max(prev - 50, 0);
                 sessionStorage.setItem(storageKey, next.toString());
+
+                if (props.attemptId && Date.now() - lastUpdateRef.current >= 1000) {
+                    updateDailyAttemptRemaining(props.attemptId, next).catch(console.error);
+                    lastUpdateRef.current = Date.now();
+                }
+
                 if (next === 0) {
                     sessionStorage.removeItem(storageKey);
                 }
@@ -30,7 +47,7 @@ export const Countdown = (props: CountdownProps) => {
         }, 50);
 
         return () => clearInterval(interval);
-    }, []);
+    }, [props.attemptId]);
 
     useEffect(() => {
         if (remainingMs === 0) {
