@@ -6,6 +6,7 @@ export function generateWhichStateQuestion(
     itemsById: Map<string, IItem>,
     templateText: string,
     optionsCount: number,
+    lang: string = "en"
 ): { questionText: string, options: { text: string; isCorrect: boolean }[] } {
 
     const candidates = sceneItems
@@ -27,8 +28,10 @@ export function generateWhichStateQuestion(
 
     if (states.length === 2) {
         const correctState = selectedItem.state;
-        const template = itemsFromLibrary.questionTemplate || templateText || "Was the {name} {state}?";
-        questionText = template
+        const templateStr = (itemsFromLibrary.questionTemplate as Record<string, string>)?.[lang] 
+            || templateText 
+            || "Was the {name} {state}?";
+        questionText = templateStr
             .replace("{name}", selectedItem.name)
             .replace("{state}", correctState);
 
@@ -39,8 +42,9 @@ export function generateWhichStateQuestion(
 
         options.sort(() => 0.5 - Math.random());
     } else {
-        const template = itemsFromLibrary.questionTemplate || "What was the state of the {name}";
-        questionText = template.replace("{name}", selectedItem.name);
+        const templateStr = (itemsFromLibrary.questionTemplate as Record<string, string>)?.[lang] 
+            || "What was the state of the {name}";
+        questionText = templateStr.replace("{name}", selectedItem.name);
 
         const shuffledStates = [...states].sort(() => 0.5 - Math.random());
         const chosenOptions = shuffledStates.slice(0, Math.max(optionsCount, shuffledStates.length));
