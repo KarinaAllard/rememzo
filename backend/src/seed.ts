@@ -23,43 +23,33 @@ async function seed() {
     // --- SEED ITEMS ---
     const itemsToInsert = [
         {
-          name: "Cup Coffee",
+          name: "Cup",
           type: "cups",
           variations: ["coffee", "empty", "tea", "messy"],
-          states: ["default", "dirty", "empty"],
-          artRef: ["cup-coffee.png", "cup-empty.png", "cup-tea.png", "cup-coffee-messy.png"],
-          translations: { en: "Cup Coffee", sv: "Kopp kaffe" }
-        },
-        {
-          name: "Cookie",
-          type: "cookies",
-          variations: ["regular", "bitten"],
           states: ["default"],
-          artRef: ["cookie.png", "cookie-bitten.png"],
-          translations: { en: "Cookie", sv: "Kaka" }
+          artRef: ["cup-coffee.png", "cup-empty.png", "cup-tea.png", "cup-coffee-messy.png"],
+          translations: { en: "Cup", sv: "Kopp" }
         },
         {
-          name: "Plate with Cookie",
+          name: "Plate",
           type: "plates",
-          variations: ["dirty", "empty", "crumbs", "one-cookie", "triple-cookie"],
-          states: ["default", "broken"],
+          variations: ["broken", "dirty", "empty", "crumbs", "one-cookie", "one-half-cookie"],
+          states: ["default"],
           artRef: [
             "plate-broken.png",
-            "plate-crumbs.png",
             "plate-dirty.png",
             "plate-empty.png",
+            "plate-crumbs.png",
             "plate-one-cookie.png",
             "plate-one-cookie-bitten.png",
-            "plate-triple-cookies.png",
-            "triple-cookies.png"
           ],
-          translations: { en: "Plate with Cookies", sv: "Tallrik med kakor" }
+          translations: { en: "Plate", sv: "Tallrik" }
         },
         {
           name: "Curtains",
           type: "curtains",
           variations: ["open", "closed"],
-          states: ["default"],
+          states: ["open", "closed"],
           artRef: ["curtains-open.png", "curtains-closed.png"],
           translations: { en: "Curtains", sv: "Gardiner" }
         },
@@ -75,9 +65,18 @@ async function seed() {
           name: "Fruit Bowl",
           type: "fruit-bowls",
           variations: ["full", "empty"],
-          states: ["default"],
+          states: ["full", "empty"],
           artRef: ["fruit-bowl-full.png", "fruit-bowl-empty.png"],
           translations: { en: "Fruit Bowl", sv: "Fruktskål" }
+        },
+        {
+          name: "TV",
+          type: "tvs",
+          variations: ["off", "news", "weather", "game", "static"],
+          states: ["off", "news", "weather", "game", "static"],
+          artRef: ["tv-off.png", "tv-news.png", "tv-weather.png", "tv-game.png", "tv-static.png"],
+          translations: { en: "TV", sv: "TV" },
+          questionTemplate: "What was on the {name}?"
         },
         {
           name: "Empty",
@@ -99,12 +98,24 @@ async function seed() {
         backgroundRef: "scene-1.png",
         maxItems: 6,
         slots: [
-          { index: 0, x: 50, y: 100, allowedTypes: ["cups"] },
-          { index: 1, x: 150, y: 100, allowedTypes: ["plates"] },
-          { index: 2, x: 250, y: 100, allowedTypes: ["cookies"] },
-          { index: 3, x: 100, y: 200, allowedTypes: ["plants"] },
-          { index: 4, x: 200, y: 200, allowedTypes: ["fruit-bowls"] },
-          { index: 5, x: 300, y: 50, allowedTypes: ["curtains"] }
+          { index: 0, x: 560, y: 545, allowedTypes: ["cups"] },
+          { index: 1, x: 500, y: 575, allowedTypes: ["plates"] },
+          { index: 2, x: 460, y: 600, allowedTypes: ["cookies"] },
+          { index: 3, x: 425, y: 650, allowedTypes: ["fruit-bowls"] },
+          { index: 4, x: 700, y: 420, allowedTypes: ["plants"] },
+          { index: 5, x: 670, y: 400, allowedTypes: ["plants"] },
+          { index: 6, x: 725, y: 350, allowedTypes: ["curtains"] }
+        ]
+      },
+      {
+        name: "Scene 2",
+        backgroundRef: "scene-2.png",
+        maxItems: 6,
+        slots: [
+          { index: 0, x: 350, y: 500, allowedTypes: ["tvs"] },
+          { index: 1, x: 700, y: 420, allowedTypes: ["plants"] },
+          { index: 2, x: 670, y: 400, allowedTypes: ["plants"] },
+          { index: 3, x: 725, y: 350, allowedTypes: ["curtains"] }
         ]
       }
     ];
@@ -116,7 +127,7 @@ async function seed() {
     const questionsToInsert = [
       {
         type: "countItemType",
-        requiredItemTypes: ["cup", "plate", "fruit-bowl", "flower"], 
+        requiredItemTypes: ["cups", "plates", "fruit-bowls", "plants"], 
         templateText: "How many {type} were in the scene?",
         optionsCount: 4,
         translations: {
@@ -125,11 +136,11 @@ async function seed() {
       },
       {
         type: "whichState",
-        requiredItemTypes: ["cup", "plate", "fruit-bowl", "flower"],
-        templateText: "What was the state of the {type}?",
+        requiredItemTypes: ["fruit-bowls", "tvs"],
+        templateText: "",
         optionsCount: 3,
         translations: {
-          sv: "Vilket tillstånd hade {type}?"
+          sv: ""
         }
       },
       {
