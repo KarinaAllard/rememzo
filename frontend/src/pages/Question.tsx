@@ -84,7 +84,7 @@ export const Question = () => {
     };
 
     return (
-        <div className="w-full flex flex-col">
+        <div className="w-full flex flex-col max-w-md">
             <h1 className="text-4xl text-(--text-hover) mb-6">Question</h1>
             <p className="text-sm">{today}</p>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md mx-auto mt-10">

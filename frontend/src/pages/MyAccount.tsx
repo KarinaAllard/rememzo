@@ -30,7 +30,7 @@ export const MyAccount = () => {
     const winrateClass = user?.stats && user?.stats.winrate >= 0.5 ? "text-(--success) font-bold text-lg" : "text-(--text-hover) font-bold text-lg";
 
     return (
-        <div className="w-full flex flex-col gap-2">
+        <div className="w-full flex flex-col gap-2 max-w-md">
             <h1 className="text-4xl text-(--text-hover) mb-6">My Account</h1>
             <p className="text-sm mb-4 text-(--secondary-text)">Welcome! Here you can see your stats and preferences.</p>
             
