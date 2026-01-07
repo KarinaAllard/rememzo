@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { Button } from "../components/Button"
 import type { IDailyQuestion } from "../types/IQuestion";
-import { fetchDailyQuestion } from "../services/questionService";
 import { markDailyAttemptCompleted } from "../hooks/useDailyAttempt";
 import { useToday } from "../hooks/useToday";
 import { useGameController } from "../hooks/useGameController";
@@ -9,6 +8,7 @@ import { useGame } from "../game/GameContext";
 import { submitAttemptAnswer } from "../services/attemptService";
 import { getAttemptIdentity } from "../game/identity";
 import { useUser } from "../context/UserContext";
+import { fetchDailyPuzzle } from "../services/dailyPuzzleService";
 
 export const Question = () => {
     const [selected, setSelected] = useState<string | null>(null);
@@ -24,7 +24,7 @@ export const Question = () => {
     useEffect(() => {
         const fetchQuestion = async () => {
             try {
-                const data = await fetchDailyQuestion(today);
+                const data = await fetchDailyPuzzle(today);
 
                 if (!data?.question) {
                     console.error("No question in daily scene:", data);

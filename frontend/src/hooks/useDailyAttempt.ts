@@ -1,7 +1,7 @@
-import { fetchDailyQuestion } from "../services/questionService";
 import { startAttempt, completeAttempt, fetchAttemptForIdentity, updateRemainingAttempt } from "../services/gameService";
 import { useToday } from "./useToday";
 import { getAttemptIdentity, type AttemptIdentity } from "../game/identity";
+import { fetchDailyPuzzle } from "../services/dailyPuzzleService";
 
 interface DailyAttemptData {
     attemptId: string;
@@ -11,7 +11,7 @@ interface DailyAttemptData {
 export const startDailyAttempt = async (): Promise<DailyAttemptData> => {
     const today = useToday();
     const identity: AttemptIdentity = getAttemptIdentity();
-    const sceneData = await fetchDailyQuestion(today);
+    const sceneData = await fetchDailyPuzzle(today);
 
     let attemptData: any = null;
    try {
