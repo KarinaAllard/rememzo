@@ -10,6 +10,7 @@ import { type IDailyPuzzle } from "../types/IGame";
 import { fetchDailyPuzzle } from "../services/dailyPuzzleService";
 import type { IItem } from "../types/IItemLibrary";
 import { fetchItemsLibrary } from "../services/itemLibraryService";
+import { useLanguage } from "../context/LanguageContext";
 
 export const Play = () => {
     const { phase, countdownRemainingMs, setCountdownRemainingMs, attemptId, setAttemptId } = useGame();
@@ -18,6 +19,7 @@ export const Play = () => {
     const [loading, setLoading] = useState(false);
     const [itemsLibrary, setItemsLibrary] = useState<IItem[]>([]);
     const today = useToday();
+    const { lang } = useLanguage();
 
     useEffect(() => {
         const storedAttemptId = sessionStorage.getItem("dailyAttemptId");
@@ -33,14 +35,14 @@ export const Play = () => {
     useEffect(() => {
         const fetchPuzzle = async () => {
             try {
-                const data = await fetchDailyPuzzle(today);
+                const data = await fetchDailyPuzzle(today, lang);
                 setDailyPuzzle(data);
             } catch (error) {
                 console.error("Failed to load daily puzzle", error);
             }
         };
         fetchPuzzle();
-    }, [today]);
+    }, [today, lang]);
 
     useEffect(() => {
         fetchItemsLibrary()

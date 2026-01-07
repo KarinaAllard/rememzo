@@ -9,6 +9,7 @@ import { submitAttemptAnswer } from "../services/attemptService";
 import { getAttemptIdentity } from "../game/identity";
 import { useUser } from "../context/UserContext";
 import { fetchDailyPuzzle } from "../services/dailyPuzzleService";
+import { useLanguage } from "../context/LanguageContext";
 
 export const Question = () => {
     const [selected, setSelected] = useState<string | null>(null);
@@ -20,11 +21,12 @@ export const Question = () => {
     const { attemptId } = useGame();
     const { refreshUser } = useUser();
     const identity = getAttemptIdentity();
+    const { lang } = useLanguage();
 
     useEffect(() => {
         const fetchQuestion = async () => {
             try {
-                const data = await fetchDailyPuzzle(today);
+                const data = await fetchDailyPuzzle(today, lang);
 
                 if (!data?.question) {
                     console.error("No question in daily scene:", data);
@@ -41,7 +43,7 @@ export const Question = () => {
             }
         }
         fetchQuestion()
-    }, [today])
+    }, [today, lang])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
