@@ -2,17 +2,15 @@ import { startAttempt, completeAttempt, fetchAttemptForIdentity, updateRemaining
 import { useToday } from "./useToday";
 import { getAttemptIdentity, type AttemptIdentity } from "../game/identity";
 import { fetchDailyPuzzle } from "../services/dailyPuzzleService";
-import { useLanguage } from "../context/LanguageContext";
 
 interface DailyAttemptData {
     attemptId: string;
     remainingMs: number;
 }
 
-export const startDailyAttempt = async (): Promise<DailyAttemptData> => {
+export const startDailyAttempt = async (lang: "en" | "sv"): Promise<DailyAttemptData> => {
     const today = useToday();
     const identity: AttemptIdentity = getAttemptIdentity();
-    const { lang } = useLanguage();
     const sceneData = await fetchDailyPuzzle(today, lang);
 
     let attemptData: any = null;
