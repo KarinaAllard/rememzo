@@ -14,7 +14,8 @@ export interface IGeneratedQuestion {
 export async function generateQuestion(
     generatedScene: IGeneratedScene,
     itemsById: Map<string, IItem>,
-    allQuestions: IQuestion[]
+    allQuestions: IQuestion[],
+	lang: "en" | "sv" = "en"
 ): Promise<IGeneratedQuestion> {
     const sceneItems = generatedScene.items.filter(i => i.state !== "empty");
     const libraryItems = Array.from(itemsById.values()).filter(i => i.type !== "empty");
@@ -44,8 +45,16 @@ export async function generateQuestion(
 
                     const count = validItems.filter(i => i.type === selectedType).length;
 
+                    let typeName = selectedType;
+                    const itemForType = Array.from(itemsById.values()).find(i => i.type === selectedType);
+                    if (itemForType && itemForType.translations?.[lang]) {
+                        typeName = itemForType.translations[lang].indefinite || selectedType;
+                    }
+
                     const options = generateCountOptions(count, randomQuestion.optionsCount);
-                    const questionText = randomQuestion.templateText.replace("{type}", selectedType);
+
+                    const templateText = randomQuestion.translations?.[lang] || randomQuestion.templateText;
+                    const questionText = templateText.replace("{type}", typeName);
 
                     return { questionText, options, questionId: randomQuestion._id.toString() };
                 }
@@ -62,7 +71,8 @@ export async function generateQuestion(
                         sceneItems,
                         itemsById,
                         randomQuestion.templateText,
-                        randomQuestion.optionsCount
+                        randomQuestion.optionsCount,
+                        lang
                     );
 
                     return { ...result, questionId: randomQuestion._id.toString() };
@@ -75,7 +85,8 @@ export async function generateQuestion(
 
                     if (shouldExist && sceneItems.length) {
                         const itemInScene = sceneItems[Math.floor(Math.random() * sceneItems.length)];
-                        selectedItem = libraryItems.find(libItem => libItem.name === itemInScene.name)!;
+                        selectedItem = libraryItems.find(libItem => libItem.name === itemInScene.name)
+                            ?? libraryItems[0];
                     } else {
                         const sceneNames = new Set(sceneItems.map(i => i.name));
                         const notInScene = libraryItems.filter(lib => !sceneNames.has(lib.name));
@@ -85,7 +96,7 @@ export async function generateQuestion(
                     }
 
                     return {
-                        ...generateExistsInSceneQuestion(sceneItems, selectedItem.name, randomQuestion.templateText),
+                        ...generateExistsInSceneQuestion(sceneItems, selectedItem, randomQuestion.templateText, lang),
                         questionId: randomQuestion._id.toString()
                     };
                 }
