@@ -9,7 +9,7 @@ export function generateWhichStateQuestion(
 	itemsById: Map<string, IItem>,
 	templateText: string,
 	optionsCount: number,
-	lang: string = "en"
+	lang: "en" | "sv" = "en"
 ): { questionText: string; options: { text: string; isCorrect: boolean }[] } {
 	const candidates = sceneItems
 		.filter((i) => i.state !== "empty")
