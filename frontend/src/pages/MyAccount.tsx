@@ -3,11 +3,13 @@ import { Button } from "../components/Button";
 import { FlagEN, FlagSV } from "../icons/flags";
 import { useToast } from "../context/ToastContext";
 import { useUser } from "../context/UserContext";
+import { useTranslation } from "../hooks/useTranslation";
 
 export const MyAccount = () => {
     const navigate = useNavigate();
     const { user, refreshUser } = useUser();
     const { showToast } = useToast();
+    const { t } = useTranslation();
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -16,7 +18,7 @@ export const MyAccount = () => {
         sessionStorage.removeItem("refreshToken");
 
         refreshUser();
-        showToast("You've been logged out", "info");
+        showToast(t("logoutSuccess"), "info");
         navigate("/login", { replace: true });
     };
 
@@ -31,51 +33,61 @@ export const MyAccount = () => {
 
     return (
         <div className="w-full flex flex-col gap-2 max-w-md">
-            <h1 className="text-4xl text-(--text-hover) mb-6">My Account</h1>
-            <p className="text-sm mb-4 text-(--secondary-text)">Welcome! Here you can see your stats and preferences.</p>
+            <h1 className="text-4xl text-(--cta)"><span className="text-(--text-hover)">{t("my")}</span> {t("account")}</h1>
+            <p className="text-sm mb-4 text-(--secondary-text)">{t("myAccountDesc")}</p>
             
             {user ? (
-                <div className="flex flex-col gap-4 p-4 border border-neutral-800 mb-4 text-sm">
-                    <p>Email: 
+                <div className="flex flex-col gap-4 p-4 border border-neutral-700 mb-4 text-sm shadow-[inset_0_2px_150px_rgba(var(--shadow-rgb),0.25)]">
+                    <p>
+                        <span className="border-2 border-transparent border-b-neutral-700 p-1 text-(--text) rounded-xs">{t("email")}:</span>
                         <span className="text-(--text-hover) font-bold text-lg"> {user.email}</span>
                     </p>
                     <p className="flex gap-2 items-center">
-                        Language preference: 
+                        <span className="border-2 border-transparent border-b-neutral-700 p-1 text-(--text) rounded-xs">{t("languagePreference")}: </span>
+                        
                         {user.preferences.language === "sv" ? <FlagSV /> : <FlagEN />}
                         <span className="uppercase text-(--text-hover) font-bold text-lg">
                             {user.preferences.language}
                         </span>
                     </p>
-                    <p>Current Streak: 
+                    <p>
+                        <span className="border-2 border-transparent border-b-neutral-700 p-1 text-(--text) rounded-xs">{t("currentStreak")}:</span>
                         <span className={streakClass}> {user.streak}</span>
                     </p>
-                    <div className="mt-4 p-3 border border-(--dark-cta) rounded-md flex flex-col gap-2 text-(--text)">
-                        <h2 className="text-lg font-bold">Your Stats</h2>
-                        <p>Total Games Played: 
+                    <div className="mt-4 p-3 border border-(--dark-cta) bg-neutral-900 rounded-xs flex flex-col gap-2 text-(--text-hover) shadow-[inset_0_2px_150px_rgba(var(--cta-rgb),0.1)]">
+                        <h2 className="text-lg font-bold">{t("yourStats")}</h2>
+                        <p>
+                            <span className="border-2 border-transparent border-b-(--dark-cta) p-1 text-(--text) rounded-xs">{t("totalGamesPlayed")}:</span> 
                             <span className="text-(--text-hover) font-bold text-lg"> {user.stats?.totalGamesPlayed}</span>
                         </p>
-                        <p>Total Wins: 
+                        <p>
+                            <span className="border-2 border-transparent border-b-(--dark-cta) p-1 text-(--text) rounded-xs">{t("totalWins")}:</span> 
                             <span className="text-(--text-hover) font-bold text-lg"> {user.stats?.totalWins}</span>
                         </p>
                         <p>
-                            Winrate: 
+                            <span className="border-2 border-transparent border-b-(--dark-cta) p-1 text-(--text) rounded-xs">{t("winrate")}:</span>
+                            
                             <span className={winrateClass}> {user.stats ? (user.stats.winrate * 100).toFixed(1) : "N/A"}%</span>
                         </p>
-                        <p>Best Streak: 
+                        <p>
+                            <span className="border-2 border-transparent border-b-(--dark-cta) p-1 text-(--text) rounded-xs">{t("bestStreak")}:</span> 
                             <span className="text-(--text-hover) font-bold text-lg"> {user.stats?.bestStreak}</span>
                         </p>
                         <p>
-                            Last Played: 
+                            <span className="border-2 border-transparent border-b-(--dark-cta) p-1 text-(--text) rounded-xs">{t("lastPlayed")}:</span> 
                             <span className="text-(--text-hover) font-bold text-lg"> {formatDate(user.stats?.lastPlayed)}</span>
                         </p>
                     </div>
                 </div>
             ) : (
-                <p>No user data available</p>
+                <div>
+                    <p>{t("noUserData")}</p>
+                    <p></p>
+                </div>
             )}
 
             <Button onClick={handleLogout} variant="secondary">
-                Log out
+                {t("logOut")}
             </Button>
         </div>
     );
