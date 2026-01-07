@@ -7,6 +7,9 @@ export interface AuthRequest extends Request {
     user?: {
         userId: string;
         email?: string;
+        preferences?: {
+            language: "en" | "sv";
+        }
     };
 }
 
