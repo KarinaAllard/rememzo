@@ -23,6 +23,24 @@ export const translations = {
     in: "in",
     notRegisteredYet: "Not registered yet?",
     signUpHere: "Sign up here",
+    // Sign Up
+    sign: "Sign",
+    up: "Up",
+    signUpDesc: "To keep track of your stats and streak, register here.",
+    confirmPassword: "Confirm Password",
+    signUp: "Sign Up",
+    passwordError: "Password must be at least 6 characters long.",
+    confirmPasswordError: "Passwords do not match",
+    alreadyAccount: "Already have an account?",
+    logInHere: "Log in here",
+    signUpSuccess: "Account created successfully!",
+    emailAlreadyRegistered: "Email already registered",
+    registrationFailed: "Registration failed. Try again.",
+    // PasswordMeter
+    weak: "Weak",
+    medium: "Medium",
+    strong: "Strong",
+    veryStrong: "Very Strong",
     // My Account
     my: "My",
     account: "Account",
@@ -60,7 +78,9 @@ export const translations = {
     reloadSession: "Please refresh the page to see your result.",
     // Home
     welcomeMsg: "Welcome to Rememzo",
-    welcomeDesc: "This is a memory DLE game, where you can test your memory retention and eye for detail."
+    welcomeDesc: "This is a memory DLE game, where you can test your memory retention and eye for detail.",
+    // 404
+    notFoundDesc: "This page didn't show up in today's daily puzzle.",
   },
   sv: {
     dailyPuzzle: "Dagens Pussel",
@@ -86,6 +106,24 @@ export const translations = {
     in: "in",
     notRegisteredYet: "Inte registrerad ännu?",
     signUpHere: "Registrera dig här",
+    // Sign Up
+    sign: "Registera",
+    up: " ",
+    signUpDesc: "För att hålla koll på dina vinster i rad och annan statistik, registrera dig här.",
+    confirmPassword: "Upprepa Lösenord",
+    signUp: "Registrera dig",
+    passwordError: "Lösenordet måste innehålla minst 6 tecken.",
+    confirmPasswordError: "Lösenorden matchar inte",
+    signUpSuccess: "Konto skapat!",
+    emailAlreadyRegistered: "Email är redan registrerad",
+    registrationFailed: "Registration misslyckades. Försök igen.",
+    alreadyAccount: "Har du redan ett konto?",
+    logInHere: "Logga in här",
+    // PasswordMeter
+    weak: "Osäkert",
+    medium: "Medium",
+    strong: "Starkt",
+    veryStrong: "Väldigt Starkt",
     // My Account
     my: "Mitt",
     account: "Konto",
@@ -123,6 +161,8 @@ export const translations = {
     reloadSession: "Ladda om sidan för att få se ditt resultat.",
     // Home
     welcomeMsg: "Välkommen till Rememzo",
-    welcomeDesc: "Rememzo är ett dagligt DLE-spel där du kan testa ditt minne och öga för detaljer."
+    welcomeDesc: "Rememzo är ett dagligt DLE-spel där du kan testa ditt minne och öga för detaljer.",
+    // 404
+    notFoundDesc: "This page didn't show up in today's daily puzzle.",
   },
 };

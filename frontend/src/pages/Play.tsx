@@ -90,7 +90,7 @@ export const Play = () => {
 
     return (
         <div className="w-full flex flex-col">
-            <h1 className="text-4xl text-(--secondary-text) mb-4">{t("daily")} <span className="decoration-3 underline underline-offset-4 decoration-(--cta)">Puzzle</span></h1>
+            <h1 className="text-4xl text-(--secondary-text) mb-4">{t("daily")} <span className="decoration-3 underline underline-offset-4 decoration-(--cta)">{t("puzzle")}</span></h1>
             <p className="text-xs mb-4 bg-neutral-900 w-fit p-1 rounded-xs border border-neutral-700">{today}</p>
 
             {( phase === "idle" || phase === "paused") && (
