@@ -33,7 +33,7 @@ export const MyAccount = () => {
 
     return (
         <div className="w-full flex flex-col gap-2 max-w-md">
-            <h1 className="text-4xl text-(--cta)"><span className="text-(--text-hover)">{t("my")}</span> {t("account")}</h1>
+            <h1 className="text-4xl text-(--secondary-text)">{t("my")} <span className="decoration-3 underline underline-offset-4 decoration-(--cta)">{t("account")}</span></h1>
             <p className="text-sm mb-4 text-(--secondary-text)">{t("myAccountDesc")}</p>
             
             {user ? (
