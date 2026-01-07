@@ -77,7 +77,7 @@ export const translations = {
     outdatedSession: "Your session seems outdated.",
     reloadSession: "Please refresh the page to see your result.",
     // Home
-    welcomeMsg: "Welcome to Rememzo",
+    welcomeMsg: "Welcome to",
     welcomeDesc: "This is a memory DLE game, where you can test your memory retention and eye for detail.",
     // 404
     notFoundDesc: "This page didn't show up in today's daily puzzle.",
@@ -160,7 +160,7 @@ export const translations = {
     outdatedSession: "Din session verkar utdaterad.",
     reloadSession: "Ladda om sidan för att få se ditt resultat.",
     // Home
-    welcomeMsg: "Välkommen till Rememzo",
+    welcomeMsg: "Välkommen till",
     welcomeDesc: "Rememzo är ett dagligt DLE-spel där du kan testa ditt minne och öga för detaljer.",
     // 404
     notFoundDesc: "This page didn't show up in today's daily puzzle.",
