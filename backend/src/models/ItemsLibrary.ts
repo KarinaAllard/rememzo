@@ -6,9 +6,17 @@ export interface IItem extends Document {
     variations: string[];
     states: string[];
     artRef: string[];
-    translations?: Record<string, string>;
+    translations?: Record<string, {
+        base: string;
+        indefinite?: string;
+        definite?: string;
+    }>;
     questionTemplate?: Record <string, string>;
+    stateTranslations?: Record <string, string>;
 }
+// stateTranslations only needs to handle one additional language for now,
+// if language selection expands at a later date, just change it to
+// stateTranslations?: Record<string, Record<string, string>>;
 
 const ItemSchema: Schema<IItem> = new Schema({
     name: { type: String, required: true },
@@ -16,8 +24,16 @@ const ItemSchema: Schema<IItem> = new Schema({
     variations: { type: [String], default: [] },
     states: { type: [String], default: [] },
     artRef: { type: [String], default: [] },
-    translations: { type: Map, of: String },
+    translations: { 
+        type: Map, 
+        of: {
+            base: String,
+            indefinite: String,
+            definite: String,
+        },
+     },
     questionTemplate: { type: Map, of: String },
+    stateTranslations: { type: Map, of: String },
 },
 { collection: "itemslibrary" }
 );
