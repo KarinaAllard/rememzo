@@ -6,7 +6,7 @@ export function generateExistsInSceneQuestion(
 	sceneItems: IGeneratedItem[],
 	item: IItem,
 	templateText: string,
-	lang: "en" | "sv" = "en"
+	lang: "en" | "sv"
 ) {
 	const exists = sceneItems.some((i) => i.itemId === item._id.toString());
 

@@ -25,7 +25,8 @@ export class DailySceneService {
         const generatedQuestion: IGeneratedQuestion = await generateQuestion(
             generatedScene,
             itemsById,
-            allQuestions
+            allQuestions,
+            "sv"
         );
 
         const emptyItem = await ItemsLibrary.findOne({ type: "empty" });

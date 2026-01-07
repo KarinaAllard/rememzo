@@ -4,6 +4,7 @@ import { generateCountOptions } from "../utils/questionGenerators/countItemType"
 import { generateWhichStateQuestion } from "../utils/questionGenerators/whichState";
 import { generateExistsInSceneQuestion } from "../utils/questionGenerators/existsInScene";
 import { IQuestion } from "../models/QuestionsLibrary";
+import { typeNames } from "../utils/typeNames";
 
 export interface IGeneratedQuestion {
     questionText: string;
@@ -15,7 +16,7 @@ export async function generateQuestion(
     generatedScene: IGeneratedScene,
     itemsById: Map<string, IItem>,
     allQuestions: IQuestion[],
-	lang: "en" | "sv" = "en"
+	lang: "en" | "sv"
 ): Promise<IGeneratedQuestion> {
     const sceneItems = generatedScene.items.filter(i => i.state !== "empty");
     const libraryItems = Array.from(itemsById.values()).filter(i => i.type !== "empty");
@@ -45,16 +46,12 @@ export async function generateQuestion(
 
                     const count = validItems.filter(i => i.type === selectedType).length;
 
-                    let typeName = selectedType;
-                    const itemForType = Array.from(itemsById.values()).find(i => i.type === selectedType);
-                    if (itemForType && itemForType.translations?.[lang]) {
-                        typeName = itemForType.translations[lang].indefinite || selectedType;
-                    }
+                    const typeText = typeNames[selectedType as keyof typeof typeNames]?.[lang] || selectedType;
 
                     const options = generateCountOptions(count, randomQuestion.optionsCount);
 
                     const templateText = randomQuestion.translations?.[lang] || randomQuestion.templateText;
-                    const questionText = templateText.replace("{type}", typeName);
+                    const questionText = templateText.replace("{type}", typeText);
 
                     return { questionText, options, questionId: randomQuestion._id.toString() };
                 }
@@ -95,8 +92,12 @@ export async function generateQuestion(
                             : libraryItems[Math.floor(Math.random() * libraryItems.length)];
                     }
 
+                    const templateText = randomQuestion.translations && randomQuestion.translations[lang]
+                        ? randomQuestion.translations[lang]
+                        : randomQuestion.templateText;
+
                     return {
-                        ...generateExistsInSceneQuestion(sceneItems, selectedItem, randomQuestion.templateText, lang),
+                        ...generateExistsInSceneQuestion(sceneItems, selectedItem, templateText, lang),
                         questionId: randomQuestion._id.toString()
                     };
                 }

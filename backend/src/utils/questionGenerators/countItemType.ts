@@ -8,7 +8,7 @@ export function generateCountItemTypeQuestion(
   requiredItemTypes: string[],
   templateText: string,
   optionsCount: number,
-	lang: "en" | "sv" = "en"
+	lang: "en" | "sv"
 ): { questionText: string; options: QuestionOption[] } {
 
   const validItems = sceneItems.filter(item =>
