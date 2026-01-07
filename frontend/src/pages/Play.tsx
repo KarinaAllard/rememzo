@@ -11,6 +11,7 @@ import { fetchDailyPuzzle } from "../services/dailyPuzzleService";
 import type { IItem } from "../types/IItemLibrary";
 import { fetchItemsLibrary } from "../services/itemLibraryService";
 import { useLanguage } from "../context/LanguageContext";
+import { useTranslation } from "../hooks/useTranslation";
 
 export const Play = () => {
     const { phase, countdownRemainingMs, setCountdownRemainingMs, attemptId, setAttemptId } = useGame();
@@ -20,6 +21,7 @@ export const Play = () => {
     const [itemsLibrary, setItemsLibrary] = useState<IItem[]>([]);
     const today = useToday();
     const { lang } = useLanguage();
+    const { t } = useTranslation();
 
     useEffect(() => {
         const storedAttemptId = sessionStorage.getItem("dailyAttemptId");
@@ -88,7 +90,7 @@ export const Play = () => {
 
     return (
         <div className="w-full flex flex-col">
-            <h1 className="text-4xl text-(--secondary-text) mb-4">Daily <span className="decoration-3 underline underline-offset-4 decoration-(--cta)">Puzzle</span></h1>
+            <h1 className="text-4xl text-(--secondary-text) mb-4">{t("daily")} <span className="decoration-3 underline underline-offset-4 decoration-(--cta)">Puzzle</span></h1>
             <p className="text-xs mb-4 bg-neutral-900 w-fit p-1 rounded-xs border border-neutral-700">{today}</p>
 
             {( phase === "idle" || phase === "paused") && (
@@ -97,7 +99,7 @@ export const Play = () => {
                     onClick={handleStart}
                     disabled={loading}
                 >
-                    {loading ? "Starting..." : "Start Game"}
+                    {loading ? t("starting") : t("startGame")}
                 </Button>
             )}
 

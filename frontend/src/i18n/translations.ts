@@ -2,8 +2,7 @@ export const translations = {
   en: {
     dailyPuzzle: "Daily Puzzle",
     play: "Play",
-    startGame: "Start Game",
-    starting: "Starting...",
+    // Question
     question: "Question",
     submit: "Submit",
     submitting: "Submitting...",
@@ -41,6 +40,24 @@ export const translations = {
     noUserData: "No user data available",
     noUserDataText: "You have to play at least one game to view your stats",
     logOut: "Log Out",
+    // Play
+    daily: "Daily",
+    puzzle: "Puzzle",
+    startGame: "Start Game",
+    starting: "Starting...",
+    // Result
+    result: "Result",
+    youSelected: "You chose",
+    correct: "Correct",
+    wrong: "Wrong",
+    resultDesc: "Come back tomorrow to play again!",
+    goBack: "Go back",
+    dailyPuzzleCompleted: "Daily puzzle completed!",
+    noResultData: "No user data available",
+    loadingResult: "Loading result...",
+    loading: "Loading...",
+    outdatedSession: "Your session seems outdated.",
+    reloadSession: "Please refresh the page to see your result.",
     // Home
     welcomeMsg: "Welcome to Rememzo",
     welcomeDesc: "This is a memory DLE game, where you can test your memory retention and eye for detail."
@@ -48,10 +65,9 @@ export const translations = {
   sv: {
     dailyPuzzle: "Dagens Pussel",
     play: "Spela",
-    startGame: "Starta Spelet",
-    starting: "Startar...",
+    // Question
     question: "Fråga",
-    submit: "Skicka",
+    submit: "Svara",
     submitting: "Skickar...",
     yes: "Ja",
     no: "Nej",
@@ -87,6 +103,24 @@ export const translations = {
     noUserData: "Användardata saknas",
     noUserDataText: "Du måste spela minst ett spel för att se din statistik",
     logOut: "Logga ut",
+    // Play
+    daily: "Dagens",
+    puzzle: "Pussel",
+    startGame: "Starta Spelet",
+    starting: "Startar...",
+    // Result
+    result: "Resultat",
+    youSelected: "Du valde",
+    correct: "Rätt",
+    wrong: "Fel",
+    resultDesc: "Spela igen imorgon!",
+    goBack: "Tillbaka",
+    dailyPuzzleCompleted: "Du har redan löst dagens pussel!",
+    noResultData: "Resultat saknas",
+    loadingResult: "Laddar resultat...",
+    loading: "Laddar...",
+    outdatedSession: "Din session verkar utdaterad.",
+    reloadSession: "Ladda om sidan för att få se ditt resultat.",
     // Home
     welcomeMsg: "Välkommen till Rememzo",
     welcomeDesc: "Rememzo är ett dagligt DLE-spel där du kan testa ditt minne och öga för detaljer."

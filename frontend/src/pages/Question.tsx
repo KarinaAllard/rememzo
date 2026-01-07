@@ -10,6 +10,7 @@ import { getAttemptIdentity } from "../game/identity";
 import { useUser } from "../context/UserContext";
 import { fetchDailyPuzzle } from "../services/dailyPuzzleService";
 import { useLanguage } from "../context/LanguageContext";
+import { useTranslation } from "../hooks/useTranslation";
 
 export const Question = () => {
     const [selected, setSelected] = useState<string | null>(null);
@@ -22,6 +23,7 @@ export const Question = () => {
     const { refreshUser } = useUser();
     const identity = getAttemptIdentity();
     const { lang } = useLanguage();
+    const { t } = useTranslation();
 
     useEffect(() => {
         const fetchQuestion = async () => {
@@ -88,7 +90,7 @@ export const Question = () => {
 
     return (
         <div className="w-full flex flex-col max-w-md">
-            <h1 className="text-4xl text-(--text-hover) mb-6">Question</h1>
+            <h1 className="text-4xl text-(--secondary-text) mb-4">{t("daily")} <span className="decoration-3 underline underline-offset-4 decoration-(--cta)">{t("question")}</span></h1>
             <p className="text-sm">{today}</p>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md mx-auto mt-10">
                 <p className="text-xl text-center text-(--text-hover)">{question?.questionText}</p>
@@ -124,7 +126,7 @@ export const Question = () => {
                     </label>
                 ))}
                 <Button type="submit" className="mt-4 w-full" disabled={!selected || loading}>
-                    {loading ? "Submitting..." : "Submit"}
+                    {loading ? t("submitting") : t("submit")}
                 </Button>
             </form>
         </div>
