@@ -129,10 +129,10 @@ async function seed() {
       {
         type: "countItemType",
         requiredItemTypes: ["cups", "plates", "fruit-bowls", "plants"], 
-        templateText: "How many {type} were in the scene?",
+        templateText: "How many {type} were there?",
         optionsCount: 4,
         translations: {
-          sv: "Hur många {type} fanns i scenen?"
+          sv: "Hur många {type} fanns det?"
         }
       },
       {
@@ -147,10 +147,10 @@ async function seed() {
       {
         type: "existsInScene",
         requiredItemTypes: [], 
-        templateText: "Was there a {name} in the scene?",
+        templateText: "Did you see {name}?",
         optionsCount: 2, 
         translations: {
-          sv: "Fanns {name} i scenen?"
+          sv: "Såg du {name}?"
         }
       }
     ];
