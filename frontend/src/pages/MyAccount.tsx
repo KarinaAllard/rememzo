@@ -61,10 +61,12 @@ export const MyAccount = () => {
                         <span className="border-2 border-transparent border-b-neutral-700 p-1 text-(--text) rounded-xs">{t("email")}:</span>
                         <span className="text-(--text-hover) font-bold text-lg"> {user.email}</span>
                     </p>
-                    <p className="flex gap-2 items-center cursor-pointer" onClick={toggleLanguage}>
-                        <span className="border-2 border-transparent border-b-neutral-700 p-1 text-(--text) rounded-xs">{t("languagePreference")}: </span>
-                        {user.preferences.language === "sv" ? <FlagSV /> : <FlagEN />}
-                        <span className="uppercase text-(--text-hover) font-bold text-lg">{user.preferences.language}</span>
+                    <p className="flex gap-2 items-center">
+                            <span className="border-2 border-transparent border-b-neutral-700 p-1 text-(--text) rounded-xs">{t("languagePreference")}: </span>
+                        <Button variant="option" onClick={toggleLanguage} className="flex gap-2">
+                            {user.preferences.language === "sv" ? <FlagSV /> : <FlagEN />}
+                            <span className="uppercase text-(--text-hover) font-bold text-lg">{user.preferences.language}</span>
+                        </Button>
                     </p>
                     <p>
                         <span className="border-2 border-transparent border-b-neutral-700 p-1 text-(--text) rounded-xs">{t("currentStreak")}:</span>

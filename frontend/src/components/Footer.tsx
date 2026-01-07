@@ -4,6 +4,7 @@ import { useLanguage } from "../context/LanguageContext";
 import { updateMyLanguage } from "../services/meService";
 import { useTranslation } from "../hooks/useTranslation";
 import { useToast } from "../context/ToastContext";
+import { Button } from "./Button";
 
 export const Footer = () => {
   const { user, refreshUser } = useUser();
@@ -29,13 +30,14 @@ export const Footer = () => {
 
   return (
     <footer className="w-full p-2 flex justify-center items-center border-t border-neutral-800 bg-(--background)">
-      <button
+      <Button
         onClick={toggleLanguage}
-        className="flex items-center gap-2 text-sm text-(--secondary-text) cursor-pointer"
+        className="flex items-center gap-2 text-sm text-(--secondary-text)"
+        variant="option"
       >
         {lang === "sv" ? <FlagSV /> : <FlagEN />}
         <span className="uppercase">{lang}</span>
-      </button>
+      </Button>
     </footer>
   );
 };
