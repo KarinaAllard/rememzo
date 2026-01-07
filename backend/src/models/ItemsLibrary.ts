@@ -7,6 +7,7 @@ export interface IItem extends Document {
     states: string[];
     artRef: string[];
     translations?: Record<string, string>;
+    questionTemplate?: Record <string, string>;
 }
 
 const ItemSchema: Schema<IItem> = new Schema({
@@ -15,7 +16,8 @@ const ItemSchema: Schema<IItem> = new Schema({
     variations: { type: [String], default: [] },
     states: { type: [String], default: [] },
     artRef: { type: [String], default: [] },
-    translations: { type: Map, of: String }
+    translations: { type: Map, of: String },
+    questionTemplate: { type: Map, of: String },
 },
 { collection: "itemslibrary" }
 );

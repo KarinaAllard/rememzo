@@ -11,7 +11,7 @@ export interface IQuestion extends Document {
 const QuestionSchema: Schema<IQuestion> = new Schema({
     type: { type: String, required: true },
     requiredItemTypes: { type: [String], required: true },
-    templateText: { type: String, required: true },
+    templateText: { type: String, required: false },
     optionsCount: { type: Number, required: true },
     translations: { type: Map, of: String},
 },

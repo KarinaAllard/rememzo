@@ -29,12 +29,20 @@ export async function generateQuestion(
         try {
             switch (randomQuestion.type) {
                 case "countItemType": {
-                    const availableTypes = Array.from(new Set(sceneItems.map(i => i.name)));
-                    const selectedType = availableTypes.length
-                        ? availableTypes[Math.floor(Math.random() * availableTypes.length)]
-                        : randomQuestion.requiredItemTypes[0];
+                    const validItems = sceneItems.filter(item =>
+                        randomQuestion.requiredItemTypes.includes(item.type)
+                    );
 
-                    const count = sceneItems.filter(i => i.name === selectedType).length;
+                    if (!validItems.length) {
+                        throw new Error("No valid items for countItemType question");
+                    }
+
+                    const availableTypes = Array.from(new Set(validItems.map(i => i.type)));
+
+                    const selectedType =
+                        availableTypes[Math.floor(Math.random() * availableTypes.length)];
+
+                    const count = validItems.filter(i => i.type === selectedType).length;
 
                     const options = generateCountOptions(count, randomQuestion.optionsCount);
                     const questionText = randomQuestion.templateText.replace("{type}", selectedType);

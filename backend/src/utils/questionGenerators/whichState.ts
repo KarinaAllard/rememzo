@@ -6,6 +6,7 @@ export function generateWhichStateQuestion(
     itemsById: Map<string, IItem>,
     templateText: string,
     optionsCount: number,
+    lang: string = "en"
 ): { questionText: string, options: { text: string; isCorrect: boolean }[] } {
 
     const candidates = sceneItems
@@ -18,17 +19,46 @@ export function generateWhichStateQuestion(
 
     const selectedItem = candidates[Math.floor(Math.random() * candidates.length)];
     const itemsFromLibrary = itemsById.get(selectedItem.itemId);
+    if (!itemsFromLibrary) throw new Error("Item not found in library");
+
     const states = itemsFromLibrary?.states || ["default"];
 
-    const shuffledStates = [...states].sort(() => 0.5 - Math.random());
-    const chosenOptions = shuffledStates.slice(0, Math.max(optionsCount, 1));
+    let questionText = "";
+    let options: { text: string; isCorrect: boolean }[] = [];
 
-    const options = chosenOptions.map(s => ({
-        text: s,
-        isCorrect: s === selectedItem.state
-    }));
+    if (states.length === 2) {
+        const correctState = selectedItem.state;
+        const templateStr = (itemsFromLibrary.questionTemplate as Record<string, string>)?.[lang] 
+            || templateText 
+            || "Was the {name} {state}?";
+        questionText = templateStr
+            .replace("{name}", selectedItem.name)
+            .replace("{state}", correctState);
 
-    const questionText = templateText.replace("{type}", selectedItem.name);
+        options = [
+            { text: "Yes", isCorrect: true },
+            { text: "No", isCorrect: false },
+        ];
+
+        options.sort(() => 0.5 - Math.random());
+    } else {
+        const templateStr = (itemsFromLibrary.questionTemplate as Record<string, string>)?.[lang] 
+            || "What was the state of the {name}";
+        questionText = templateStr.replace("{name}", selectedItem.name);
+
+        const shuffledStates = [...states].sort(() => 0.5 - Math.random());
+        const chosenOptions = shuffledStates.slice(0, Math.max(optionsCount, shuffledStates.length));
+
+        options = chosenOptions.map(s => ({
+            text: s,
+            isCorrect: s === selectedItem.state
+        }));
+
+        if (!options.some(o => o.isCorrect)) {
+            options[0] = { text: selectedItem.state, isCorrect: true };
+        }
+
+    }
 
     return { questionText, options };
 }
