@@ -4,6 +4,7 @@ import { generateCountOptions } from "../utils/questionGenerators/countItemType"
 import { generateWhichStateQuestion } from "../utils/questionGenerators/whichState";
 import { generateExistsInSceneQuestion } from "../utils/questionGenerators/existsInScene";
 import { IQuestion } from "../models/QuestionsLibrary";
+import { typeNames } from "../utils/typeNames";
 
 export interface IGeneratedQuestion {
     questionText: string;
@@ -14,7 +15,8 @@ export interface IGeneratedQuestion {
 export async function generateQuestion(
     generatedScene: IGeneratedScene,
     itemsById: Map<string, IItem>,
-    allQuestions: IQuestion[]
+    allQuestions: IQuestion[],
+	lang: "en" | "sv"
 ): Promise<IGeneratedQuestion> {
     const sceneItems = generatedScene.items.filter(i => i.state !== "empty");
     const libraryItems = Array.from(itemsById.values()).filter(i => i.type !== "empty");
@@ -44,8 +46,12 @@ export async function generateQuestion(
 
                     const count = validItems.filter(i => i.type === selectedType).length;
 
+                    const typeText = typeNames[selectedType as keyof typeof typeNames]?.[lang] || selectedType;
+
                     const options = generateCountOptions(count, randomQuestion.optionsCount);
-                    const questionText = randomQuestion.templateText.replace("{type}", selectedType);
+
+                    const templateText = randomQuestion.translations?.[lang] || randomQuestion.templateText;
+                    const questionText = templateText.replace("{type}", typeText);
 
                     return { questionText, options, questionId: randomQuestion._id.toString() };
                 }
@@ -62,7 +68,8 @@ export async function generateQuestion(
                         sceneItems,
                         itemsById,
                         randomQuestion.templateText,
-                        randomQuestion.optionsCount
+                        randomQuestion.optionsCount,
+                        lang
                     );
 
                     return { ...result, questionId: randomQuestion._id.toString() };
@@ -75,7 +82,8 @@ export async function generateQuestion(
 
                     if (shouldExist && sceneItems.length) {
                         const itemInScene = sceneItems[Math.floor(Math.random() * sceneItems.length)];
-                        selectedItem = libraryItems.find(libItem => libItem.name === itemInScene.name)!;
+                        selectedItem = libraryItems.find(libItem => libItem.name === itemInScene.name)
+                            ?? libraryItems[0];
                     } else {
                         const sceneNames = new Set(sceneItems.map(i => i.name));
                         const notInScene = libraryItems.filter(lib => !sceneNames.has(lib.name));
@@ -84,8 +92,12 @@ export async function generateQuestion(
                             : libraryItems[Math.floor(Math.random() * libraryItems.length)];
                     }
 
+                    const templateText = randomQuestion.translations && randomQuestion.translations[lang]
+                        ? randomQuestion.translations[lang]
+                        : randomQuestion.templateText;
+
                     return {
-                        ...generateExistsInSceneQuestion(sceneItems, selectedItem.name, randomQuestion.templateText),
+                        ...generateExistsInSceneQuestion(sceneItems, selectedItem, templateText, lang),
                         questionId: randomQuestion._id.toString()
                     };
                 }

@@ -6,12 +6,18 @@ import { generateQuestion, IGeneratedQuestion } from "./questionGenerator";
 import SceneTemplates from "../models/SceneTemplates";
 
 export class DailySceneService {
-    static async getOrGenerateScene(date: string): Promise<any> {
+    static async getOrGenerateScene(date: string, lang: "en" | "sv" = "en"): Promise<any> {
 
         let dailyScene = await DailyScene.findOne({ date }).lean();
         if (dailyScene) {
             const template = await SceneTemplates.findById(dailyScene.templateId).lean();    
-            return {...dailyScene, template};
+            const questionForLang = dailyScene.question[lang] ?? dailyScene.question.en;
+            
+            return {
+                ...dailyScene,
+                question: questionForLang,
+                template
+            };
         }
 
         const generatedScene: IGeneratedScene = await generateDailyScene();
@@ -22,10 +28,18 @@ export class DailySceneService {
         const allQuestions = await (await import("../models/QuestionsLibrary")).default.find().lean();
         if (!allQuestions.length) throw new Error("No questions available");
 
-        const generatedQuestion: IGeneratedQuestion = await generateQuestion(
+        const generatedQuestionEn: IGeneratedQuestion = await generateQuestion(
             generatedScene,
             itemsById,
-            allQuestions
+            allQuestions,
+            "en"
+        );
+
+        const generatedQuestionSv: IGeneratedQuestion = await generateQuestion(
+            generatedScene,
+            itemsById,
+            allQuestions,
+            "sv"
         );
 
         const emptyItem = await ItemsLibrary.findOne({ type: "empty" });
@@ -46,10 +60,16 @@ export class DailySceneService {
             templateId: new mongoose.Types.ObjectId(generatedScene.templateId),
             items: itemsForDb,
             question: {
-                questionText: generatedQuestion.questionText,
-                options: generatedQuestion.options
+                en: {
+                    questionText: generatedQuestionEn.questionText,
+                    options: generatedQuestionEn.options
+                },
+                sv: {
+                    questionText: generatedQuestionSv.questionText,
+                    options: generatedQuestionSv.options
+                }
             },
-            questionId: new mongoose.Types.ObjectId(generatedQuestion.questionId),
+            questionId: new mongoose.Types.ObjectId(generatedQuestionEn.questionId),
             timestamp: new Date(),
             date
         });
@@ -58,6 +78,7 @@ export class DailySceneService {
 
         return {
             ...dailyScene.toObject(),
+            question: dailyScene.question[lang] ?? dailyScene.question.en,
             template
         }
     }

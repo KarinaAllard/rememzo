@@ -1,16 +1,22 @@
 import { IGeneratedItem } from "../itemGenerator";
+import { IItem } from "../../models/ItemsLibrary";
+import { replaceNamePlaceholder } from "../replaceNamePlaceholder";
 
 export function generateExistsInSceneQuestion(
-    sceneItems: IGeneratedItem[],
-    itemName: string,
-    templateText: string
+	sceneItems: IGeneratedItem[],
+	item: IItem,
+	templateText: string,
+	lang: "en" | "sv"
 ) {
-    const exists = sceneItems.some(i => i.name === itemName);
-    return {
-        questionText: templateText.replace("{name}", itemName),
-        options: [
-            { text: "Yes", isCorrect: exists },
-            { text: "No", isCorrect: !exists }
-        ]
-    }
+	const exists = sceneItems.some((i) => i.itemId === item._id.toString());
+
+	const questionText = replaceNamePlaceholder(templateText, item, lang);
+
+	return {
+		questionText,
+		options: [
+			{ text: lang === "sv" ? "Ja" : "Yes", isCorrect: exists },
+			{ text: lang === "sv" ? "Nej" : "No", isCorrect: !exists },
+		],
+	};
 }

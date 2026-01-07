@@ -53,4 +53,39 @@ router.get(
     }
 );
 
+router.patch(
+    "/me",
+    authenticateJWT,
+    async (req: AuthRequest, res: Response) => {
+        try {
+        if (!req.user?.userId) {
+            return res.status(401).json({ error: "Unauthorized" });
+        }
+
+        const { language } = req.body;
+        if (!language || !["en", "sv"].includes(language)) {
+            return res.status(400).json({ error: "Invalid language" });
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            req.user.userId,
+            { "preferences.language": language },
+            { new: true, runValidators: true }
+        ).select("email streak preferences");
+
+        if (!updatedUser) return res.status(404).json({ error: "User not found" });
+
+        res.json({
+            userId: updatedUser._id,
+            email: updatedUser.email,
+            streak: updatedUser.streak,
+            preferences: updatedUser.preferences
+        });
+
+        } catch (error: any) {
+        res.status(500).json({ error: error.message });
+        }
+    }
+);
+
 export default router;

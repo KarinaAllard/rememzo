@@ -5,7 +5,7 @@ import connectDB from "./db";
 import dailyPuzzle from "./routes/dailyPuzzle";
 import authRoutes from "./routes/auth/auth";
 import gameRoutes from "./routes/gameAttempt";
-import meRoute from "./routes/me";
+import meRoutes from "./routes/me";
 import attemptRoutes from "./routes/attempts";
 import itemRoute from "./routes/items";
 
@@ -39,7 +39,7 @@ app.use("/api/auth", authRoutes);
 
 app.use("/api/game", gameRoutes);
 
-app.use("/api/", meRoute);
+app.use("/api/", meRoutes);
 
 app.use("/api/attempt", attemptRoutes);
 

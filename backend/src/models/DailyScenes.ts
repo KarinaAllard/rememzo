@@ -11,11 +11,14 @@ export interface IDailyScene extends Document {
         y: number;
     }[];
     question: {
-        questionText: string;
-        options: { 
-            text: string; 
-            isCorrect: boolean 
-        }[];
+        en: {
+            questionText: string;
+            options: { text: string; isCorrect: boolean }[];
+        };
+        sv: {
+            questionText: string;
+            options: { text: string; isCorrect: boolean }[];
+        };
     }
     questionId: mongoose.Types.ObjectId;
     timestamp: Date;
@@ -35,13 +38,18 @@ const DailySceneSchema: Schema<IDailyScene> = new Schema({
         }
     ],
     question: {
-        questionText: { type: String, required: true },
-        options: [
-            {
-                text: { type: String, required: true },
-                isCorrect: { type: Boolean, required: true }
-            }
-        ]
+        en: {
+            questionText: { type: String, required: true },
+            options: [
+                { text: { type: String, required: true }, isCorrect: { type: Boolean, required: true } }
+            ]
+        },
+        sv: {
+            questionText: { type: String, required: true },
+            options: [
+                { text: { type: String, required: true }, isCorrect: { type: Boolean, required: true } }
+            ]
+        }
     },
     questionId: { type: Schema.Types.ObjectId, ref: "questionslibrary", required: true },
     timestamp: { type: Date, default: Date.now },
