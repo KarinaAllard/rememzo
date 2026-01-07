@@ -18,7 +18,7 @@ export const Question = () => {
 
     const today = useToday();
     const { goToPhase } = useGameController();
-    const { attemptId } = useGame();
+    const { attemptId, setReadyForResult } = useGame();
     const { refreshUser } = useUser();
     const identity = getAttemptIdentity();
     const { lang } = useLanguage();
@@ -75,6 +75,7 @@ export const Question = () => {
             }
             
             markDailyAttemptCompleted(today, attemptId ?? undefined);
+            setReadyForResult(true);
 
 
             goToPhase("result");
