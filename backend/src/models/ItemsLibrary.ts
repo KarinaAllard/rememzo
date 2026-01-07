@@ -12,11 +12,8 @@ export interface IItem extends Document {
         definite?: string;
     }>;
     questionTemplate?: Record <string, string>;
-    stateTranslations?: Record <string, string>;
+    stateTranslations?: Record<string, Record<string, string>>;
 }
-// stateTranslations only needs to handle one additional language for now,
-// if language selection expands at a later date, just change it to
-// stateTranslations?: Record<string, Record<string, string>>;
 
 const ItemSchema: Schema<IItem> = new Schema({
     name: { type: String, required: true },
@@ -33,7 +30,7 @@ const ItemSchema: Schema<IItem> = new Schema({
         },
      },
     questionTemplate: { type: Map, of: String },
-    stateTranslations: { type: Map, of: String },
+    stateTranslations: { type: Map, of: Map, },
 },
 { collection: "itemslibrary" }
 );
