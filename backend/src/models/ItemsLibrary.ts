@@ -11,7 +11,7 @@ export interface IItem extends Document {
         indefinite?: string;
         definite?: string;
     }>;
-    questionTemplate?: Record <string, string>;
+    questionTemplate?: Record<string, string>;
     stateTranslations?: Record<string, Record<string, string>>;
 }
 
@@ -29,8 +29,8 @@ const ItemSchema: Schema<IItem> = new Schema({
             definite: String,
         },
      },
-    questionTemplate: { type: Map, of: String },
-    stateTranslations: { type: Map, of: Map, },
+    questionTemplate: { type: Object, default: {}, },
+    stateTranslations: { type: Object, default: {}, },
 },
 { collection: "itemslibrary" }
 );
