@@ -4,12 +4,31 @@ import { FlagEN, FlagSV } from "../icons/flags";
 import { useToast } from "../context/ToastContext";
 import { useUser } from "../context/UserContext";
 import { useTranslation } from "../hooks/useTranslation";
+import { useLanguage } from "../context/LanguageContext";
+import { updateMyLanguage } from "../services/meService";
 
 export const MyAccount = () => {
     const navigate = useNavigate();
     const { user, refreshUser } = useUser();
     const { showToast } = useToast();
     const { t } = useTranslation();
+    const { lang, setLang } = useLanguage();
+
+    const toggleLanguage = async () => {
+        const newLang = lang === "en" ? "sv" : "en";
+        setLang(newLang);
+
+        if (user?.preferences) {
+        try {
+                await updateMyLanguage({ language: newLang });
+                refreshUser();
+                showToast(t("languageUpdated"), "success");
+            } catch (err) {
+                console.error("Failed to update language preference", err);
+                showToast(t("languageUpdateFailed"), "error");
+            }
+        }
+    };
 
     const handleLogout = () => {
         localStorage.removeItem("token");
@@ -42,13 +61,10 @@ export const MyAccount = () => {
                         <span className="border-2 border-transparent border-b-neutral-700 p-1 text-(--text) rounded-xs">{t("email")}:</span>
                         <span className="text-(--text-hover) font-bold text-lg"> {user.email}</span>
                     </p>
-                    <p className="flex gap-2 items-center">
+                    <p className="flex gap-2 items-center cursor-pointer" onClick={toggleLanguage}>
                         <span className="border-2 border-transparent border-b-neutral-700 p-1 text-(--text) rounded-xs">{t("languagePreference")}: </span>
-                        
                         {user.preferences.language === "sv" ? <FlagSV /> : <FlagEN />}
-                        <span className="uppercase text-(--text-hover) font-bold text-lg">
-                            {user.preferences.language}
-                        </span>
+                        <span className="uppercase text-(--text-hover) font-bold text-lg">{user.preferences.language}</span>
                     </p>
                     <p>
                         <span className="border-2 border-transparent border-b-neutral-700 p-1 text-(--text) rounded-xs">{t("currentStreak")}:</span>

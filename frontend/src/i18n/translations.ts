@@ -58,6 +58,8 @@ export const translations = {
     noUserData: "No user data available",
     noUserDataText: "You have to play at least one game to view your stats",
     logOut: "Log Out",
+    languageUpdated: "Language successfully updated!",
+    languageUpdateFailed: "Language couldn't be updated",
     // Play
     daily: "Daily",
     puzzle: "Puzzle",
@@ -141,6 +143,8 @@ export const translations = {
     noUserData: "Användardata saknas",
     noUserDataText: "Du måste spela minst ett spel för att se din statistik",
     logOut: "Logga ut",
+    languageUpdated: "Valt språk uppdaterat!",
+    languageUpdateFailed: "Språk kunde inte uppdateras",
     // Play
     daily: "Dagens",
     puzzle: "Pussel",

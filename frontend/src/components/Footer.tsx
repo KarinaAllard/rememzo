@@ -25,7 +25,7 @@ export const Footer = () => {
     <footer className="w-full p-2 flex justify-center items-center border-t border-neutral-800 bg-(--background)">
       <button
         onClick={toggleLanguage}
-        className="flex items-center gap-2 text-sm text-(--secondary-text)"
+        className="flex items-center gap-2 text-sm text-(--secondary-text) cursor-pointer"
       >
         {lang === "sv" ? <FlagSV /> : <FlagEN />}
         <span className="uppercase">{lang}</span>
