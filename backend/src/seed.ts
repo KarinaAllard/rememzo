@@ -51,10 +51,11 @@ async function seed() {
           variations: ["open", "closed"],
           states: ["open", "closed"],
           artRef: ["curtains-open.png", "curtains-closed.png"],
-          translations: { en: "Curtains", sv: "Gardiner" }
+          translations: { en: "Curtains", sv: "Gardiner" },
+          questionTemplate: { en: "Were the {name} {state}", sv: "Var {name} {state}?"}
         },
         {
-          name: "Flower",
+          name: "Plant",
           type: "plants",
           variations: ["alive", "dead", "pot-empty"],
           states: ["default"],
@@ -76,7 +77,7 @@ async function seed() {
           states: ["off", "news", "weather", "game", "static"],
           artRef: ["tv-off.png", "tv-news.png", "tv-weather.png", "tv-game.png", "tv-static.png"],
           translations: { en: "TV", sv: "TV" },
-          questionTemplate: "What was on the {name}?"
+          questionTemplate: {en: "What was on the {name}?", sv: "Vad var på {name}n?"},
         },
         {
           name: "Empty",
@@ -146,7 +147,7 @@ async function seed() {
       {
         type: "existsInScene",
         requiredItemTypes: [], 
-        templateText: "Did {name} exist in the scene?",
+        templateText: "Was there a {name} in the scene?",
         optionsCount: 2, 
         translations: {
           sv: "Fanns {name} i scenen?"
