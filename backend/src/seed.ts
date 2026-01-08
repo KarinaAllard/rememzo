@@ -97,8 +97,8 @@ async function seed() {
           { width: 28, height: 35 }, // empty
         ],
         translations: {
-            en: { base: "Flower", indefinite: "a flower", definite: "the flower" },
-            sv: { base: "Blomma", indefinite: "en blomma", definite: "blomman" }
+            en: { base: "Plant", indefinite: "a plant", definite: "the plant" },
+            sv: { base: "Växt", indefinite: "en växt", definite: "växten" }
         }
       },
       {
@@ -214,7 +214,7 @@ async function seed() {
       {
         type: "existsInScene",
         requiredItemTypes: [], 
-        templateText: "Did you see {name}?",
+        templateText: "Did you see {name:indefinite}?",
         optionsCount: 2, 
         translations: {
           sv: "Såg du {name:indefinite}?"
