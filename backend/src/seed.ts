@@ -42,27 +42,38 @@ async function seed() {
       {
         name: "Plate",
         type: "plates",
-        variations: ["broken", "dirty", "empty", "crumbs", "one-cookie", "one-half-cookie"],
+        variations: ["empty", "broken", "dirty", "crumbs"],
         states: ["default"],
-        artRef: [
-          "plate-broken.png",
-          "plate-dirty.png",
-          "plate-empty.png",
-          "plate-crumbs.png",
-          "plate-one-cookie.png",
-          "plate-one-cookie-bitten.png",
-        ],
+        artRef: ["plate-empty.png", "plate-broken.png", "plate-dirty.png", "plate-crumbs.png"],
         variationSizes: [
+          { width: 51, height: 33 }, // empty
           { width: 51, height: 35 }, // broken
           { width: 61, height: 47 }, // dirty
-          { width: 51, height: 33 }, // empty
           { width: 51, height: 33 }, // crumbs
-          { width: 52, height: 33 }, // one cookie
-          { width: 51, height: 33 }, // half cookie
         ],
         translations: {
-            en: { base: "Plate", indefinite: "a plate", definite: "the plate" },
-            sv: { base: "Tallrik", indefinite: "en tallrik", definite: "tallriken" }
+          en: { base: "Plate", indefinite: "a plate", definite: "the plate" },
+          sv: { base: "Tallrik", indefinite: "en tallrik", definite: "tallriken" }
+        }
+      },
+      {
+        name: "Cookie",
+        type: "cookies",
+        variations: ["whole", "bitten", "three"],
+        states: ["whole", "bitten"],
+        artRef: ["cookie-whole.png", "cookie-bitten.png", "three-cookies.png"],
+        variationSizes: [
+          { width: 23, height: 16 },
+          { width: 23, height: 16 },
+          { width: 39, height: 24 }
+        ],
+        translations: {
+          en: { base: "Cookie", indefinite: "a cookie", definite: "the cookie" },
+          sv: { base: "Kaka", indefinite: "en kaka", definite: "kakan" }
+        },
+        variationTranslations: {
+          en: { whole: "whole", bitten: "bitten" },
+          sv: { whole: "hel", bitten: "biten" }
         }
       },
       {
@@ -144,6 +155,69 @@ async function seed() {
         }
       },
       {
+        name: "Painting",
+        type: "decorations",
+        variations: ["default"],
+        states: ["default"],
+        artRef: ["painting.png"],
+        variationSizes: [{ width: 182, height: 245 }],
+        translations: {
+          en: { base: "Painting", indefinite: "a painting", definite: "the painting" },
+          sv: { base: "Tavla", indefinite: "en tavla", definite: "tavlan" }
+        }
+      },
+      {
+        name: "Snack Bowl",
+        type: "snacks",
+        variations: ["default"],
+        states: ["default"],
+        artRef: ["snack-bowl.png"],
+        variationSizes: [{ width: 34, height: 30 }],
+        translations: {
+          en: { base: "Snack Bowl", indefinite: "a snack bowl", definite: "the snack bowl" },
+          sv: { base: "Skål med snacks", indefinite: "en skål med snacks", definite: "skålen med snacks" }
+        }
+      },
+      {
+        name: "Drawing",
+        type: "drawing",
+        variations: ["default"],
+        states: ["default"],
+        artRef: ["drawing.png"],
+        variationSizes: [{ width: 107, height: 68 }],
+        translations: {
+          en: { base: "Drawing", indefinite: "a drawing", definite: "the drawing" },
+          sv: { base: "Teckning", indefinite: "en teckning", definite: "teckningen" }
+        }
+      },
+      {
+        name: "Newspaper",
+        type: "newspaper",
+        variations: ["default"],
+        states: ["default"],
+        artRef: ["newspaper.png"],
+        variationSizes: [{ width: 84, height: 55 }],
+        translations: {
+          en: { base: "Newspaper", indefinite: "a newspaper", definite: "the newspaper" },
+          sv: { base: "Tidning", indefinite: "en tidning", definite: "tidningen" }
+        }
+      },
+      {
+        name: "Glasses",
+        type: "glasses",
+        variations: ["default", "sunglasses"],
+        states: ["default"],
+        artRef: ["glasses.png", "glasses-sun.png"],
+        variationSizes: [
+          { width: 35, height: 29 },
+          { width: 35, height: 29 },
+        ],
+        translations: {
+          en: { base: "Glasses", indefinite: "a pair of glasses", definite: "the glasses" },
+          sv: { base: "Glasögon", indefinite: "ett par glasögon", definite: "glasögonen" }
+        }
+      },
+      {
         name: "Empty",
         type: "empty",
         variations: ["empty"],
@@ -166,24 +240,45 @@ async function seed() {
         backgroundRef: "scene-1.png",
         maxItems: 6,
         slots: [
-          { index: 0, x: 560, y: 545, allowedTypes: ["cups"] },
-          { index: 1, x: 500, y: 575, allowedTypes: ["plates"] },
-          { index: 2, x: 460, y: 600, allowedTypes: ["cookies"] },
-          { index: 3, x: 425, y: 650, allowedTypes: ["fruit-bowls"] },
-          { index: 4, x: 700, y: 420, allowedTypes: ["plants"] },
-          { index: 5, x: 670, y: 400, allowedTypes: ["plants"] },
-          { index: 6, x: 725, y: 350, allowedTypes: ["curtains"] }
+          { index: 0, x: 340, y: 500, allowedTypes: ["cups"] },      
+          { index: 1, x: 430, y: 530, allowedTypes: ["plates"] },    
+          { index: 2, x: 500, y: 555, allowedTypes: ["cookies"] },   
+          { index: 3, x: 565, y: 580, allowedTypes: ["fruit-bowls"] },
+          { index: 4, x: 615, y: 520, allowedTypes: ["cups"] },      
+          { index: 5, x: 480, y: 590, allowedTypes: ["cookies"] },  
+          { index: 6, x: 700, y: 420, allowedTypes: ["plants"] },
+          { index: 7, x: 670, y: 400, allowedTypes: ["plants"] },
+          { index: 8, x: 725, y: 350, allowedTypes: ["curtains"] }
         ]
       },
       {
         name: "Scene 2",
         backgroundRef: "scene-2.png",
-        maxItems: 6,
+        maxItems: 4,
         slots: [
           { index: 0, x: 350, y: 500, allowedTypes: ["tvs"] },
           { index: 1, x: 700, y: 420, allowedTypes: ["plants"] },
           { index: 2, x: 670, y: 400, allowedTypes: ["plants"] },
           { index: 3, x: 725, y: 350, allowedTypes: ["curtains"] }
+        ]
+      },
+      {
+        name: "Scene 3",
+        backgroundRef: "scene-3.png",
+        maxItems: 12,
+        slots: [
+          { index: 0, x: 430, y: 485, allowedTypes: ["drawing", "newspaper"] },
+          { index: 1, x: 480, y: 470, allowedTypes: ["drawing", "newspaper"] },
+          { index: 2, x: 500, y: 520, allowedTypes: ["cups", "cookies", "snacks"] },
+          { index: 3, x: 550, y: 540, allowedTypes: ["cups", "cookies", "snacks"] },
+          { index: 4, x: 600, y: 555, allowedTypes: ["cups", "cookies", "snacks"] },
+          { index: 5, x: 640, y: 580, allowedTypes: ["cups", "cookies", "snacks"] },
+          { index: 6, x: 580, y: 600, allowedTypes: ["cookies", "snacks"] },
+          { index: 7, x: 520, y: 495, allowedTypes: ["drawing", "newspaper"] },
+          { index: 8, x: 570, y: 510, allowedTypes: ["drawing", "newspaper"] },
+          { index: 9, x: 700, y: 420, allowedTypes: ["plants"] },
+          { index: 10, x: 670, y: 400, allowedTypes: ["plants"] },
+          { index: 11, x: 725, y: 350, allowedTypes: ["curtains"] }
         ]
       }
     ];
@@ -204,7 +299,7 @@ async function seed() {
       },
       {
         type: "whichState",
-        requiredItemTypes: ["fruit-bowls", "tvs"],
+        requiredItemTypes: ["fruit-bowls", "tvs", "curtains", "cookies"],
         templateText: "",
         optionsCount: 3,
         translations: {
