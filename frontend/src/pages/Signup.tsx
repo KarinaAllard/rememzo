@@ -134,7 +134,7 @@ export const Signup = () => {
 			</form>
 			<div className="mt-4">
 				<p>{t("alreadyAccount")}</p>
-				<p className="text-(--link) hover:text-(--link-hover) font-semibold">
+				<p className="text-(--link) hover:text-(--text-hover) hover:underline underline-offset-4 decoration-(--cta)">
 					<Link to="/login">{t("logInHere")}</Link>
 				</p>
 			</div>

@@ -118,7 +118,7 @@ export const Login = () => {
 			</form>
 			<div className="mt-4">
 				<p>{t("notRegisteredYet")}</p>
-				<p className="text-(--link) hover:text-(--link-hover) font-semibold">
+				<p className="text-(--link) hover:text-(--text-hover) hover:underline underline-offset-4 decoration-(--cta)">
 					<Link to="/signup">{t("signUpHere")}</Link>
 				</p>
 			</div>
