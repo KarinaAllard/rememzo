@@ -8,6 +8,8 @@ import { useAuthRedirect } from "../hooks/useAuthRedirect";
 import { useToast } from "../context/ToastContext";
 import { useUser } from "../context/UserContext";
 import { useTranslation } from "../hooks/useTranslation";
+import { usePageMotion } from "../hooks/usePageMotion";
+import { motion } from "framer-motion";
 
 export const Login = () => {
 	const [email, setEmail] = useState("");
@@ -19,6 +21,7 @@ export const Login = () => {
 	const { showToast } = useToast();
 	const { refreshUser } = useUser();
 	const { t } = useTranslation();
+	const motionProps = usePageMotion();
 	const navigate = useNavigate();
 
 	useAuthRedirect(true);
@@ -65,7 +68,7 @@ export const Login = () => {
 	};
 
 	return (
-		<div className="w-full flex flex-col max-w-md">
+		<motion.div {...motionProps} className="w-full flex flex-col max-w-md">
 			<h1 className="text-4xl text-(--secondary-text)">{t("log")} <span className="decoration-3 underline underline-offset-4 decoration-(--cta)">{t("in")}</span></h1>
 			
 			<p className="text-sm">
@@ -115,10 +118,10 @@ export const Login = () => {
 			</form>
 			<div className="mt-4">
 				<p>{t("notRegisteredYet")}</p>
-				<p className="text-(--link) hover:text-(--link-hover) font-semibold">
+				<p className="text-(--link) hover:text-(--text-hover) hover:underline underline-offset-4 decoration-(--cta)">
 					<Link to="/signup">{t("signUpHere")}</Link>
 				</p>
 			</div>
-		</div>
+		</motion.div>
 	);
 };

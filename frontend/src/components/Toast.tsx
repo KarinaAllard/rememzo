@@ -48,3 +48,5 @@ export const Toast = ({ children, duration = 2500, onClose, variant = "success" 
         </motion.div>
     )
 }
+
+// TODO: Toast flashes briefly on mount due to Framer Motion + fixed positioning, revisit post-deadline

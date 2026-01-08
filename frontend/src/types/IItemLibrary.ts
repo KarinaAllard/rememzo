@@ -5,4 +5,5 @@ export interface IItem {
   variations: string[];
   states: string[];
   artRef: string[];
+  variationSizes?: { width: number; height: number }[];
 }

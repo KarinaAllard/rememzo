@@ -6,6 +6,7 @@ export interface IItem extends Document {
     variations: string[];
     states: string[];
     artRef: string[];
+    variationSizes?: { width: number; height: number }[];
     translations?: Record<string, {
         base: string;
         indefinite?: string;
@@ -21,6 +22,15 @@ const ItemSchema: Schema<IItem> = new Schema({
     variations: { type: [String], default: [] },
     states: { type: [String], default: [] },
     artRef: { type: [String], default: [] },
+    variationSizes: {
+      type: [
+        {
+          width: { type: Number, required: true },
+          height: { type: Number, required: true },
+        },
+      ],
+      default: undefined,
+    },
     translations: { 
         type: Map, 
         of: {

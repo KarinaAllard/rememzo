@@ -1,17 +1,21 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useUser } from "../context/UserContext";
 import { useGame } from "../game/GameContext";
 
 export const useResetGuestOnLogin = () => {
   const { user } = useUser();
-  const { attemptId, setAttemptId, setCountdownRemainingMs, setPhase } = useGame();
+  const { setAttemptId, setCountdownRemainingMs, setPhase } = useGame();
+
+  const hasResetRef = useRef(false);
 
   useEffect(() => {
     if (!user) return;
+    if (hasResetRef.current) return;
 
     const guestId = sessionStorage.getItem("guestId");
-
     if (!guestId) return;
+
+    hasResetRef.current = true;
 
     sessionStorage.removeItem("guestId");
     sessionStorage.removeItem("dailyPuzzleCountdown");
@@ -21,5 +25,5 @@ export const useResetGuestOnLogin = () => {
     setAttemptId(null);
     setCountdownRemainingMs(null);
     setPhase("idle");
-  }, [user, attemptId, setAttemptId, setCountdownRemainingMs, setPhase]);
+  }, [user, setAttemptId, setCountdownRemainingMs, setPhase]);
 };

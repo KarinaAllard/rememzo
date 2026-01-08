@@ -17,14 +17,14 @@ export const Navbar = () => {
             <nav>
                 <ul className="flex gap-6 pt-3">
                 <li>
-                    <NavLink to="/play" className="text-(--link) hover:text-(--link-hover)">
+                    <NavLink to="/play" className="text-(--link) hover:text-(--text-hover) hover:underline underline-offset-4 decoration-(--cta)">
                         {t("play")}
                     </NavLink>
                 </li>
                 <li>
                     <NavLink 
                     to={user ? "/my-account" : "/login"} 
-                    className="text-(--link) hover:text-(--link-hover)">
+                    className="text-(--link) hover:text-(--text-hover) hover:underline underline-offset-4 decoration-(--cta)">
                         {user ? t("account") : t("login")}
                     </NavLink>
                 </li>

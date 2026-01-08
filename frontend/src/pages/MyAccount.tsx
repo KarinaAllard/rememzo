@@ -6,6 +6,8 @@ import { useUser } from "../context/UserContext";
 import { useTranslation } from "../hooks/useTranslation";
 import { useLanguage } from "../context/LanguageContext";
 import { updateMyLanguage } from "../services/meService";
+import { usePageMotion } from "../hooks/usePageMotion";
+import { motion } from "framer-motion";
 
 export const MyAccount = () => {
     const navigate = useNavigate();
@@ -13,6 +15,7 @@ export const MyAccount = () => {
     const { showToast } = useToast();
     const { t } = useTranslation();
     const { lang, setLang } = useLanguage();
+    const motionProps = usePageMotion();
 
     const toggleLanguage = async () => {
         const newLang = lang === "en" ? "sv" : "en";
@@ -51,7 +54,7 @@ export const MyAccount = () => {
     const winrateClass = user?.stats && user?.stats.winrate >= 0.5 ? "text-(--success) font-bold text-lg" : "text-(--text-hover) font-bold text-lg";
 
     return (
-        <div className="w-full flex flex-col gap-2 max-w-md">
+        <motion.div {...motionProps} className="w-full flex flex-col gap-2 max-w-md">
             <h1 className="text-4xl text-(--secondary-text)">{t("my")} <span className="decoration-3 underline underline-offset-4 decoration-(--cta)">{t("account")}</span></h1>
             <p className="text-sm mb-4 text-(--secondary-text)">{t("myAccountDesc")}</p>
             
@@ -107,6 +110,6 @@ export const MyAccount = () => {
             <Button onClick={handleLogout} variant="secondary">
                 {t("logOut")}
             </Button>
-        </div>
+        </motion.div>
     );
 };

@@ -11,6 +11,9 @@ import { useUser } from "../context/UserContext"
 import { useToast } from "../context/ToastContext"
 import { TbReload } from "../icons/icons"
 import { useTranslation } from "../hooks/useTranslation"
+import { motion } from "framer-motion"
+import { usePageMotion } from "../hooks/usePageMotion"
+
 
 type ResultData = {
     selectedOption: string
@@ -26,6 +29,7 @@ export const Result = () => {
     const showResultToast = phase === "result" || phase === "completed";
     const { showToast } = useToast();
     const { t } = useTranslation();
+    const motionProps = usePageMotion();
     
     const [result, setResult] = useState<ResultData | null>(null);
     const [loading, setLoading] = useState(true);
@@ -80,7 +84,7 @@ export const Result = () => {
     const completed = !result && isDailyAttemptCompleted(today);
 
     return (
-        <div className="w-full flex flex-col items-center max-w-md">
+        <motion.div {...motionProps} className="w-full flex flex-col items-center max-w-md">
             <h1 className="text-4xl text-(--text-hover) mb-4 decoration-3 underline underline-offset-4 decoration-(--cta)">{t("result")}</h1>
             {showResultToast && (
                 <Toast duration={2500} variant="success">
@@ -132,6 +136,6 @@ export const Result = () => {
             <Link to="/" className="block w-full mt-4">
                 <Button className="w-full">{t("goBack")}</Button>
             </Link>
-        </div>
+        </motion.div>
     )
 }

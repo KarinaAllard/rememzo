@@ -81,6 +81,11 @@ export const translations = {
     // Home
     welcomeMsg: "Welcome to",
     welcomeDesc: "This is a memory DLE game, where you can test your memory retention and eye for detail.",
+    homeHowToTitle: "How to play",
+    homeBullet1: "Memorize the details of a new scene every day.",
+    homeBullet2: "Answer a question about what you saw.",
+    homeBullet3: "Sharpen your memory and track your streaks!",
+    homeTagline: "Randomized scenes daily. Quick, fun, brain-training!",
     // 404
     notFoundDesc: "This page didn't show up in today's daily puzzle.",
   },
@@ -166,6 +171,11 @@ export const translations = {
     // Home
     welcomeMsg: "Välkommen till",
     welcomeDesc: "Rememzo är ett dagligt DLE-spel där du kan testa ditt minne och öga för detaljer.",
+    homeHowToTitle: "Så här spelar du",
+    homeBullet1: "Memorera detaljerna i en ny scen varje dag.",
+    homeBullet2: "Svara på en fråga om vad du såg.",
+    homeBullet3: "Träna ditt minne och följ dina vinster i rad!",
+    homeTagline: "Slumpmässiga scener varje dag. Snabbt, roligt och hjärntränande!",
     // 404
     notFoundDesc: "This page didn't show up in today's daily puzzle.",
   },
