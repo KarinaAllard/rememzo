@@ -67,17 +67,29 @@ export const Countdown = (props: CountdownProps) => {
 
     return (
 
-        <div className="flex justify-center items-center h-32">
+        <div className="absolute top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none">
                 <motion.div 
-                    animate={{ scale: remainingMs / 1000 <= 1 ? [1, 1.1, 1] : 1, color }}
-                    transition={{ 
+                    animate={{
+                        borderColor: color,
+                    }}
+                    transition={{
                         duration: 0.6,
-                        repeat: remainingMs / 1000 <= 1 ? Infinity : 0,
+                        repeat: fraction <= 1/5 ? Infinity : 0,
                         repeatType: "reverse",
                     }}
-                    className="text-6xl font-bold"
+                    className="bg-(--background-transparent) py-1 px-2 rounded-xs border border-(--hover-text)"
                 >
-                    {display}
+                    <motion.span
+                        animate={{ scale: remainingMs / 1000 <= 1 ? [1, 1.1, 1] : 1, color }}
+                        transition={{ 
+                            duration: 0.6,
+                            repeat: remainingMs / 1000 <= 1 ? Infinity : 0,
+                            repeatType: "reverse",
+                        }}
+                        className="text-6xl md:text-5xl sm:text-4xl font-bold"
+                    >
+                        {display}
+                    </motion.span>
                 </motion.div>
         </div>
     )

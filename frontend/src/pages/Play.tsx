@@ -12,6 +12,7 @@ import type { IItem } from "../types/IItemLibrary";
 import { fetchItemsLibrary } from "../services/itemLibraryService";
 import { useLanguage } from "../context/LanguageContext";
 import { useTranslation } from "../hooks/useTranslation";
+import { useRef } from "react";
 
 export const Play = () => {
     const { phase, countdownRemainingMs, setCountdownRemainingMs, attemptId, setAttemptId } = useGame();
@@ -22,6 +23,7 @@ export const Play = () => {
     const today = useToday();
     const { lang } = useLanguage();
     const { t } = useTranslation();
+    const playSceneRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const storedAttemptId = sessionStorage.getItem("dailyAttemptId");
@@ -55,6 +57,12 @@ export const Play = () => {
     const itemsById = useMemo(() => {
         return new Map(itemsLibrary.map(item => [item._id, item]));
     }, [itemsLibrary]);
+
+    useEffect(() => {
+        if (phase === "countdown") {
+            playSceneRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+    }, [phase]);
 
 
     const handleStart = async () => { 
@@ -105,7 +113,7 @@ export const Play = () => {
 
             {/* TODO: Remember to change countdown time */}
             {phase === "countdown" && dailyPuzzle && ( 
-                <>
+                <div className="relative">
                     <Countdown 
                         seconds={20} 
                         attemptId={attemptId || undefined}
@@ -113,12 +121,14 @@ export const Play = () => {
                         setRemainingMs={setCountdownRemainingMs}
                         onComplete={handleCountdownComplete}
                     />
-                    <PlayScene 
-                        items={dailyPuzzle.items} 
-                        itemsById={itemsById}
-                        backgroundRef={dailyPuzzle.template?.backgroundRef}
-                    />
-                </>
+                    <div ref={playSceneRef} className="max-w-3xl flex flex-col justify-center w-full">
+                        <PlayScene 
+                            items={dailyPuzzle.items} 
+                            itemsById={itemsById}
+                            backgroundRef={dailyPuzzle.template?.backgroundRef}
+                        />
+                    </div>
+                </div>
             )}
         </div>
     )

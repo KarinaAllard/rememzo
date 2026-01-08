@@ -17,7 +17,7 @@ export const Layout = () => {
                 >
                 <div
                     className={`w-full ${
-                    isPlayPhase ? "max-w-[90vw] md:max-w-5xl" : "max-w-md"
+                    isPlayPhase ? "max-w-[90vw] md:max-w-3xl" : "max-w-md"
                     } flex flex-col items-center`}
                 >
                     <Outlet />

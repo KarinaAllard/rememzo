@@ -40,10 +40,10 @@ export const PlayScene = ({
   const scaledSize = originalSceneSize * scale;
 
   return (
-    <div className="flex justify-center w-full overflow-hidden border-2 border-(--cta) rounded-sm">
+    <div className="flex justify-center w-full max-w-3xl overflow-hidden border-2 border-(--cta) rounded-sm">
       <div
         ref={containerRef}
-        className="relative overflow-hidden"
+        className="relative overflow-hidden w-full"
         style={{
           width: `${scaledSize}px`,
           height: `${scaledSize}px`,
