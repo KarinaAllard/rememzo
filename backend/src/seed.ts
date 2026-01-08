@@ -28,6 +28,12 @@ async function seed() {
         variations: ["coffee", "empty", "tea", "messy"],
         states: ["default"],
         artRef: ["cup-coffee.png", "cup-empty.png", "cup-tea.png", "cup-coffee-messy.png"],
+        variationSizes: [
+          { width: 30, height: 29 }, // coffee
+          { width: 30, height: 29 }, // empty
+          { width: 30, height: 29 }, // tea
+          { width: 30, height: 37 }, // messy
+        ],
         translations: {
             en: { base: "Cup", indefinite: "a cup", definite: "the cup" },
             sv: { base: "Kopp", indefinite: "en kopp", definite: "koppen" }
@@ -46,6 +52,14 @@ async function seed() {
           "plate-one-cookie.png",
           "plate-one-cookie-bitten.png",
         ],
+        variationSizes: [
+          { width: 51, height: 35 }, // broken
+          { width: 61, height: 47 }, // dirty
+          { width: 51, height: 33 }, // empty
+          { width: 51, height: 33 }, // crumbs
+          { width: 52, height: 33 }, // one cookie
+          { width: 51, height: 33 }, // half cookie
+        ],
         translations: {
             en: { base: "Plate", indefinite: "a plate", definite: "the plate" },
             sv: { base: "Tallrik", indefinite: "en tallrik", definite: "tallriken" }
@@ -57,6 +71,10 @@ async function seed() {
         variations: ["open", "closed"],
         states: ["open", "closed"],
         artRef: ["curtains-open.png", "curtains-closed.png"],
+        variationSizes: [
+          { width: 239, height: 294 }, // open
+          { width: 239, height: 294 }, // closed
+        ],
         translations: {
             en: { base: "Curtains", indefinite: "some curtains", definite: "the curtains" },
             sv: { base: "Gardiner", indefinite: "gardiner", definite: "gardinerna" }
@@ -73,6 +91,11 @@ async function seed() {
         variations: ["alive", "dead", "pot-empty"],
         states: ["default"],
         artRef: ["flower.png", "flower-dead.png", "flower-pot-empty.png"],
+        variationSizes: [
+          { width: 34, height: 66 }, // flower
+          { width: 63, height: 64 }, // dead
+          { width: 28, height: 35 }, // empty
+        ],
         translations: {
             en: { base: "Flower", indefinite: "a flower", definite: "the flower" },
             sv: { base: "Blomma", indefinite: "en blomma", definite: "blomman" }
@@ -84,6 +107,10 @@ async function seed() {
         variations: ["full", "empty"],
         states: ["full", "empty"],
         artRef: ["fruit-bowl-full.png", "fruit-bowl-empty.png"],
+        variationSizes: [
+          { width: 45, height: 42 }, // full
+          { width: 45, height: 42 }, // empty
+        ],
         translations: {
             en: { base: "Fruit Bowl", indefinite: "a fruit bowl", definite: "the fruit bowl" },
             sv: { base: "Fruktskål", indefinite: "en fruktskål", definite: "fruktskålen" }
@@ -99,6 +126,13 @@ async function seed() {
         variations: ["off", "news", "weather", "game", "static"],
         states: ["off", "news", "weather", "game", "static"],
         artRef: ["tv-off.png", "tv-news.png", "tv-weather.png", "tv-game.png", "tv-static.png"],
+        variationSizes: [
+          { width: 190, height: 199 }, // off
+          { width: 190, height: 199 }, // news
+          { width: 190, height: 199 }, // weather
+          { width: 191, height: 201 }, // game
+          { width: 190, height: 198 }, // static
+        ],
         translations: {
             en: { base: "TV", indefinite: "a TV", definite: "the TV" },
             sv: { base: "TV", indefinite: "en TV", definite: "TV:n" }
