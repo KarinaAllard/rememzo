@@ -110,6 +110,14 @@ export const Play = () => {
         <motion.div {...motionProps} className="w-full flex flex-col">
             <h1 className="text-4xl text-(--secondary-text) mb-4">{t("daily")} <span className="decoration-3 underline underline-offset-4 decoration-(--cta)">{t("puzzle")}</span></h1>
             <p className="text-xs mb-4 bg-neutral-900 w-fit p-1 rounded-xs border border-neutral-700">{today}</p>
+            <div className="border border-(--dark-cta) bg-neutral-900 rounded-xs flex flex-col gap-2 text-(--text-hover) shadow-[inset_0_2px_150px_rgba(var(--cta-rgb),0.1)] p-4 mb-4">
+                <h2 className="font-semibold text-(--secondary-text) text-xl">{t("homeHowToTitle")} <span className="decoration-3 underline underline-offset-4 decoration-(--cta)">Rememzo</span></h2>
+                <ul className="list-disc list-inside space-y-4 text-(--text) text-sm">
+                    <li>{t("homeBullet1")}</li>
+                    <li>{t("homeBullet2")}</li>
+                    <li>{t("homeBullet3")}</li>
+                </ul>
+            </div>
 
             {( phase === "idle" || phase === "paused") && (
                 <Button 
