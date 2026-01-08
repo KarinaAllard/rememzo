@@ -21,6 +21,16 @@ export const PlayScene = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
 
+  const typeZIndex: Record<string, number> = {
+    curtains: 0,
+    tvs: 1,
+    plants: 2,
+    cups: 3,
+    plates: 4,
+    "fruit-bowls": 5,
+    empty: 10,
+  };
+
   useEffect(() => {
     const updateScale = () => {
       if (!containerRef.current) return;
@@ -76,6 +86,7 @@ export const PlayScene = ({
                 width: size ? `${size.width * scale}px` : undefined,
                 height: size ? `${size.height * scale}px` : undefined,
                 transform: "translate(-50%, -50%)",
+                zIndex: typeZIndex[libraryItem.type] ?? 0,
               }}
             />
           );
