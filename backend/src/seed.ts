@@ -61,7 +61,7 @@ async function seed() {
         type: "cookies",
         variations: ["whole", "bitten", "three"],
         states: ["whole", "bitten"],
-        artRef: ["cookie-whole.png", "cookie-bitten.png", "three-cookies.png"],
+        artRef: ["cookie.png", "cookie-bitten.png", "three-cookies.png"],
         variationSizes: [
           { width: 23, height: 16 },
           { width: 23, height: 16 },
@@ -236,19 +236,21 @@ async function seed() {
     // --- SEED SCENE TEMPLATES ---
     const templatesToInsert = [
       {
-        name: "Scene 1",
-        backgroundRef: "scene-1.png",
-        maxItems: 9,
-        slots: [
-          { index: 0, x: 340, y: 500, allowedTypes: ["cups"] },      
-          { index: 1, x: 430, y: 530, allowedTypes: ["plates"] },    
-          { index: 2, x: 500, y: 555, allowedTypes: ["cookies"] },   
-          { index: 3, x: 565, y: 580, allowedTypes: ["fruit-bowls"] },
-          { index: 4, x: 615, y: 520, allowedTypes: ["cups"] },      
-          { index: 5, x: 480, y: 590, allowedTypes: ["cookies"] },  
-          { index: 6, x: 700, y: 420, allowedTypes: ["plants"] },
-          { index: 7, x: 670, y: 400, allowedTypes: ["plants"] },
-          { index: 8, x: 725, y: 350, allowedTypes: ["curtains"] }
+        "name": "Scene 1",
+        "backgroundRef": "scene-1.png",
+        "maxItems": 12,
+        "slots": [
+          { "index": 0, "x": 560, "y": 525, "allowedTypes": ["cups"] },
+          { "index": 1, "x": 500, "y": 545, "allowedTypes": ["plates", "cups"] },
+          { "index": 2, "x": 440, "y": 570, "allowedTypes": ["cookies", "snacks"] },
+          { "index": 3, "x": 400, "y": 600, "allowedTypes": ["fruit-bowls"] },
+          { "index": 4, "x": 520, "y": 585, "allowedTypes": ["drawing", "newspaper"] },
+          { "index": 5, "x": 460, "y": 610, "allowedTypes": ["drawing", "newspaper", "painting"] },
+          { "index": 6, "x": 580, "y": 545, "allowedTypes": ["cups", "snacks"] },
+          { "index": 7, "x": 480, "y": 600, "allowedTypes": ["cookies", "fruit-bowls"] },
+          { "index": 10, "x": 700, "y": 420, "allowedTypes": ["plants"] },
+          { "index": 11, "x": 670, "y": 400, "allowedTypes": ["plants"] },
+          { "index": 12, "x": 725, "y": 350, "allowedTypes": ["curtains"] }
         ]
       },
       {
@@ -263,22 +265,23 @@ async function seed() {
         ]
       },
       {
-        name: "Scene 3",
-        backgroundRef: "scene-3.png",
-        maxItems: 12,
-        slots: [
-          { index: 0, x: 430, y: 485, allowedTypes: ["drawing", "newspaper"] },
-          { index: 1, x: 480, y: 470, allowedTypes: ["drawing", "newspaper"] },
-          { index: 2, x: 500, y: 520, allowedTypes: ["cups", "cookies", "snacks"] },
-          { index: 3, x: 550, y: 540, allowedTypes: ["cups", "cookies", "snacks"] },
-          { index: 4, x: 600, y: 555, allowedTypes: ["cups", "cookies", "snacks"] },
-          { index: 5, x: 640, y: 580, allowedTypes: ["cups", "cookies", "snacks"] },
-          { index: 6, x: 580, y: 600, allowedTypes: ["cookies", "snacks"] },
-          { index: 7, x: 520, y: 495, allowedTypes: ["drawing", "newspaper"] },
-          { index: 8, x: 570, y: 510, allowedTypes: ["drawing", "newspaper"] },
-          { index: 9, x: 700, y: 420, allowedTypes: ["plants"] },
-          { index: 10, x: 670, y: 400, allowedTypes: ["plants"] },
-          { index: 11, x: 725, y: 350, allowedTypes: ["curtains"] }
+        "name": "Scene 3",
+        "backgroundRef": "scene-3.png",
+        "maxItems": 12,
+        "slots": [
+          { "index": 0, "x": 430, "y": 485, "allowedTypes": ["drawing", "newspaper"] },
+          { "index": 1, "x": 480, "y": 470, "allowedTypes": ["drawing", "newspaper"] },
+          { "index": 2, "x": 500, "y": 520, "allowedTypes": ["cups", "cookies"] },
+          { "index": 3, "x": 550, "y": 540, "allowedTypes": ["cups", "snacks"] },
+          { "index": 4, "x": 600, "y": 555, "allowedTypes": ["fruit-bowls"] }, // only fruit bowls
+          { "index": 5, "x": 640, "y": 580, "allowedTypes": ["cups", "cookies", "snacks"] },
+          { "index": 6, "x": 580, "y": 600, "allowedTypes": ["cookies", "snacks"] },
+          { "index": 7, "x": 520, "y": 495, "allowedTypes": ["drawing", "newspaper"] },
+          { "index": 8, "x": 570, "y": 510, "allowedTypes": ["drawing", "newspaper"] },
+          { "index": 9, "x": 610, "y": 530, "allowedTypes": ["snacks"] }, // replaced plate with snacks
+          { "index": 10, "x": 700, "y": 420, "allowedTypes": ["plants"] },
+          { "index": 11, "x": 670, "y": 400, "allowedTypes": ["plants"] },
+          { "index": 12, "x": 725, "y": 350, "allowedTypes": ["curtains"] }
         ]
       }
     ];
