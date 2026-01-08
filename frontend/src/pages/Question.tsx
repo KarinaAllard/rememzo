@@ -11,6 +11,8 @@ import { useUser } from "../context/UserContext";
 import { fetchDailyPuzzle } from "../services/dailyPuzzleService";
 import { useLanguage } from "../context/LanguageContext";
 import { useTranslation } from "../hooks/useTranslation";
+import { motion } from "framer-motion";
+import { usePageMotion } from "../hooks/usePageMotion";
 
 export const Question = () => {
     const [selected, setSelected] = useState<string | null>(null);
@@ -24,6 +26,7 @@ export const Question = () => {
     const identity = getAttemptIdentity();
     const { lang } = useLanguage();
     const { t } = useTranslation();
+    const motionProps = usePageMotion();
 
     useEffect(() => {
         const fetchQuestion = async () => {
@@ -89,7 +92,7 @@ export const Question = () => {
     };
 
     return (
-        <div className="w-full flex flex-col max-w-md">
+        <motion.div {...motionProps} className="w-full flex flex-col max-w-md">
             <h1 className="text-4xl text-(--secondary-text) mb-4">{t("daily")} <span className="decoration-3 underline underline-offset-4 decoration-(--cta)">{t("question")}</span></h1>
             <p className="text-sm">{today}</p>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md mx-auto mt-10">
@@ -129,6 +132,6 @@ export const Question = () => {
                     {loading ? t("submitting") : t("submit")}
                 </Button>
             </form>
-        </div>
+        </motion.div>
     )
 }

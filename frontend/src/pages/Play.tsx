@@ -14,6 +14,8 @@ import { useLanguage } from "../context/LanguageContext";
 import { useTranslation } from "../hooks/useTranslation";
 import { useRef } from "react";
 import { SceneWipe } from "../components/SceneWipe";
+import { motion, animate } from "framer-motion";
+import { usePageMotion } from "../hooks/usePageMotion";
 
 export const Play = () => {
     const { phase, countdownRemainingMs, setCountdownRemainingMs, attemptId, setAttemptId } = useGame();
@@ -26,6 +28,7 @@ export const Play = () => {
     const { lang } = useLanguage();
     const { t } = useTranslation();
     const playSceneRef = useRef<HTMLDivElement>(null);
+    const motionProps = usePageMotion();
 
     useEffect(() => {
         const storedAttemptId = sessionStorage.getItem("dailyAttemptId");
@@ -61,8 +64,13 @@ export const Play = () => {
     }, [itemsLibrary]);
 
     useEffect(() => {
-        if (phase === "countdown") {
-            playSceneRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+        if (phase === "countdown" && playSceneRef.current) {
+            const target = playSceneRef.current.getBoundingClientRect().top + window.scrollY - 50;
+            animate(window.scrollY, target, {
+                duration: 0.8,
+                ease: "easeInOut",
+                onUpdate: value => window.scrollTo(0, value),
+            });
         }
     }, [phase]);
 
@@ -99,7 +107,7 @@ export const Play = () => {
     };
 
     return (
-        <div className="w-full flex flex-col">
+        <motion.div {...motionProps} className="w-full flex flex-col">
             <h1 className="text-4xl text-(--secondary-text) mb-4">{t("daily")} <span className="decoration-3 underline underline-offset-4 decoration-(--cta)">{t("puzzle")}</span></h1>
             <p className="text-xs mb-4 bg-neutral-900 w-fit p-1 rounded-xs border border-neutral-700">{today}</p>
 
@@ -138,6 +146,6 @@ export const Play = () => {
                     </div>
                 </div>
             )}
-        </div>
+        </motion.div>
     )
 }

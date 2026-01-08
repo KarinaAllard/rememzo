@@ -8,6 +8,8 @@ import { PasswordMeter } from "../components/PasswordMeter";
 import { useAuthRedirect } from "../hooks/useAuthRedirect";
 import { useToast } from "../context/ToastContext";
 import { useTranslation } from "../hooks/useTranslation";
+import { motion } from "framer-motion";
+import { usePageMotion } from "../hooks/usePageMotion";
 
 export const Signup = () => {
 	const [email, setEmail] = useState("");
@@ -19,6 +21,7 @@ export const Signup = () => {
 	const navigate = useNavigate();
 	const { showToast } = useToast();
 	const { t } = useTranslation();
+	const motionProps = usePageMotion();
 
 	useAuthRedirect(true);
 
@@ -78,7 +81,7 @@ export const Signup = () => {
 	};
 
 	return (
-		<div className="w-full flex flex-col max-w-md">
+		<motion.div {...motionProps} className="w-full flex flex-col max-w-md">
 			<h1 className="text-4xl text-(--secondary-text)"><span className="decoration-3 underline underline-offset-4 decoration-(--cta)">{t("sign")}</span> {t("up")}</h1>
 			<p className="text-sm">
 				{t("signUpDesc")}
@@ -135,6 +138,6 @@ export const Signup = () => {
 					<Link to="/login">{t("logInHere")}</Link>
 				</p>
 			</div>
-		</div>
+		</motion.div>
 	);
 };
