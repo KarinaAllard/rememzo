@@ -13,6 +13,7 @@ import { fetchItemsLibrary } from "../services/itemLibraryService";
 import { useLanguage } from "../context/LanguageContext";
 import { useTranslation } from "../hooks/useTranslation";
 import { useRef } from "react";
+import { SceneWipe } from "../components/SceneWipe";
 
 export const Play = () => {
     const { phase, countdownRemainingMs, setCountdownRemainingMs, attemptId, setAttemptId } = useGame();
@@ -20,6 +21,7 @@ export const Play = () => {
     const [dailyPuzzle, setDailyPuzzle] = useState<IDailyPuzzle | null>(null);
     const [loading, setLoading] = useState(false);
     const [itemsLibrary, setItemsLibrary] = useState<IItem[]>([]);
+    const [wipe, setWipe] = useState(false);
     const today = useToday();
     const { lang } = useLanguage();
     const { t } = useTranslation();
@@ -92,8 +94,8 @@ export const Play = () => {
     };
 
     const handleCountdownComplete = async () => {
+            setWipe(true);
             setCountdownRemainingMs(null);
-            goToPhase("question");
     };
 
     return (
@@ -127,6 +129,12 @@ export const Play = () => {
                             itemsById={itemsById}
                             backgroundRef={dailyPuzzle.template?.backgroundRef}
                         />
+                        {wipe && (
+                            <SceneWipe
+                            trigger={wipe}
+                            onComplete={() => goToPhase("question")}
+                            />
+                        )}
                     </div>
                 </div>
             )}
