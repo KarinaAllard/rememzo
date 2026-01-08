@@ -7,6 +7,7 @@ import { LuEye, LuEyeClosed } from "../icons/icons";
 import { useAuthRedirect } from "../hooks/useAuthRedirect";
 import { useToast } from "../context/ToastContext";
 import { useUser } from "../context/UserContext";
+import { useTranslation } from "../hooks/useTranslation";
 
 export const Login = () => {
 	const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ export const Login = () => {
 	const [rememberMe, setRememberMe] = useState(false);
 	const { showToast } = useToast();
 	const { refreshUser } = useUser();
+	const { t } = useTranslation();
 	const navigate = useNavigate();
 
 	useAuthRedirect(true);
@@ -25,7 +27,7 @@ export const Login = () => {
 
 	const emailError =
 		email && !validateEmail(email)
-			? "Please enter a valid email address."
+			? t("emailError")
 			: null;
 
 	const hasLiveErrors = !!emailError;
@@ -35,7 +37,7 @@ export const Login = () => {
 		setSubmitError(null);
 
 		if (hasLiveErrors) {
-			setSubmitError("Please fix the errors above.");
+			setSubmitError(t("submitError"));
 			return;
 		}
 
@@ -52,11 +54,11 @@ export const Login = () => {
 
 			await refreshUser();
 			navigate("/my-account", { replace: true });
-			showToast("Successfully logged in!", "success");
+			showToast(t("loginSuccess"), "success");
 		} catch (error) {
-			console.error("Login failed:", error);
-			setSubmitError("Invalid email or password");
-			showToast("Login failed", "error");
+			console.error(t("loginFail"), error);
+			setSubmitError(t("invalidInfo"));
+			showToast(t("loginFail"), "error");
 		} finally {
 			setLoading(false);
 		}
@@ -64,15 +66,15 @@ export const Login = () => {
 
 	return (
 		<div className="w-full flex flex-col max-w-md">
-			<h1 className="text-4xl text-(--text-hover) mb-6">Log in</h1>
+			<h1 className="text-4xl text-(--secondary-text)">{t("log")} <span className="decoration-3 underline underline-offset-4 decoration-(--cta)">{t("in")}</span></h1>
 			
 			<p className="text-sm">
-				To view your streak and other stats, log in here.
+				{t("loginDesc")}
 			</p>
 			<form onSubmit={handleSubmit} className="flex flex-col mt-4 w-full">
 				<p className="text-(--cta) text-sm mt-1 min-h-4">{submitError}</p>
 				<Input
-					label="Email"
+					label={t("email")}
 					type="email"
 					name="email"
 					value={email}
@@ -83,7 +85,7 @@ export const Login = () => {
 					{emailError}
 				</p>
 				<Input
-					label="Password"
+					label={t("password")}
 					type={showPassword ? "text" : "password"}
 					name="password"
 					value={password}
@@ -102,19 +104,19 @@ export const Login = () => {
 						className="mr-2 accent-(--cta)"
 					/>
 					<label htmlFor="rememberMe" className="text-sm text-(--text)">
-						Remember me
+						{t("rememberMe")}
 					</label>
 				</div>
 				<div className="mt-10 w-full">
 					<Button type="submit" className="w-full" loading={loading}>
-						Log in
+						{t("login")}
 					</Button>
 				</div>
 			</form>
 			<div className="mt-4">
-				<p>Not registered yet? </p>
+				<p>{t("notRegisteredYet")}</p>
 				<p className="text-(--link) hover:text-(--link-hover) font-semibold">
-					<Link to="/signup">Sign up here</Link>
+					<Link to="/signup">{t("signUpHere")}</Link>
 				</p>
 			</div>
 		</div>

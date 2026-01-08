@@ -18,3 +18,6 @@ export const fetchMe = (): Promise<{
         baseService.get("/me")
     );
 }
+
+export const updateMyLanguage = (preferences: { language: "en" | "sv"}) =>
+    handleRequest(baseService.patch("/me", preferences));

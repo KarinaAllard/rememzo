@@ -7,6 +7,7 @@ import { LuEye, LuEyeClosed } from "../icons/icons";
 import { PasswordMeter } from "../components/PasswordMeter";
 import { useAuthRedirect } from "../hooks/useAuthRedirect";
 import { useToast } from "../context/ToastContext";
+import { useTranslation } from "../hooks/useTranslation";
 
 export const Signup = () => {
 	const [email, setEmail] = useState("");
@@ -17,6 +18,7 @@ export const Signup = () => {
 	const [showPassword, setShowPassword] = useState(false);
 	const navigate = useNavigate();
 	const { showToast } = useToast();
+	const { t } = useTranslation();
 
 	useAuthRedirect(true);
 
@@ -24,17 +26,17 @@ export const Signup = () => {
 
 	const emailError =
 		email && !validateEmail(email)
-			? "Please enter a valid email address."
+			? t("emailError")
 			: null;
 
 	const passwordError =
 		password && password.length < 6
-			? "Password must be at least 6 characters long."
+			? t("passwordError")
 			: null;
 
 	const confirmPasswordError =
 		confirmPassword && password !== confirmPassword
-			? "Passwords do not match."
+			? t("confirmPasswordError")
 			: null;
 
 	const hasLiveErrors =
@@ -45,7 +47,7 @@ export const Signup = () => {
 		setSubmitError(null);
 
 		if (hasLiveErrors) {
-			setSubmitError("Please fix the errors above.");
+			setSubmitError(t("submitError"));
 			return;
 		}
 
@@ -55,20 +57,20 @@ export const Signup = () => {
 			localStorage.setItem("token", result.token);
 			localStorage.setItem("refreshToken", result.refreshToken);
 
-			showToast("Account created successfully!", "success");
+			showToast(t("signUpSuccess"), "success");
 			navigate("/my-account", { replace: true });
 		} catch (error: any) {
 			console.error("Signup failed:", error);
 
 			if (error?.response?.status === 409) {
-				setSubmitError("Email already registered.");
-				showToast("Email already registered", "error");
+				setSubmitError(t("emailAlreadyRegistered"));
+				showToast(t("emailAlreadyRegistered"), "error");
 			} else if (error?.response?.data?.error) {
 				setSubmitError(error.response.data.error);
 				showToast(error.response.data.error, "error");
 			} else {
-				setSubmitError("Registration failed. Try again.");
-				showToast("Registration failed. Try again.", "error");
+				setSubmitError(t("registrationFailed"));
+				showToast(t("registrationFailed"), "error");
 			}
 		} finally {
 			setLoading(false);
@@ -77,14 +79,14 @@ export const Signup = () => {
 
 	return (
 		<div className="w-full flex flex-col max-w-md">
-			<h1 className="text-4xl text-(--text-hover) mb-6">Sign Up</h1>
+			<h1 className="text-4xl text-(--secondary-text)"><span className="decoration-3 underline underline-offset-4 decoration-(--cta)">{t("sign")}</span> {t("up")}</h1>
 			<p className="text-sm">
-				To keep track of your stats and streak, register here.
+				{t("signUpDesc")}
 			</p>
 			<form onSubmit={handleSubmit} className="flex flex-col mt-4 w-full">
 				<p className="text-(--cta) text-sm mt-1 min-h-4">{submitError}</p>
 				<Input
-					label="Email"
+					label={t("email")}
 					type="email"
 					name="email"
 					value={email}
@@ -95,7 +97,7 @@ export const Signup = () => {
 					{emailError}
 				</p>
 				<Input
-					label="Password"
+					label={t("password")}
 					type={showPassword ? "text" : "password"}
 					name="password"
 					value={password}
@@ -111,7 +113,7 @@ export const Signup = () => {
 					</p>
 				</div>
 				<Input
-					label="Confirm Password"
+					label={t("confirmPassword")}
 					type={showPassword ? "text" : "password"}
 					name="confirmPassword"
 					value={confirmPassword}
@@ -123,14 +125,14 @@ export const Signup = () => {
 				</p>
 				<div className="mt-4 w-full">
 					<Button type="submit" loading={loading} className="w-full">
-						Sign Up
+						{t("signUp")}
 					</Button>
 				</div>
 			</form>
 			<div className="mt-4">
-				<p>Already have an account?</p>
+				<p>{t("alreadyAccount")}</p>
 				<p className="text-(--link) hover:text-(--link-hover) font-semibold">
-					<Link to="/login">Log in here</Link>
+					<Link to="/login">{t("logInHere")}</Link>
 				</p>
 			</div>
 		</div>

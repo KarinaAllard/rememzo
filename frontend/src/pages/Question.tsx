@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react"
 import { Button } from "../components/Button"
 import type { IDailyQuestion } from "../types/IQuestion";
-import { fetchDailyQuestion } from "../services/questionService";
 import { markDailyAttemptCompleted } from "../hooks/useDailyAttempt";
 import { useToday } from "../hooks/useToday";
 import { useGameController } from "../hooks/useGameController";
@@ -9,6 +8,9 @@ import { useGame } from "../game/GameContext";
 import { submitAttemptAnswer } from "../services/attemptService";
 import { getAttemptIdentity } from "../game/identity";
 import { useUser } from "../context/UserContext";
+import { fetchDailyPuzzle } from "../services/dailyPuzzleService";
+import { useLanguage } from "../context/LanguageContext";
+import { useTranslation } from "../hooks/useTranslation";
 
 export const Question = () => {
     const [selected, setSelected] = useState<string | null>(null);
@@ -17,14 +19,16 @@ export const Question = () => {
 
     const today = useToday();
     const { goToPhase } = useGameController();
-    const { attemptId } = useGame();
+    const { attemptId, setReadyForResult } = useGame();
     const { refreshUser } = useUser();
     const identity = getAttemptIdentity();
+    const { lang } = useLanguage();
+    const { t } = useTranslation();
 
     useEffect(() => {
         const fetchQuestion = async () => {
             try {
-                const data = await fetchDailyQuestion(today);
+                const data = await fetchDailyPuzzle(today, lang);
 
                 if (!data?.question) {
                     console.error("No question in daily scene:", data);
@@ -41,7 +45,7 @@ export const Question = () => {
             }
         }
         fetchQuestion()
-    }, [today])
+    }, [today, lang])
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -73,6 +77,7 @@ export const Question = () => {
             }
             
             markDailyAttemptCompleted(today, attemptId ?? undefined);
+            setReadyForResult(true);
 
 
             goToPhase("result");
@@ -85,7 +90,7 @@ export const Question = () => {
 
     return (
         <div className="w-full flex flex-col max-w-md">
-            <h1 className="text-4xl text-(--text-hover) mb-6">Question</h1>
+            <h1 className="text-4xl text-(--secondary-text) mb-4">{t("daily")} <span className="decoration-3 underline underline-offset-4 decoration-(--cta)">{t("question")}</span></h1>
             <p className="text-sm">{today}</p>
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 max-w-md mx-auto mt-10">
                 <p className="text-xl text-center text-(--text-hover)">{question?.questionText}</p>
@@ -121,7 +126,7 @@ export const Question = () => {
                     </label>
                 ))}
                 <Button type="submit" className="mt-4 w-full" disabled={!selected || loading}>
-                    {loading ? "Submitting..." : "Submit"}
+                    {loading ? t("submitting") : t("submit")}
                 </Button>
             </form>
         </div>

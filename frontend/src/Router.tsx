@@ -15,7 +15,6 @@ export const router = createBrowserRouter([
     {
         path: "/",
         element: <Layout />,
-        errorElement: <NotFound />,
         children: [
             {
                 path: "/",
@@ -58,6 +57,10 @@ export const router = createBrowserRouter([
                     </ProtectedRoute>
                 )
             },
+            { 
+                path: "*", 
+                element: <NotFound /> 
+            }
         ]
     }
 ])

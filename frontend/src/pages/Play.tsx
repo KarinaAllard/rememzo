@@ -10,6 +10,8 @@ import { type IDailyPuzzle } from "../types/IGame";
 import { fetchDailyPuzzle } from "../services/dailyPuzzleService";
 import type { IItem } from "../types/IItemLibrary";
 import { fetchItemsLibrary } from "../services/itemLibraryService";
+import { useLanguage } from "../context/LanguageContext";
+import { useTranslation } from "../hooks/useTranslation";
 
 export const Play = () => {
     const { phase, countdownRemainingMs, setCountdownRemainingMs, attemptId, setAttemptId } = useGame();
@@ -18,6 +20,8 @@ export const Play = () => {
     const [loading, setLoading] = useState(false);
     const [itemsLibrary, setItemsLibrary] = useState<IItem[]>([]);
     const today = useToday();
+    const { lang } = useLanguage();
+    const { t } = useTranslation();
 
     useEffect(() => {
         const storedAttemptId = sessionStorage.getItem("dailyAttemptId");
@@ -33,14 +37,14 @@ export const Play = () => {
     useEffect(() => {
         const fetchPuzzle = async () => {
             try {
-                const data = await fetchDailyPuzzle(today);
+                const data = await fetchDailyPuzzle(today, lang);
                 setDailyPuzzle(data);
             } catch (error) {
                 console.error("Failed to load daily puzzle", error);
             }
         };
         fetchPuzzle();
-    }, [today]);
+    }, [today, lang]);
 
     useEffect(() => {
         fetchItemsLibrary()
@@ -60,7 +64,7 @@ export const Play = () => {
         try {
             let attempt;
             try {
-                attempt = await startDailyAttempt();
+                attempt = await startDailyAttempt(lang);
             } catch (error: any) {
                 if (error.response?.data?.error === "You have already completed today's attempt") {
                     goToPhase("completed");
@@ -86,8 +90,8 @@ export const Play = () => {
 
     return (
         <div className="w-full flex flex-col">
-            <h1 className="text-4xl text-(--text-hover) mb-6">Daily Puzzle</h1>
-            <p className="text-sm">{today}</p>
+            <h1 className="text-4xl text-(--secondary-text) mb-4">{t("daily")} <span className="decoration-3 underline underline-offset-4 decoration-(--cta)">{t("puzzle")}</span></h1>
+            <p className="text-xs mb-4 bg-neutral-900 w-fit p-1 rounded-xs border border-neutral-700">{today}</p>
 
             {( phase === "idle" || phase === "paused") && (
                 <Button 
@@ -95,7 +99,7 @@ export const Play = () => {
                     onClick={handleStart}
                     disabled={loading}
                 >
-                    {loading ? "Starting..." : "Start Game"}
+                    {loading ? t("starting") : t("startGame")}
                 </Button>
             )}
 

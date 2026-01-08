@@ -1,18 +1,17 @@
-import type { GamePhase } from "./gameTypes";
 import { useGame } from "./GameContext";
-
+import type { GamePhase } from "./gameTypes";
 
 type GameGuardProps = {
     allowed: GamePhase[];
     children: React.ReactNode;
-}
+};
 
-export const GameGuard = (props: GameGuardProps) => {
-    const { phase } = useGame();
+export const GameGuard = ({ allowed, children }: GameGuardProps) => {
+    const { phase, hydrating } = useGame();
 
-    if (!props.allowed.includes(phase)) {
-        return null;
-    }
+    if (hydrating) return <p className="text-center mt-10">Loading game...</p>;
 
-    return <>{props.children}</>
+    if (!allowed.includes(phase)) return null;
+
+    return <>{children}</>;
 };

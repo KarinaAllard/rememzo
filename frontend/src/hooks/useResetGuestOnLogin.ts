@@ -4,11 +4,16 @@ import { useGame } from "../game/GameContext";
 
 export const useResetGuestOnLogin = () => {
   const { user } = useUser();
-  const { setAttemptId, setCountdownRemainingMs, setPhase } = useGame();
+  const { attemptId, setAttemptId, setCountdownRemainingMs, setPhase } = useGame();
 
   useEffect(() => {
     if (!user) return;
 
+    const guestId = sessionStorage.getItem("guestId");
+
+    if (!guestId) return;
+
+    sessionStorage.removeItem("guestId");
     sessionStorage.removeItem("dailyPuzzleCountdown");
     sessionStorage.removeItem("dailyAttemptId");
     sessionStorage.removeItem("completedAttempts");
@@ -16,6 +21,5 @@ export const useResetGuestOnLogin = () => {
     setAttemptId(null);
     setCountdownRemainingMs(null);
     setPhase("idle");
-
-  }, [user, setAttemptId, setCountdownRemainingMs, setPhase]);
+  }, [user, attemptId, setAttemptId, setCountdownRemainingMs, setPhase]);
 };

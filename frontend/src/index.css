@@ -27,6 +27,8 @@
   --secondary-text: #f2f2f4; 
   --background: #121212;
   --cta: #c9215f;
+  --cta-rgb: 201,33,95;
+  --shadow-rgb: 55, 55, 55;
   --cta-hover: #d73973;
   --dark-cta: #86123d;
   --success: #36dea0;

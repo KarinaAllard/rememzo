@@ -10,6 +10,7 @@ import { Toast } from "../components/Toast"
 import { useUser } from "../context/UserContext"
 import { useToast } from "../context/ToastContext"
 import { TbReload } from "../icons/icons"
+import { useTranslation } from "../hooks/useTranslation"
 
 type ResultData = {
     selectedOption: string
@@ -24,6 +25,7 @@ export const Result = () => {
     const identityUserId = "userId" in identity ? identity.userId : null;
     const showResultToast = phase === "result" || phase === "completed";
     const { showToast } = useToast();
+    const { t } = useTranslation();
     
     const [result, setResult] = useState<ResultData | null>(null);
     const [loading, setLoading] = useState(true);
@@ -54,7 +56,7 @@ export const Result = () => {
 
                     if (!raw && phase === "completed") {
                         showToast(
-                            "Your session seems outdated. Please refresh the page to see your result.",
+                            t("outdatedSession"),
                             "error"
                         );
                         setSessionOutdated(true);
@@ -71,7 +73,7 @@ export const Result = () => {
     }, [attemptId, identityUserId]);
 
     if (loading) {
-        return <p>Loading result...</p>
+        return <p>{t("loadingResult")}</p>
     };
     
 
@@ -79,44 +81,44 @@ export const Result = () => {
 
     return (
         <div className="w-full flex flex-col items-center max-w-md">
-            <h1 className="text-4xl text-(--text-hover) mb-6">Result</h1>
+            <h1 className="text-4xl text-(--text-hover) mb-4 decoration-3 underline underline-offset-4 decoration-(--cta)">{t("result")}</h1>
             {showResultToast && (
                 <Toast duration={2500} variant="success">
-                    Daily puzzle completed!
+                    {t("dailyPuzzleCompleted")}
                 </Toast>
             )}
             {result ? (
                 <div className="flex flex-col items-center">
                     <p>
-                        You selected: {result.selectedOption} -{" "}
+                        {t("youSelected")} {result.selectedOption} -{" "}
                         <span className={result.correct ? "text-(--success) font-bold" : "text-(--cta) font-bold"}>
-                            {result.correct ? "Correct!" : "Wrong!"}
+                            {result.correct ? t("correct") : t("wrong")}
                         </span>
                     </p>
                      {user && (
                         <p>
-                            Current streak: <span>{user.streak}</span>
+                            {t("currentStreak")} <span>{user.streak}</span>
                         </p>
                     )}
                     <p>
-                        Come back tomorrow to play again!
+                        {t("resultDesc")}
                     </p>
                 </div>
             ) : completed ? (
                 <p>
-                    You have already completed today's puzzle!
+                    {t("dailyPuzzleCompleted")}
                 </p>
             ) : (
                 <p>
-                    No result available.
+                    {t("noResultData")}
                 </p>
             )}
 
             {sessionOutdated && (
                 <div className="flex flex-col items-center w-full mt-4">
                     <div className="p-2 mb-2 bg-(--dark-cta) text-(--shine) rounded-sm flex flex-col items-center">
-                        <h4 className="text-xl">Your session seems outdated.</h4>
-                        <p className="text-sm">Please reload the page to see your result.</p>
+                        <h4 className="text-xl">{t("outdatedSession")}</h4>
+                        <p className="text-sm">{t("reloadSession")}</p>
                     </div>
                     <Button 
                         onClick={() => window.location.reload()} 
@@ -128,7 +130,7 @@ export const Result = () => {
             )}
             
             <Link to="/" className="block w-full mt-4">
-                <Button className="w-full">Go back</Button>
+                <Button className="w-full">{t("goBack")}</Button>
             </Link>
         </div>
     )
