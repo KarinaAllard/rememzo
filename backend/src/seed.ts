@@ -180,7 +180,7 @@ async function seed() {
       },
       {
         name: "Drawing",
-        type: "drawing",
+        type: "drawings",
         variations: ["default"],
         states: ["default"],
         artRef: ["drawing.png"],
@@ -192,7 +192,7 @@ async function seed() {
       },
       {
         name: "Newspaper",
-        type: "newspaper",
+        type: "newspapers",
         variations: ["default"],
         states: ["default"],
         artRef: ["newspaper.png"],
@@ -238,7 +238,7 @@ async function seed() {
       {
         name: "Scene 1",
         backgroundRef: "scene-1.png",
-        maxItems: 6,
+        maxItems: 9,
         slots: [
           { index: 0, x: 340, y: 500, allowedTypes: ["cups"] },      
           { index: 1, x: 430, y: 530, allowedTypes: ["plates"] },    
